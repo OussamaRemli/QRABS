@@ -27,14 +27,14 @@ public class AuthController {
         // Authentification réussie
         return ResponseEntity.ok("Login successful");
     }
-//    @GetMapping("/{id}")
-//    public ResponseEntity<?> getProfessorById(@PathVariable("id") Long id) {
-//        Professor professor = authServiceImp.findProfessorById(id);
-//
-//        if (professor == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor not found");
-//        }
-//
-//        return ResponseEntity.ok(professor);
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProfessorById(@PathVariable("id") Long id) {
+        Professor professor = authServiceImp.findProfessorById(id);
+
+        if (professor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Professor not found");
+        }
+
+        return ResponseEntity.ok(professor);
+    }
 }

@@ -14,23 +14,4 @@ public interface DepartmentService {
     List<DepartmentDTO> getAllDepartment();
 
     DepartmentDTO findDepartmentByName(String name);
-
-    @Service
-    class AuthService {
-
-        @Autowired
-        private AuthRepository authRepository;
-
-        public boolean authenticate(LoginDTO loginDTO) {
-            Professor professor = authRepository.findByEmail(loginDTO.getEmail());
-
-            // Vérifier si l'utilisateur avec l'email donné existe dans la base de données
-            if (professor == null) {
-                return false;
-            }
-
-            // Vérifier si le mot de passe correspond
-            return professor.getPassword().equals(loginDTO.getPassword());
-        }
-    }
 }

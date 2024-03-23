@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class LevelDTO {
     private long levelId;
     private String levelName;
+    private String sectorName;
 }

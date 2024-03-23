@@ -15,10 +15,14 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "moduleI_id")
     private long moduleId;
-    @Column(name = "moduleName" ,nullable = false ,unique = true)
+
+    @Column(name = "module_name", nullable = false, unique = true)
     private String moduleName;
 
     @ManyToOne
     @JoinColumn(name ="department_id")
-    Department department;
+    private Department department;
+
+
+
 }

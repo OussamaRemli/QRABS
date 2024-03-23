@@ -4,6 +4,8 @@ import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.Model.Level;
 import com.ensaoSquad.backend.Model.Student;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
+import com.ensaoSquad.backend.mapper.StudentMapper;
 import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.repository.StudentRepository;
 import com.ensaoSquad.backend.service.StudentService;
@@ -33,8 +35,22 @@ public class StudentServiceImpl implements StudentService {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0); //only one sheet
 
+            // Get level name from the first row, third column
+            Row headerRow = sheet.getRow(0);
+            String levelName = headerRow.getCell(2).getStringCellValue(); // Assuming levelName is in the third column (index 2)
+
+            // Find the level based on the level name in the Excel
+            Level level = levelRepository.findByLevelName(levelName);
+            if (level == null) {
+                // If level does not exist, you can handle this scenario
+                // e.g., throw an exception or log a warning
+                throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
+            }
+
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next(); // Skip header row
+            // Skip header 2 row to achieve values
+            rowIterator.next();
+            rowIterator.next();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -45,33 +61,18 @@ public class StudentServiceImpl implements StudentService {
                 studentDTO.setEmail(row.getCell(3).getStringCellValue());
                 studentDTO.setGroupName(row.getCell(4).getStringCellValue());
 
-                String levelName = row.getCell(5).getStringCellValue();
-                String sectorName = row.getCell(6).getStringCellValue();
-                Level level = levelRepository.findByLevelNameAndSectorName(levelName, sectorName);
-                if (level == null) {
-                    level = new Level();
-                    level.setLevelName(levelName);
-                    level.setSectorName(sectorName);
-                    level = levelRepository.save(level);
-                }
-                studentDTO.setLevel(new LevelDTO(level.getLevelId(), level.getLevelName(), level.getSectorName()));
-
-                Student student = new Student();
-                student.setApogee(studentDTO.getApogee());
-                student.setFirstName(studentDTO.getFirstName());
-                student.setLastName(studentDTO.getLastName());
-                student.setEmail(studentDTO.getEmail());
-                student.setGroupName(studentDTO.getGroupName());
+                Student student = StudentMapper.toEntity(studentDTO);
                 student.setLevel(level);
+
                 student = studentRepository.save(student);
 
-                uploadedStudents.add(studentDTO);
-            }
+                uploadedStudents.add(StudentMapper.toDTO(student));            }
             workbook.close();
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle exception
         }
         return uploadedStudents;
     }
+
 }
+

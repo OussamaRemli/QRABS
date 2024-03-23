@@ -16,7 +16,7 @@ public class Level {
     private long levelId;
     @Column(nullable = false ,unique = true)
     private String levelName;
-    @Column(nullable = false ,unique = true)
+    @Column(nullable = false)
     private String sectorName;
 
 }

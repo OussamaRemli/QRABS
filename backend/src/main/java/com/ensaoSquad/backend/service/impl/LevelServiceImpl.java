@@ -8,6 +8,7 @@ import com.ensaoSquad.backend.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,4 +38,21 @@ public class LevelServiceImpl implements LevelService {
                 .map(LevelMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<LevelDTO> saveSectorData(String sectorAbbreviation) {
+        // Extracting sector abbreviation from the request body
+        String abbreviation = sectorAbbreviation.split("=")[1];
+        List<LevelDTO> levelDTOS = new ArrayList<>();
+        for (int i = 3; i <= 5; i++) {
+            Level entity = new Level();
+            entity.setLevelName(abbreviation + i);
+            entity.setSectorName(abbreviation);
+            LevelDTO levelDTO = LevelMapper.toDTO(levelRepository.save(entity));
+            levelDTOS.add(levelDTO);
+        }
+        return levelDTOS;
+    }
+
+
 }

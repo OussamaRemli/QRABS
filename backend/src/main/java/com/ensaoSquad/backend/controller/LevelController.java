@@ -22,6 +22,13 @@ public class LevelController {
         return new ResponseEntity<>(createdLevel, HttpStatus.CREATED);
     }
 
+    @PostMapping("/createFiliere")
+    public ResponseEntity<List<LevelDTO>> addSectorData(@RequestBody String sectorAbbreviation) {
+        List<LevelDTO> entities = levelService.saveSectorData(sectorAbbreviation);
+        return new ResponseEntity<>(entities, HttpStatus.CREATED);
+    }
+
+
     @GetMapping("/{levelName}")
     public ResponseEntity<LevelDTO> getLevelByName(@PathVariable String levelName) {
         LevelDTO levelDTO = levelService.getLevelByName(levelName);

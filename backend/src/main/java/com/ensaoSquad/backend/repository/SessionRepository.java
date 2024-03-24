@@ -1,3 +1,7 @@
 package com.ensaoSquad.backend.repository;
-public interface SessionRepository {
+
+import com.ensaoSquad.backend.model.Session;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SessionRepository extends JpaRepository<Session ,Long> {
 }

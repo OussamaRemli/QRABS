@@ -14,18 +14,18 @@ public class AuthServiceImp implements AuthService {
     @Autowired
     private AuthRepository authRepository;
 
-    public boolean authenticate(LoginDTO loginDTO) {
+    public Professor authenticate(LoginDTO loginDTO) {
         Professor professor = authRepository.findByEmail(loginDTO.getEmail());
 
         // Vérifier si l'utilisateur avec l'email donné existe dans la base de données
-        if (professor == null) {
-            return false;
+        if (professor == null || !professor.getPassword().equals(loginDTO.getPassword())) {
+            return null; // Authentification échouée
         }
 
-        // Vérifier si le mot de passe correspond
-        return professor.getPassword().equals(loginDTO.getPassword());
+        return professor; // Authentification réussie, renvoie l'objet Professor
     }
     public Professor findProfessorById(Long id) {
+
         return authRepository.findByProfessorId(id);
     }
 }

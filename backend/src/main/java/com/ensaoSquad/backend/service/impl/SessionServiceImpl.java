@@ -138,7 +138,7 @@ public class SessionServiceImpl implements SessionService {
                                         ModuleDTO moduleDTO, ProfessorDTO professorDTO, Time startTime, Time endTime,
                                         String sessionDay) {
         SessionDTO sessionDTO = new SessionDTO();
-        sessionDTO.setSessionDay(sessionDay); // Assuming day is always Monday for now
+        sessionDTO.setSessionDay(sessionDay); 
         sessionDTO.setStartTime(startTime);
         sessionDTO.setEndTime(endTime);
         sessionDTO.setByGroup(byGroup);

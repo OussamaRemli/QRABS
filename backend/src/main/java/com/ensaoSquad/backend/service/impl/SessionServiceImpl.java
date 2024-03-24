@@ -68,6 +68,7 @@ public class SessionServiceImpl implements SessionService {
         if (byGroup) {
             for (int i = 0; i < 2; i++) {
                 String moduleName = sheet.getRow(startRow).getCell(startColumn+i*3).getStringCellValue();
+                if(moduleName.isEmpty()) continue;
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn+i*3).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn+i*3).getStringCellValue();
                 String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn+i*3).getStringCellValue();
@@ -87,6 +88,7 @@ public class SessionServiceImpl implements SessionService {
             }
         } else {
             String moduleName = sheet.getRow(startRow).getCell(startColumn).getStringCellValue();
+            if(!moduleName.isEmpty()){
             String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
             String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
             String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue();
@@ -111,6 +113,7 @@ public class SessionServiceImpl implements SessionService {
 
             uploadedSessionDTOs.add(sessionDTO);
         }
+        }
         return uploadedSessionDTOs;
     }
 
@@ -127,7 +130,8 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public boolean isByGroup(Sheet sheet, int startRow, int startColumn) {
         Row sessionRow = sheet.getRow(startRow + 1);
-        return !sessionRow.getCell(startColumn).getStringCellValue().isEmpty();
+        return !sessionRow.getCell(startColumn).getStringCellValue().isEmpty() ||
+                !sessionRow.getCell(startColumn + 3).getStringCellValue().isEmpty();
     }
 
     public SessionDTO createSessionDTO(LevelDTO levelDTO, boolean byGroup, String groupName, String sessionType,

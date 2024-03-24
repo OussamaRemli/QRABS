@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.controller;
 
-import com.ensaoSquad.backend.Model.Professor;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.dto.LoginDTO;
 import com.ensaoSquad.backend.service.AuthService;
 import com.ensaoSquad.backend.service.impl.AuthServiceImp;

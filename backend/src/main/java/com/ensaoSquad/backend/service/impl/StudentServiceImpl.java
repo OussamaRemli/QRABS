@@ -2,8 +2,8 @@ package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
-import com.ensaoSquad.backend.Model.Level;
-import com.ensaoSquad.backend.Model.Student;
+import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.StudentMapper;
 import com.ensaoSquad.backend.repository.LevelRepository;

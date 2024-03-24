@@ -1,7 +1,7 @@
 package com.ensaoSquad.backend.mapper;
 
 import com.ensaoSquad.backend.dto.LevelDTO;
-import com.ensaoSquad.backend.Model.Level;
+import com.ensaoSquad.backend.model.Level;
 
 public class LevelMapper {
 

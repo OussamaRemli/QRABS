@@ -1,4 +1,4 @@
-package com.ensaoSquad.backend.Model;
+package com.ensaoSquad.backend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int departmentId;
+    private long departmentId;
 
     private String departmentName;
 

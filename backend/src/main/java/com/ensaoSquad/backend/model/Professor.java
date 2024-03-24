@@ -1,4 +1,5 @@
-package com.ensaoSquad.backend.Model;
+package com.ensaoSquad.backend.model;
+import com.ensaoSquad.backend.model.Department;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

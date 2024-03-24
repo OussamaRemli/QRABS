@@ -1,7 +1,7 @@
 package com.ensaoSquad.backend.mapper;
 
 import com.ensaoSquad.backend.dto.StudentDTO;
-import com.ensaoSquad.backend.Model.Student;
+import com.ensaoSquad.backend.model.Student;
 import org.springframework.stereotype.Component;
 
 @Component

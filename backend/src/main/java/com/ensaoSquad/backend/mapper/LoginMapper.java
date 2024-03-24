@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.mapper;
 
-import com.ensaoSquad.backend.Model.Professor;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.dto.LoginDTO;
 
 public class LoginMapper {

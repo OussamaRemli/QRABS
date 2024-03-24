@@ -1,14 +1,14 @@
 package com.ensaoSquad.backend.service;
 
-import com.ensaoSquad.backend.dto.ModuleDto;
+import com.ensaoSquad.backend.dto.ModuleDTO;
 
 import java.util.List;
 
 public interface ModuleService {
-    ModuleDto createModule(ModuleDto moduleDto);
-    List<ModuleDto> getAllModule();
+    ModuleDTO createModule(ModuleDTO moduleDto);
+    List<ModuleDTO> getAllModule();
 
 
 
-    ModuleDto findModuleByName(String name);
+    ModuleDTO findModuleByName(String name);
 }

@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route exact path='/' element={<Auth />} />
+          {/*<Route exact path='/' element={<Auth />} />*/}
           <Route exact path='/home/:id' element={<Home />} />
         </Routes>
       </Router>

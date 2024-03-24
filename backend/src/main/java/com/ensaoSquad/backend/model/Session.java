@@ -22,6 +22,9 @@ public class Session {
     private String sessionDay;
 
     @Column(nullable = false)
+    private  String sessionType;
+
+    @Column(nullable = false)
     private Time startTime;
 
     @Column(nullable = false)

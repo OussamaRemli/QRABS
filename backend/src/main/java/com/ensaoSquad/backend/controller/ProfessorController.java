@@ -2,17 +2,17 @@ package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.service.ProfessorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/professors")
+@AllArgsConstructor
+@RequestMapping({"/api/professors","/api/professors"})
 public class ProfessorController {
 
-    @Autowired
-    private ProfessorService professorService;
+    private final ProfessorService professorService;
 
     @PostMapping
     public ProfessorDTO create(@RequestBody ProfessorDTO professorDto) {

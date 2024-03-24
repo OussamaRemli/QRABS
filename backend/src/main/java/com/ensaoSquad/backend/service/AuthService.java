@@ -1,5 +1,5 @@
 package com.ensaoSquad.backend.service;
-import com.ensaoSquad.backend.Model.Professor;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.dto.LoginDTO;
 import com.ensaoSquad.backend.repository.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;

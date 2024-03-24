@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfessorMapper {
 
-    public ProfessorDTO toDto(Professor professor) {
+    public static ProfessorDTO toDTO(Professor professor) {
         ProfessorDTO dto = new ProfessorDTO();
         dto.setProfessorId(professor.getProfessorId());
         dto.setFirstName(professor.getFirstName());
@@ -19,7 +19,7 @@ public class ProfessorMapper {
         return dto;
     }
 
-    public Professor toEntity(ProfessorDTO professorDto) {
+    public static Professor toEntity(ProfessorDTO professorDto) {
         Professor professor = new Professor();
         professor.setProfessorId(professorDto.getProfessorId());
         professor.setFirstName(professorDto.getFirstName());

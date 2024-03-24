@@ -1,12 +1,12 @@
 package com.ensaoSquad.backend.dto;
-import com.ensaoSquad.backend.Model.Department;
+import com.ensaoSquad.backend.model.Department;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor
-public class ModuleDto {
+public class ModuleDTO {
     private long moduleId;
 
     private String moduleName;

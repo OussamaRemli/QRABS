@@ -49,18 +49,20 @@ public class StudentServiceImpl implements StudentService {
 
             Iterator<Row> rowIterator = sheet.iterator();
             // Skip header rows to achieve values
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 2; i++) {
                 rowIterator.next();
             }
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
+                if(row.getCell(2).getNumericCellValue() == 0) break;
                 StudentDTO studentDTO = new StudentDTO();
                 studentDTO.setApogee((long) row.getCell(2).getNumericCellValue());
                 studentDTO.setFirstName(row.getCell(4).getStringCellValue());
                 studentDTO.setLastName(row.getCell(3).getStringCellValue());
                 studentDTO.setEmail(row.getCell(5).getStringCellValue());
                 studentDTO.setGroupName(row.getCell(6).getStringCellValue());
+
 
                 Student student = StudentMapper.toEntity(studentDTO);
                 student.setLevel(level);

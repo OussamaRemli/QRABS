@@ -35,9 +35,9 @@ public class StudentServiceImpl implements StudentService {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0); //only one sheet
 
-            // Get level name from the first row, third column
-            Row headerRow = sheet.getRow(0);
-            String levelName = headerRow.getCell(2).getStringCellValue(); // Assuming levelName is in the third column (index 2)
+            // Get level name from the fourth row, seventh column
+            Row headerRow = sheet.getRow(3); // 4th row
+            String levelName = headerRow.getCell(2).getStringCellValue();
 
             // Find the level based on the level name in the Excel
             Level level = levelRepository.findByLevelName(levelName);
@@ -48,18 +48,19 @@ public class StudentServiceImpl implements StudentService {
             }
 
             Iterator<Row> rowIterator = sheet.iterator();
-            // Skip header 2 row to achieve values
-            rowIterator.next();
-            rowIterator.next();
+            // Skip header rows to achieve values
+            for (int i = 0; i < 6; i++) {
+                rowIterator.next();
+            }
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 StudentDTO studentDTO = new StudentDTO();
-                studentDTO.setApogee((long) row.getCell(0).getNumericCellValue());
-                studentDTO.setFirstName(row.getCell(1).getStringCellValue());
-                studentDTO.setLastName(row.getCell(2).getStringCellValue());
-                studentDTO.setEmail(row.getCell(3).getStringCellValue());
-                studentDTO.setGroupName(row.getCell(4).getStringCellValue());
+                studentDTO.setApogee((long) row.getCell(2).getNumericCellValue());
+                studentDTO.setFirstName(row.getCell(4).getStringCellValue());
+                studentDTO.setLastName(row.getCell(3).getStringCellValue());
+                studentDTO.setEmail(row.getCell(5).getStringCellValue());
+                studentDTO.setGroupName(row.getCell(6).getStringCellValue());
 
                 Student student = StudentMapper.toEntity(studentDTO);
                 student.setLevel(level);

@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface StudentService {
     List<StudentDTO> uploadStudentsFromExcel(MultipartFile file);
+    List<StudentDTO> getStudentsByLevelName(String levelName);
+
+    void deleteAllStudentsByLevel(String levelName);
 }

@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.controller;
 
+import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,9 @@ public class StudentController {
 
         List<StudentDTO> uploadedStudents = studentService.uploadStudentsFromExcel(file);
         return ResponseEntity.ok(uploadedStudents);
+    }
+    @GetMapping("/{levelName}")
+    public ResponseEntity<List<StudentDTO>> getDepartmentByName(@PathVariable String levelName){
+        return ResponseEntity.ok(studentService.getStudentsByLevelName(levelName));
     }
 }

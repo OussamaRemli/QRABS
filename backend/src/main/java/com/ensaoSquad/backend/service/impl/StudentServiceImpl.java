@@ -12,6 +12,7 @@ import com.ensaoSquad.backend.service.StudentService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class StudentServiceImpl implements StudentService {
     private LevelRepository levelRepository;
 
     @Override
+    @Transactional
     public List<StudentDTO> uploadStudentsFromExcel(MultipartFile file) {
         List<StudentDTO> uploadedStudents = new ArrayList<>();
         try {
@@ -52,6 +54,9 @@ public class StudentServiceImpl implements StudentService {
             for (int i = 0; i < 2; i++) {
                 rowIterator.next();
             }
+            //delete all students of the level from database before inserting the new ones
+            deleteAllStudentsByLevel(levelName);
+
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -76,6 +81,24 @@ public class StudentServiceImpl implements StudentService {
         }
         return uploadedStudents;
     }
+
+    @Override
+    public List<StudentDTO> getStudentsByLevelName(String levelName) {
+        return studentRepository.findByLevelName(levelName)
+                .stream().map(StudentMapper::toDTO).toList();
+    }
+
+    @Override
+    public void deleteAllStudentsByLevel(String levelName) {
+        Level level = levelRepository.findByLevelName(levelName);
+        if (level != null) {
+            studentRepository.deleteByLevel(level);
+        } else {
+            // Handle the case when the level does not exist
+            throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
+        }
+    }
+
 
 }
 

@@ -1,20 +1,35 @@
-import './App.css';
-import Auth from './components/Auth';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
+import { useSelector } from 'react-redux';
+
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+
+// routing
+// import ThemeRoutes from 'routes'; // Importing ThemeRoutes from 'routes'
+import Routes from 'routes'; // Importing UserRoutes from 'user-routes'
 
 
-function App() {
+// defaultTheme
+import themes from 'themes';
+
+// project imports
+import NavigationScroll from 'layout/NavigationScroll';
+
+// ==============================|| APP ||============================== //
+
+const App = () => {
+  const customization = useSelector((state) => state.customization);
+
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          {/*<Route exact path='/' element={<Auth />} />*/}
-          <Route exact path='/home/:id' element={<Home />} />
-        </Routes>
-      </Router>
-    </div>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={themes(customization)}>
+        <CssBaseline />
+        <NavigationScroll>
+          <Routes />
+            <UserRoutes/>
+        </NavigationScroll>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
-}
+};
 
 export default App;

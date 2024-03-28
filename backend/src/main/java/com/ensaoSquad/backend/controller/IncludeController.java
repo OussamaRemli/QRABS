@@ -1,7 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.IncludeDTO;
-import com.ensaoSquad.backend.dto.ModuleDto;
+import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.service.IncludeService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

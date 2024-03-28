@@ -1,9 +1,9 @@
 package com.ensaoSquad.backend.service.impl;
 
-import com.ensaoSquad.backend.Model.Department;
-import com.ensaoSquad.backend.Model.Include;
-import com.ensaoSquad.backend.Model.Level;
-import com.ensaoSquad.backend.Model.Module;
+import com.ensaoSquad.backend.model.Department;
+import com.ensaoSquad.backend.model.Include;
+import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.dto.IncludeDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.IncludeMapper;

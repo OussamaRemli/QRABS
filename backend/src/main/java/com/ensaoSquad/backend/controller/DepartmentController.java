@@ -16,6 +16,8 @@ public class DepartmentController {
     private final DepartmentService service;
     @PostMapping
     public ResponseEntity<DepartmentDTO> createDepartment(@RequestBody DepartmentDTO departmentDTO){
+
+
         DepartmentDTO departmentDtoCreated = service.createDepartment(departmentDTO);
         return new ResponseEntity<>(departmentDtoCreated, HttpStatus.CREATED);
     }

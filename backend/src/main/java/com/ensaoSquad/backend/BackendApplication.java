@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend;
 
+import com.ensaoSquad.backend.model.Professor;
 import org.apache.poi.ss.formula.functions.TimeValue;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

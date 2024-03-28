@@ -5,12 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "include")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Include {
+@IdClass(Include.class)
+public class Include implements Serializable {
 
     @Id
     @ManyToOne

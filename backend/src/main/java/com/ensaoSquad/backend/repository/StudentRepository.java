@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
+    Student findByApogee(long apogee);
     // Method to count the number of records in the table
     long count();
     @Query("SELECT s FROM Student s JOIN s.level l WHERE l.levelName = :levelName")

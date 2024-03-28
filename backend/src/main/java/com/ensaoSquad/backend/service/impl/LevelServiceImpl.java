@@ -2,7 +2,7 @@ package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.mapper.LevelMapper;
-import com.ensaoSquad.backend.Model.Level;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;

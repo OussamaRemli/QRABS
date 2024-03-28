@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.service.impl;
 
-import com.ensaoSquad.backend.Model.Department;
+import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.DepartmentMapper;
@@ -39,5 +39,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         );
         return DepartmentMapper.toDTO(department);
     }
+
+    @Override
+    public DepartmentDTO findDepartmentById(long departmentId) {
+        return repo.findById(departmentId)
+                .map(DepartmentMapper::toDTO)
+                .orElseThrow(() ->  new RessourceNotFoundException("Department not found with ID: " + departmentId));
+    }
+
 
 }

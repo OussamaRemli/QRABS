@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.service;
 
-import com.ensaoSquad.backend.Model.Professor;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.dto.LoginDTO;
 import com.ensaoSquad.backend.repository.AuthRepository;
@@ -14,4 +14,6 @@ public interface DepartmentService {
     List<DepartmentDTO> getAllDepartment();
 
     DepartmentDTO findDepartmentByName(String name);
+    DepartmentDTO findDepartmentById(long departmentId);
+
 }

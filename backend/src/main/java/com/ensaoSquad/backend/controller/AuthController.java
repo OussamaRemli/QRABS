@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.ensaoSquad.backend.Model.Professor;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.dto.LoginDTO;
 import com.ensaoSquad.backend.service.AuthService;
 import com.ensaoSquad.backend.service.impl.AuthServiceImp;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -18,14 +20,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginDTO loginDTO) {
-        boolean isAuthenticated = authServiceImp.authenticate(loginDTO);
+        Professor professor = authServiceImp.authenticate(loginDTO);
 
-        if (!isAuthenticated) {
+        if (professor == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
-        // Authentification réussie
-        return ResponseEntity.ok("Login successful");
+        // Authentification réussie, renvoyer l'objet Professor
+        return ResponseEntity.ok(professor);
     }
     @GetMapping("/{id}")
     public ResponseEntity<?> getProfessorById(@PathVariable("id") Long id) {

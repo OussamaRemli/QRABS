@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.service;
 
-import com.ensaoSquad.backend.Model.Level;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.dto.LevelDTO;
 import java.util.List;
 

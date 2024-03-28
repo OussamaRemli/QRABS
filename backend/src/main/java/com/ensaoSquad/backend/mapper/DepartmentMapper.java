@@ -1,6 +1,6 @@
 package com.ensaoSquad.backend.mapper;
 
-import com.ensaoSquad.backend.Model.Department;
+import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import org.springframework.stereotype.Component;
 

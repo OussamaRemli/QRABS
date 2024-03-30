@@ -54,14 +54,12 @@ const Header = ({ handleLeftDrawerToggle }) => {
           </Avatar>
         </ButtonBase>
       </Box>
-
       {/* header search */}
-      <SearchSection />
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
-
+      {/*<SearchSection />*/}
       {/* notification & profile */}
-      <NotificationSection />
+      {/*<NotificationSection />*/}
+        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexGrow: 1 }} />
       <ProfileSection />
     </>
   );

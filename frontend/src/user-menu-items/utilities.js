@@ -1,68 +1,51 @@
 // assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
+// import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons-react';
 
-// constant
-const icons = {
-  IconTypography,
-  IconPalette,
-  IconShadow,
-  IconWindmill
-};
+// // constant
+// const icons = {
+//   IconTypography,
+//   IconPalette,
+//   IconShadow,
+//   IconWindmill
+// };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
   id: 'utilities',
-  title: 'Utilities',
+  title: 'Modules',
   type: 'group',
   children: [
     {
-      id: 'util-typography',
-      title: 'Typography',
+      id: 'Réseaux_informatique',
+      title: 'Réseaux informatique',
       type: 'item',
-      url: '/utils/util-typography',
-      icon: icons.IconTypography,
-      breadcrumbs: false
+      url: '/utils/Réseaux_informatique'
+      // icon: icons.IconTypography,
+      // breadcrumbs: false
     },
     {
-      id: 'util-color',
-      title: 'Color',
+      id: 'Adminstration_système',
+      title: 'Adminstration_système',
       type: 'item',
-      url: '/utils/util-color',
-      icon: icons.IconPalette,
-      breadcrumbs: false
+      url: '/utils/Adminstration_système'
+      // icon: icons.IconPalette,
+      // breadcrumbs: false
     },
     {
-      id: 'util-shadow',
-      title: 'Shadow',
+      id: 'Interconnexion_réseaux',
+      title: 'Interconnexion réseaux',
       type: 'item',
-      url: '/utils/util-shadow',
-      icon: icons.IconShadow,
-      breadcrumbs: false
+      url: '/utils/Interconnexion_réseaux'
+      // icon: icons.IconShadow,
+      // breadcrumbs: false
     },
     {
-      id: 'icons',
-      title: 'Icons',
-      type: 'collapse',
-      icon: icons.IconWindmill,
-      children: [
-        {
-          id: 'tabler-icons',
-          title: 'Tabler Icons',
-          type: 'item',
-          url: '/icons/tabler-icons',
-          breadcrumbs: false
-        },
-        {
-          id: 'material-icons',
-          title: 'Material Icons',
-          type: 'item',
-          external: true,
-          target: '_blank',
-          url: 'https://mui.com/material-ui/material-icons/',
-          breadcrumbs: false
-        }
-      ]
+      id: 'Sécurité_informatique',
+      title: 'Sécurité informatique',
+      type: 'item',
+      url: '/utils/Sécurité_informatique'
+      // icon: icons.IconWindmill
     }
   ]
 };

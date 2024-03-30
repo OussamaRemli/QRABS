@@ -1,0 +1,27 @@
+.admin-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100vh; /* ou une hauteur appropriée */
+}
+
+.sidebar {
+background-color: #f4f4f4;
+padding: 20px;
+}
+
+.sidebar a {
+display: block;
+text-decoration: none;
+color: #333;
+padding: 10px;
+margin-bottom: 5px;
+}
+
+.sidebar a.active-link {
+background-color: #007bff;
+color: #fff;
+}
+
+.main-content {
+padding: 20px;
+}

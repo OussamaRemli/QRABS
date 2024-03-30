@@ -56,12 +56,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
       </Box>
       {/* header search */}
       {/*<SearchSection />*/}
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
-      {/* notification & profile */}
+{/* notification & profile */}
       {/*<NotificationSection />*/}
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ flexGrow: 1 }} />

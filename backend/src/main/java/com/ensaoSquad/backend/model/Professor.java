@@ -23,6 +23,9 @@ public class Professor {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private String role = "ROLE_PROFESSOR"; // Valeur par défaut "ROLE_PROFESSOR"
+
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;

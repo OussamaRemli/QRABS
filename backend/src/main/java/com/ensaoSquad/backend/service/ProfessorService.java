@@ -10,4 +10,6 @@ public interface ProfessorService {
 
     ProfessorDTO findByName(String name);
     void delete(Long id);
+    ProfessorDTO update(ProfessorDTO professorDto);
+
 }

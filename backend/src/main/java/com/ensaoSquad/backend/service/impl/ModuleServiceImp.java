@@ -41,6 +41,27 @@ public class ModuleServiceImp implements ModuleService {
     }
 
     @Override
+    public void deleteModule(Long moduleId) {
+        if (!moduleRepository.existsById(moduleId)) {
+            throw new RessourceNotFoundException("Module not found with ID: " + moduleId);
+        }
+        moduleRepository.deleteById(moduleId);
+    }
+
+    @Override
+    public ModuleDTO updateModule(Long moduleId, ModuleDTO moduleDto) {
+        Module existingModule = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RessourceNotFoundException("Module not found with ID: " + moduleId));
+        existingModule.setModuleName(moduleDto.getModuleName());
+        existingModule.setDepartment(departmentRepository.findById(moduleDto.getDepartment().getDepartmentId())
+                .orElseThrow(() -> new RessourceNotFoundException("Department not found with ID: " + moduleDto.getDepartment().getDepartmentId())));
+
+        // Save the updated mod
+        Module updatedModule = moduleRepository.save(existingModule);
+        return ModuleMapper.toDTO(updatedModule);
+    }
+
+    @Override
     public ModuleDTO findModuleByName(String name) {
         Module module=moduleRepository.findByModuleName(name).orElseThrow(() ->
                 new RessourceNotFoundException("Module: "+name+" n'existe pas")

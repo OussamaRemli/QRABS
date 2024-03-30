@@ -34,6 +34,17 @@ public class ModuleController {
     public ResponseEntity<ModuleDTO> findByModuleName(@PathVariable String name){
         return ResponseEntity.ok(moduleService.findModuleByName(name));
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ModuleDTO> updateModule(@PathVariable Long id, @RequestBody ModuleDTO moduleDTO) {
+        ModuleDTO updatedModule = moduleService.updateModule(id, moduleDTO);
+        return ResponseEntity.ok(updatedModule);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
+        moduleService.deleteModule(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 

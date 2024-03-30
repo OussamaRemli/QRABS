@@ -3,10 +3,14 @@ package com.ensaoSquad.backend.service.impl;
 import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Professor;
+import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.StudentMapper;
 import com.ensaoSquad.backend.repository.LevelRepository;
+import com.ensaoSquad.backend.repository.ProfessorRepository;
+import com.ensaoSquad.backend.repository.SessionRepository;
 import com.ensaoSquad.backend.repository.StudentRepository;
 import com.ensaoSquad.backend.service.StudentService;
 import org.apache.poi.ss.usermodel.*;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +33,12 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private LevelRepository levelRepository;
+
+    @Autowired
+    private SessionRepository sessionRepository;
+
+    @Autowired
+    private ProfessorRepository professorRepository;
 
     @Override
     @Transactional
@@ -99,6 +110,18 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    @Override
+    public List<List<StudentDTO>> getStudentsTaughtByProfessorInTimeframe(
+            String professorEmail, String sessionDay, Time startTime, Time endTime) {
+        Professor professor = professorRepository.findByEmail(professorEmail).orElseThrow(
+                () -> new RessourceNotFoundException("Email not found")
+        );
+        List<Session> sessions = sessionRepository
+                .findByProfessorAndSessionDayAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(
+                        professor, sessionDay, startTime, endTime);
+        List<List<StudentDTO>> students = sessions.stream().map(s -> getStudentsByLevelName(s.getLevel().getLevelName())).toList();
+        return students;
+    }
 
 }
 

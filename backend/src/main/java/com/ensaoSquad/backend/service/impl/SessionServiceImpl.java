@@ -4,6 +4,15 @@ import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ensaoSquad.backend.dto.*;
+import com.ensaoSquad.backend.mapper.LevelMapper;
+import com.ensaoSquad.backend.mapper.ModuleMapper;
+import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Module;
+import com.ensaoSquad.backend.repository.LevelRepository;
+import com.ensaoSquad.backend.service.*;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -11,18 +20,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.ensaoSquad.backend.dto.LevelDTO;
-import com.ensaoSquad.backend.dto.ModuleDTO;
-import com.ensaoSquad.backend.dto.ProfessorDTO;
-import com.ensaoSquad.backend.dto.SessionDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.SessionMapper;
 import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.repository.SessionRepository;
-import com.ensaoSquad.backend.service.LevelService;
-import com.ensaoSquad.backend.service.ModuleService;
-import com.ensaoSquad.backend.service.ProfessorService;
-import com.ensaoSquad.backend.service.SessionService;
 import lombok.Data;
 
 @Service
@@ -31,18 +32,24 @@ public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
-
+    @Autowired
+    private LevelRepository levelRepository;
     private final LevelService levelService;
     private final ModuleService moduleService;
     private final ProfessorService professorService;
+    private final IncludeService includeService;
     private List<SessionDTO> uploadedSessionDTOs = new ArrayList<>();
 
+    @Transactional
     @Override
     public List<SessionDTO> uploadSessionFromExcel(MultipartFile file) {
+
         List<SessionDTO> uploadedSession = new ArrayList<>();
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
+            LevelDTO levelDTO = getLevelFromSheet(sheet);
+            deleteAllSessionByLevelName(levelDTO.getLevelName());
             String [] weekDays ={"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
             int startRow = 9;
             int startColumn = 7 ;
@@ -83,7 +90,13 @@ public class SessionServiceImpl implements SessionService {
                         professorDTO, startTime, endTime, sessionDay);
                 Session session = SessionMapper.toEntity(sessionDTO);
                 sessionRepository.save(session);
-
+                // Create Include
+                IncludeDTO includeDTO = new IncludeDTO();
+                Level level =LevelMapper.toEntity(levelDTO);
+                includeDTO.setLevelId(level);
+                Module module = ModuleMapper.toEntity(moduleDTO);
+                includeDTO.setModuleId(module);
+                includeService.createInclude(includeDTO);
                 uploadedSessionDTOs.add(sessionDTO);
             }
         } else {
@@ -110,8 +123,14 @@ public class SessionServiceImpl implements SessionService {
                     professorDTO, startTime, endTime, sessionDay);
             Session session = SessionMapper.toEntity(sessionDTO);
             sessionRepository.save(session);
-
-            uploadedSessionDTOs.add(sessionDTO);
+                // Create Include
+                IncludeDTO includeDTO = new IncludeDTO();
+                Level level =LevelMapper.toEntity(levelDTO);
+                includeDTO.setLevelId(level);
+                Module module = ModuleMapper.toEntity(moduleDTO);
+                includeDTO.setModuleId(module);
+                includeService.createInclude(includeDTO);
+                uploadedSessionDTOs.add(sessionDTO);
         }
         }
         return uploadedSessionDTOs;
@@ -125,6 +144,16 @@ public class SessionServiceImpl implements SessionService {
             throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
         }
         return levelDTO;
+    }
+    @Override
+    public void deleteAllSessionByLevelName(String levelName) {
+        Level level = levelRepository.findByLevelName(levelName);
+        if (level != null) {
+            sessionRepository.deleteByLevel(level);
+        } else {
+            throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
+        }
+
     }
 
     @Override

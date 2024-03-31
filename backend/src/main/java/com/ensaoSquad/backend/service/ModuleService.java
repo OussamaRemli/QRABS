@@ -11,4 +11,5 @@ public interface ModuleService {
     void deleteModule(Long moduleId);
     ModuleDTO updateModule(Long moduleId, ModuleDTO moduleDto);
     ModuleDTO findModuleByName(String name);
+
 }

@@ -22,4 +22,6 @@ public interface SessionService {
                                         ModuleDTO moduleDTO, ProfessorDTO professorDTO, Time startTime, Time endTime,
                                         String sessionDay);
      LevelDTO getLevelFromSheet(Sheet sheet);
+
+     void deleteAllSessionByLevelName(String levelName);
 }

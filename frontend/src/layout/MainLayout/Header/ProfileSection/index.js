@@ -6,24 +6,24 @@ import { useSelector } from 'react-redux';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-  Avatar,
+  // Avatar,
   Box,
-  Card,
-  CardContent,
+  // Card,
+  // CardContent,
   Chip,
   ClickAwayListener,
   Divider,
-  Grid,
-  InputAdornment,
+  // Grid,
+  // InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  OutlinedInput,
+  // OutlinedInput,
   Paper,
   Popper,
   Stack,
-  Switch,
+  // Switch,
   Typography
 } from '@mui/material';
 
@@ -33,11 +33,13 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
+// import UpgradePlanCard from './UpgradePlanCard';
+// import User1 from 'assets/images/users/user-round.svg';
 
 // assets
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+// import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+import { IconLogout, IconSettings } from '@tabler/icons-react';
+
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -45,10 +47,31 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
+  // fetch professor name
+  const [data, setData] = useState(null);
+  useEffect(() => {
+      fetchData();
+      }, []);
+    const fetchData = async () => {
+        try {
+            console.log(10);
+            const response = await fetch(`http://localhost:8011/api/professors/4`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const jsonData = await response.json();
+            setData(jsonData);
+        } catch (error) {
+            console.error('Error fetching data:', error.message);
+        }
+    };
 
-  const [sdm, setSdm] = useState(true);
-  const [value, setValue] = useState('');
-  const [notification, setNotification] = useState(false);
+
+
+
+    // const [sdm, setSdm] = useState(true);
+  // const [value, setValue] = useState('');
+  // const [notification, setNotification] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [open, setOpen] = useState(false);
   /**
@@ -109,20 +132,20 @@ const ProfileSection = () => {
             lineHeight: 0
           }
         }}
-        icon={
-          <Avatar
-            src={User1}
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: '8px 0 8px 8px !important',
-              cursor: 'pointer'
-            }}
-            ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
-        }
+        // icon={
+        //   <Avatar
+        //     src={User1}
+        //     sx={{
+        //       ...theme.typography.mediumAvatar,
+        //       margin: '8px 0 8px 8px !important',
+        //       cursor: 'pointer'
+        //     }}
+        //     ref={anchorRef}
+        //     aria-controls={open ? 'menu-list-grow' : undefined}
+        //     aria-haspopup="true"
+        //     color="inherit"
+        //   />
+        // }
         label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
         variant="outlined"
         ref={anchorRef}
@@ -157,77 +180,77 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
-                        <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                        <Typography variant="h4">Bonjour,</Typography>
+                        <Typography component="span" variant="h3" sx={{ fontWeight: 400 }}>
+                            {/* {data.firstName} {data.lastName} */} Admin!
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      {/*<Typography variant="subtitle2">Project Admin</Typography>*/}
                     </Stack>
-                    <OutlinedInput
-                      sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
-                      id="input-search-profile"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                      placeholder="Search profile options"
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[500]} />
-                        </InputAdornment>
-                      }
-                      aria-describedby="search-helper-text"
-                      inputProps={{
-                        'aria-label': 'weight'
-                      }}
-                    />
-                    <Divider />
+                    {/*<OutlinedInput*/}
+                    {/*  sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}*/}
+                    {/*  id="input-search-profile"*/}
+                    {/*  value={value}*/}
+                    {/*  onChange={(e) => setValue(e.target.value)}*/}
+                    {/*  placeholder="Search profile options"*/}
+                    {/*  startAdornment={*/}
+                    {/*    <InputAdornment position="start">*/}
+                    {/*      <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[500]} />*/}
+                    {/*    </InputAdornment>*/}
+                    {/*  }*/}
+                    {/*  aria-describedby="search-helper-text"*/}
+                    {/*  inputProps={{*/}
+                    {/*    'aria-label': 'weight'*/}
+                    {/*  }}*/}
+                    {/*/>*/}
+                    {/*<Divider />*/}
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                     <Box sx={{ p: 2 }}>
-                      <UpgradePlanCard />
+                      {/*<UpgradePlanCard />*/}
                       <Divider />
-                      <Card
-                        sx={{
-                          bgcolor: theme.palette.primary.light,
-                          my: 2
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3} direction="column">
-                            <Grid item>
-                              <Grid item container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="subtitle1">Start DND Mode</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    color="primary"
-                                    checked={sdm}
-                                    onChange={(e) => setSdm(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                            <Grid item>
-                              <Grid item container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="subtitle1">Allow Notifications</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    checked={notification}
-                                    onChange={(e) => setNotification(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
+                      {/*<Card*/}
+                      {/*  sx={{*/}
+                      {/*    bgcolor: theme.palette.primary.light,*/}
+                      {/*    my: 2*/}
+                      {/*  }}*/}
+                      {/*>*/}
+                      {/*  <CardContent>*/}
+                      {/*    <Grid container spacing={3} direction="column">*/}
+                      {/*      <Grid item>*/}
+                      {/*        <Grid item container alignItems="center" justifyContent="space-between">*/}
+                      {/*          <Grid item>*/}
+                      {/*            <Typography variant="subtitle1">Start DND Mode</Typography>*/}
+                      {/*          </Grid>*/}
+                      {/*          <Grid item>*/}
+                      {/*            <Switch*/}
+                      {/*              color="primary"*/}
+                      {/*              checked={sdm}*/}
+                      {/*              onChange={(e) => setSdm(e.target.checked)}*/}
+                      {/*              name="sdm"*/}
+                      {/*              size="small"*/}
+                      {/*            />*/}
+                      {/*          </Grid>*/}
+                      {/*        </Grid>*/}
+                      {/*      </Grid>*/}
+                      {/*      <Grid item>*/}
+                      {/*        <Grid item container alignItems="center" justifyContent="space-between">*/}
+                      {/*          <Grid item>*/}
+                      {/*            <Typography variant="subtitle1">Allow Notifications</Typography>*/}
+                      {/*          </Grid>*/}
+                      {/*          <Grid item>*/}
+                      {/*            <Switch*/}
+                      {/*              checked={notification}*/}
+                      {/*              onChange={(e) => setNotification(e.target.checked)}*/}
+                      {/*              name="sdm"*/}
+                      {/*              size="small"*/}
+                      {/*            />*/}
+                      {/*          </Grid>*/}
+                      {/*        </Grid>*/}
+                      {/*      </Grid>*/}
+                      {/*    </Grid>*/}
+                      {/*  </CardContent>*/}
+                      {/*</Card>*/}
                       <Divider />
                       <List
                         component="nav"
@@ -255,34 +278,34 @@ const ProfileSection = () => {
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
                         </ListItemButton>
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '#')}
-                        >
-                          <ListItemIcon>
-                            <IconUser stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Grid container spacing={1} justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="body2">Social Profile</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Chip
-                                    label="02"
-                                    size="small"
-                                    sx={{
-                                      bgcolor: theme.palette.warning.dark,
-                                      color: theme.palette.background.default
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                            }
-                          />
-                        </ListItemButton>
+                        {/*<ListItemButton*/}
+                        {/*  sx={{ borderRadius: `${customization.borderRadius}px` }}*/}
+                        {/*  selected={selectedIndex === 1}*/}
+                        {/*  onClick={(event) => handleListItemClick(event, 1, '#')}*/}
+                        {/*>*/}
+                        {/*  <ListItemIcon>*/}
+                        {/*    <IconUser stroke={1.5} size="1.3rem" />*/}
+                        {/*  </ListItemIcon>*/}
+                        {/*  <ListItemText*/}
+                        {/*    primary={*/}
+                        {/*      <Grid container spacing={1} justifyContent="space-between">*/}
+                        {/*        <Grid item>*/}
+                        {/*          <Typography variant="body2">Social Profile</Typography>*/}
+                        {/*        </Grid>*/}
+                        {/*        <Grid item>*/}
+                        {/*          <Chip*/}
+                        {/*            label="02"*/}
+                        {/*            size="small"*/}
+                        {/*            sx={{*/}
+                        {/*              bgcolor: theme.palette.warning.dark,*/}
+                        {/*              color: theme.palette.background.default*/}
+                        {/*            }}*/}
+                        {/*          />*/}
+                        {/*        </Grid>*/}
+                        {/*      </Grid>*/}
+                        {/*    }*/}
+                        {/*  />*/}
+                        {/*</ListItemButton>*/}
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}

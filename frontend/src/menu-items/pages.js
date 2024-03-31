@@ -9,31 +9,40 @@ const icons = {
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const pages = {
-  id: 'pages',
-  title: 'Pages',
-  caption: 'Pages Caption',
+  id: 'Departements',
+  title: 'Départements',
   type: 'group',
   children: [
     {
-      id: 'authentication',
-      title: 'Authentication',
+      id: 'Départements',
+      title: 'Départements',
       type: 'collapse',
       icon: icons.IconKey,
 
       children: [
         {
-          id: 'login3',
-          title: 'Login',
+          id: 'MMA',
+          title: 'MMA',
           type: 'item',
-          url: '/pages/login/login3',
-          target: true
+          url: '/departements/MMA',
+          // target: true
+          breadcrumbs: false
         },
         {
-          id: 'register3',
-          title: 'Register',
+          id: 'EIT',
+          title: 'EIT',
           type: 'item',
-          url: '/pages/register/register3',
-          target: true
+          url: '/departements/EIT',
+          // target: true
+          breadcrumbs: false
+        },
+        {
+          id: 'LC',
+          title: 'LC',
+          type: 'item',
+          url: '/departements/LC',
+          // target: true
+          breadcrumbs: false
         }
       ]
     }

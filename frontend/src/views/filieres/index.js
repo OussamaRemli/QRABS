@@ -5,6 +5,7 @@ import { Grid } from '@mui/material';
 
 // project imports
 import EarningCard from '../dashboard/Default/EarningCard';
+//import UpgradePlanCard from '../../layout/MainLayout/Header/ProfileSection/UpgradePlanCard';
 // import PopularCard from './PopularCard';
 // import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 // import TotalIncomeDarkCard from './TotalIncomeDarkCard';
@@ -26,12 +27,6 @@ const Filieres = ({name,abr}) => {
         <Grid container spacing={gridSpacing}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} name={name} abr={abr}/>
-          </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} name={name} abr={abr} />
-          </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} name={name} abr={abr} />
           </Grid>
           {/* <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>

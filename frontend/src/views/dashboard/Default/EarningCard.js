@@ -30,8 +30,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     height: 210,
     background: theme.palette.secondary[800],
     borderRadius: '50%',
-    top: -85,
-    right: -95,
+    top: -95,
+    right: -105,
     [theme.breakpoints.down('sm')]: {
       top: -105,
       right: -140
@@ -44,8 +44,8 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     height: 210,
     background: theme.palette.secondary[800],
     borderRadius: '50%',
-    top: -125,
-    right: -15,
+    top: -135,
+    right: -25,
     opacity: 0.5,
     [theme.breakpoints.down('sm')]: {
       top: -155,
@@ -56,7 +56,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const EarningCard = ({ isLoading }) => {
+const EarningCard = ({ isLoading,name,abr }) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -80,17 +80,7 @@ const EarningCard = ({ isLoading }) => {
               <Grid item>
                 <Grid container justifyContent="space-between">
                   <Grid item>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        ...theme.typography.commonAvatar,
-                        ...theme.typography.largeAvatar,
-                        backgroundColor: theme.palette.secondary[800],
-                        mt: 1
-                      }}
-                    >
-                      <img src={EarningIcon} alt="Notification" />
-                    </Avatar>
+                    
                   </Grid>
                   <Grid item>
                     <Avatar
@@ -125,28 +115,22 @@ const EarningCard = ({ isLoading }) => {
                       }}
                     >
                       <MenuItem onClick={handleClose}>
-                        <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Card
+                        <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants
                       </MenuItem>
                       <MenuItem onClick={handleClose}>
-                        <FileCopyTwoToneIcon sx={{ mr: 1.75 }} /> Copy Data
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <PictureAsPdfTwoToneIcon sx={{ mr: 1.75 }} /> Export
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
+                        <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Emploi Du Temps
                       </MenuItem>
                     </Menu>
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid container alignItems="center">
+                <Grid container alignItems="center" justifyContent='center'>
                   <Grid item>
-                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$500.00</Typography>
+                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500}}>{abr}</Typography>
                   </Grid>
                   <Grid item>
-                    <Avatar
+                    {/* <Avatar
                       sx={{
                         cursor: 'pointer',
                         ...theme.typography.smallAvatar,
@@ -155,21 +139,23 @@ const EarningCard = ({ isLoading }) => {
                       }}
                     >
                       <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                    </Avatar>
+                    </Avatar> */}
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item sx={{ mb: 1.25 }}>
-                <Typography
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: theme.palette.secondary[200]
-                  }}
-                >
-                  Total Earning
-                </Typography>
-              </Grid>
+              <Grid container alignItems="center" justifyContent='center'>
+                <Grid item sx={{ mb: 1.25 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '1rem',
+                      fontWeight: 500,
+                      color: theme.palette.secondary[200]
+                    }}
+                  >
+                    {name}
+                  </Typography>
+                </Grid>
+                </Grid>
             </Grid>
           </Box>
         </CardWrapper>

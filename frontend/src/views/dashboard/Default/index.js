@@ -21,8 +21,11 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Grid container spacing={gridSpacing}>
-      <Grid item xs={12}>
+    <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
+      <Grid item lg={2} >
+        <h2>Hi Admin!</h2>
+      </Grid>
+      {/* <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} />
@@ -42,6 +45,7 @@ const Dashboard = () => {
           </Grid>
         </Grid>
       </Grid>
+
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
@@ -51,7 +55,8 @@ const Dashboard = () => {
             <PopularCard isLoading={isLoading} />
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
+      
     </Grid>
   );
 };

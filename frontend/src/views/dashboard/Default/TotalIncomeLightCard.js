@@ -39,7 +39,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
 
-const TotalIncomeLightCard = ({ isLoading }) => {
+const TotalIncomeLightCard = ({ isLoading,name,abr }) => {
   const theme = useTheme();
 
   return (
@@ -51,7 +51,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
           <Box sx={{ p: 2 }}>
             <List sx={{ py: 0 }}>
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
-                <ListItemAvatar>
+                {/* <ListItemAvatar>
                   <Avatar
                     variant="rounded"
                     sx={{
@@ -63,23 +63,23 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                   >
                     <StorefrontTwoToneIcon fontSize="inherit" />
                   </Avatar>
-                </ListItemAvatar>
+                </ListItemAvatar> */}
                 <ListItemText
                   sx={{
                     py: 0,
                     mt: 0.45,
                     mb: 0.45
                   }}
-                  primary={<Typography variant="h4">$203k</Typography>}
+                  primary={<Typography variant="h3">{abr}</Typography>}
                   secondary={
                     <Typography
-                      variant="subtitle2"
+                      variant="subtitle1"
                       sx={{
                         color: theme.palette.grey[500],
                         mt: 0.5
                       }}
                     >
-                      Total Income
+                      {name}
                     </Typography>
                   }
                 />

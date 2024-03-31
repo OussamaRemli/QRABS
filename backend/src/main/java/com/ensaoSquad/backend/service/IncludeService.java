@@ -10,5 +10,6 @@ public interface IncludeService {
 
     List<IncludeDTO> getAllInclude();
 
+    void deleteAllIncludeByLevel(Level level);
 
 }

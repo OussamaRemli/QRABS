@@ -34,6 +34,7 @@ public class SessionServiceImpl implements SessionService {
     private SessionRepository sessionRepository;
     @Autowired
     private LevelRepository levelRepository;
+
     private final LevelService levelService;
     private final ModuleService moduleService;
     private final ProfessorService professorService;
@@ -49,15 +50,19 @@ public class SessionServiceImpl implements SessionService {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             LevelDTO levelDTO = getLevelFromSheet(sheet);
+            Level level = LevelMapper.toEntity(levelDTO);
+            //Delete the old sessions if exist
             deleteAllSessionByLevelName(levelDTO.getLevelName());
-            String [] weekDays ={"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+            //Delete the old includes if  exist
+            includeService.deleteAllIncludeByLevel(level);
+             String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
             int startRow = 9;
-            int startColumn = 7 ;
-            for(String day :weekDays) {
+            int startColumn = 7;
+            for (String day : weekDays) {
                 for (int i = 0, j = 0; i < 4; i++, j = j + 6) {
                     uploadedSession.addAll(parseSessionExcel(sheet, startRow, startColumn + j, day));
                 }
-                startRow+=8;
+                startRow += 8;
 
             }
             return uploadedSession;
@@ -74,11 +79,11 @@ public class SessionServiceImpl implements SessionService {
 
         if (byGroup) {
             for (int i = 0; i < 2; i++) {
-                String moduleName = sheet.getRow(startRow).getCell(startColumn+i*3).getStringCellValue();
-                if(moduleName.isEmpty()) continue;
-                String groupName = sheet.getRow(startRow + 1).getCell(startColumn+i*3).getStringCellValue();
-                String sessionType = sheet.getRow(startRow + 2).getCell(startColumn+i*3).getStringCellValue();
-                String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn+i*3).getStringCellValue();
+                String moduleName = sheet.getRow(startRow).getCell(startColumn + i * 3).getStringCellValue();
+                if (moduleName.isEmpty()) continue;
+                String groupName = sheet.getRow(startRow + 1).getCell(startColumn + i * 3).getStringCellValue();
+                String sessionType = sheet.getRow(startRow + 2).getCell(startColumn + i * 3).getStringCellValue();
+                String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn + i * 3).getStringCellValue();
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
                 ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
@@ -92,7 +97,7 @@ public class SessionServiceImpl implements SessionService {
                 sessionRepository.save(session);
                 // Create Include
                 IncludeDTO includeDTO = new IncludeDTO();
-                Level level =LevelMapper.toEntity(levelDTO);
+                Level level = LevelMapper.toEntity(levelDTO);
                 includeDTO.setLevelId(level);
                 Module module = ModuleMapper.toEntity(moduleDTO);
                 includeDTO.setModuleId(module);
@@ -101,37 +106,37 @@ public class SessionServiceImpl implements SessionService {
             }
         } else {
             String moduleName = sheet.getRow(startRow).getCell(startColumn).getStringCellValue();
-            if(!moduleName.isEmpty()){
-            String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
-            String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
-            String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue();
-            String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
-            String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
+            if (!moduleName.isEmpty()) {
+                String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
+                String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
+                String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue();
+                String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
+                String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
 
-            ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
-            if (moduleDTO == null) {
-                throw new RessourceNotFoundException("Le module " + moduleDTO + " n'existe pas");
-            }
-            ProfessorDTO professorDTO = professorService.findByName(professorLastName);
-            if (professorDTO == null) {
-                throw new RessourceNotFoundException("Le professor " + professorLastName + " n'existe pas");
-            }
-            Time startTime = Time.valueOf(startTimeString);
-            Time endTime = Time.valueOf(endTimeString);
+                ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
+                if (moduleDTO == null) {
+                    throw new RessourceNotFoundException("Le module " + moduleDTO + " n'existe pas");
+                }
+                ProfessorDTO professorDTO = professorService.findByName(professorLastName);
+                if (professorDTO == null) {
+                    throw new RessourceNotFoundException("Le professor " + professorLastName + " n'existe pas");
+                }
+                Time startTime = Time.valueOf(startTimeString);
+                Time endTime = Time.valueOf(endTimeString);
 
-            SessionDTO sessionDTO = createSessionDTO(levelDTO, byGroup, groupName, sessionType, moduleDTO,
-                    professorDTO, startTime, endTime, sessionDay);
-            Session session = SessionMapper.toEntity(sessionDTO);
-            sessionRepository.save(session);
+                SessionDTO sessionDTO = createSessionDTO(levelDTO, byGroup, groupName, sessionType, moduleDTO,
+                        professorDTO, startTime, endTime, sessionDay);
+                Session session = SessionMapper.toEntity(sessionDTO);
+                sessionRepository.save(session);
                 // Create Include
                 IncludeDTO includeDTO = new IncludeDTO();
-                Level level =LevelMapper.toEntity(levelDTO);
+                Level level = LevelMapper.toEntity(levelDTO);
                 includeDTO.setLevelId(level);
                 Module module = ModuleMapper.toEntity(moduleDTO);
                 includeDTO.setModuleId(module);
                 includeService.createInclude(includeDTO);
                 uploadedSessionDTOs.add(sessionDTO);
-        }
+            }
         }
         return uploadedSessionDTOs;
     }
@@ -145,6 +150,7 @@ public class SessionServiceImpl implements SessionService {
         }
         return levelDTO;
     }
+
     @Override
     public void deleteAllSessionByLevelName(String levelName) {
         Level level = levelRepository.findByLevelName(levelName);
@@ -164,10 +170,10 @@ public class SessionServiceImpl implements SessionService {
     }
 
     public SessionDTO createSessionDTO(LevelDTO levelDTO, boolean byGroup, String groupName, String sessionType,
-                                        ModuleDTO moduleDTO, ProfessorDTO professorDTO, Time startTime, Time endTime,
-                                        String sessionDay) {
+                                       ModuleDTO moduleDTO, ProfessorDTO professorDTO, Time startTime, Time endTime,
+                                       String sessionDay) {
         SessionDTO sessionDTO = new SessionDTO();
-        sessionDTO.setSessionDay(sessionDay); 
+        sessionDTO.setSessionDay(sessionDay);
         sessionDTO.setStartTime(startTime);
         sessionDTO.setEndTime(endTime);
         sessionDTO.setByGroup(byGroup);

@@ -47,8 +47,13 @@ public class IncludeServiceImp implements IncludeService {
         return includeDTOList;
     }
 
-
-
+    @Override
+    public void deleteAllIncludeByLevel(Level level) {
+        includeRepository.deleteByLevel(level);
 
     }
+
+
+
+}
 

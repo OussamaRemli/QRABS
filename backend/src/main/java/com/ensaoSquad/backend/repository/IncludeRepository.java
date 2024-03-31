@@ -14,7 +14,9 @@ import java.util.Optional;
 
 public interface IncludeRepository extends JpaRepository<Include,Long> {
 
-
+    @Modifying
+    @Query("DELETE FROM Include i WHERE i.levelId = :level")
+    void deleteByLevel(@Param("level") Level level);
 
 
 }

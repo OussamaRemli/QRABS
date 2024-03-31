@@ -1,26 +1,42 @@
 import React from 'react';
-import { Avatar, Box } from '@mui/material';
-import { DataGrid, gridClasses } from '@mui/x-data-grid';
-import { grey } from '@mui/material/colors';
+import {Avatar, Box} from '@mui/material';
+import {DataGrid, gridClasses} from '@mui/x-data-grid';
+import {grey} from '@mui/material/colors';
 
 function Users() {
     const columns = [
         {
             field: 'photoURL',
             headerName: 'Avatar',
-            width: 60,
-            renderCell: (params) => <Avatar src={params.row.photoURL} />,
+            width: 100,
+            renderCell: (params) =>
+                <div style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+                    <Avatar src={params.row.photoURL}/>
+                </div>,
             sortable: false,
             filterable: false,
         },
-        { field: 'name', headerName: 'Name', width: 170 },
-        {
-            field: 'present',
-            headerName: 'Present',
-            width: 100,
-            type: 'boolean',
-        },
-    ];
+    {
+        field: 'name',
+        headerName:'Name',
+        width:170
+    }
+,
+    {
+        field: 'present',
+            headerName
+    :
+        'Present',
+            width
+    :
+        100,
+            type
+    :
+        'boolean',
+    }
+,
+]
+    ;
 
     const users = [
         {
@@ -59,7 +75,7 @@ function Users() {
     return (
         <Box
             sx={{
-                height: 400,
+                height: 700,
                 width: '100%',
             }}
         >

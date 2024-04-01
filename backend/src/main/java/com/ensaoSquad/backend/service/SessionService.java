@@ -24,4 +24,7 @@ public interface SessionService {
      LevelDTO getLevelFromSheet(Sheet sheet);
 
      void deleteAllSessionByLevelName(String levelName);
-}
+
+     Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
+
+    }

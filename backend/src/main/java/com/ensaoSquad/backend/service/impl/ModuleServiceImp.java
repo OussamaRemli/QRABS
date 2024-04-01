@@ -71,6 +71,12 @@ public class ModuleServiceImp implements ModuleService {
         );
         return ModuleMapper.toDTO(module);
     }
+    public ModuleDTO findModuleById(long id) {
+        Module module = moduleRepository.findByModuleId(id).orElseThrow(() ->
+                new RessourceNotFoundException("Module: " + id + " n'existe pas")
+        );
+        return ModuleMapper.toDTO(module);
+    }
 
 
 

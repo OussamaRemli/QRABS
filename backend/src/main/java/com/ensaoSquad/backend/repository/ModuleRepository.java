@@ -13,4 +13,6 @@ public interface ModuleRepository extends JpaRepository<Module,Long> {
 
 
     Optional<Module> findByModuleName(String name);
+
+    Optional<Module> findByModuleId(Long id);
 }

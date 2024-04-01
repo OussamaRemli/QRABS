@@ -28,13 +28,13 @@ const Qrcode = () => {
         <>
             <MainCard content={false}
                       style={{
-                          zIndex: isExpanded ? '100' : 'auto',
-                          width: isExpanded ? '75%' : 'auto',
-                          height: isExpanded ? '84%' : 'auto',
+                          zIndex: isExpanded ? '1' : 'auto',
+                          width: isExpanded ? '100vw' : 'auto',
+                          height: isExpanded ? '100vh' : 'auto',
                           position: isExpanded ? 'fixed' : 'static',
-                          top: isExpanded ? '57%' : 'auto',
+                          top: isExpanded ? '50%' : 'auto',
                           left: isExpanded ? '50%' : 'auto',
-                          transform: isExpanded ? 'translate(-37%, -50%)' : 'none',
+                          transform: isExpanded ? 'translate(-50%, -50%)' : 'none',
                       }}>
                 <CardContent>
                     {isExpanded && <CardActions sx={{p: 1.25, pt: 0, justifyContent: 'center'}}>

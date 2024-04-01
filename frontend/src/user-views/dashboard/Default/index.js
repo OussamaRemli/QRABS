@@ -15,17 +15,21 @@ import Users from './StudentList';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
-  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   useEffect(() => {
-    setLoading(false);
+    fetch("http://localhost:8080/api/modules/currentModule/1")
+        .then(response => response.json())
+        .then(data => setData(data));
   }, []);
+
+
 
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item sx={{flexBasis: '300px',flexGrow : 0, flexShrink : 0 }}>
-            <ModuleCard moduleName={"Réseaux informatique"} startTime={"8:30"} endTime={"10:00"} />
+            <ModuleCard moduleName={data.moduleName} startTime={"8:30"} endTime={"10:00"} />
           </Grid>
           <Grid item  sx={{flexBasis: '150px',flexGrow : 0, flexShrink : 0 }}>
             <SectorCard  sectorName={"Gi 4"} />
@@ -53,7 +57,7 @@ const Dashboard = () => {
             <Users/>
           </Grid>
           <Grid item xs={6} md={4}>
-            <Qrcode isLoading={isLoading} />
+            <Qrcode />
           </Grid>
         </Grid>
       </Grid>

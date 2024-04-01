@@ -18,4 +18,9 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     @Modifying
     @Query("DELETE FROM Session s WHERE s.level = :level")
     void deleteByLevel(@Param("level") Level level);
+
+    @Query("SELECT s.module.moduleId FROM Session s WHERE s.professor.professorId = :professorId " +
+            "AND s.sessionDay = :currentDay " +
+            "AND :currentTime BETWEEN s.startTime AND s.endTime")
+    Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
 }

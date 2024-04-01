@@ -163,6 +163,12 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime) {
+        return sessionRepository.findModuleIdsByProfessorIdAndCurrentTimeAndDay(professorId, currentDay, currentTime);
+    }
+
+
+    @Override
     public boolean isByGroup(Sheet sheet, int startRow, int startColumn) {
         Row sessionRow = sheet.getRow(startRow + 1);
         return !sessionRow.getCell(startColumn).getStringCellValue().isEmpty() ||
@@ -184,4 +190,5 @@ public class SessionServiceImpl implements SessionService {
         sessionDTO.setSessionType(sessionType);
         return sessionDTO;
     }
+
 }

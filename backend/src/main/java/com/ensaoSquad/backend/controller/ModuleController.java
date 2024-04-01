@@ -55,6 +55,9 @@ public class ModuleController {
         return ResponseEntity.noContent().build();
     }
 
+
+
+    // Trouver le module á partir la séance actuelle 
     @GetMapping("/currentModule/{id}")
     public ModuleDTO getCurrentModule(@PathVariable Long id){
         long currentTimeMillis = System.currentTimeMillis();

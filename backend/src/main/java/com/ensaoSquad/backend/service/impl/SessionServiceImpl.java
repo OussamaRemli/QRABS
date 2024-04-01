@@ -162,6 +162,7 @@ public class SessionServiceImpl implements SessionService {
 
     }
 
+    // retouner le  id du module á partir la séance actuelle  du professeur
     @Override
     public Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime) {
         return sessionRepository.findModuleIdsByProfessorIdAndCurrentTimeAndDay(professorId, currentDay, currentTime);

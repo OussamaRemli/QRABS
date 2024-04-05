@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
@@ -36,7 +37,11 @@ public class SessionServiceImpl implements SessionService {
     private LevelRepository levelRepository;
 
     private final LevelService levelService;
-    private final ModuleService moduleService;
+    private ModuleService moduleService;
+    @Autowired
+    private void setModuleService(@Lazy ModuleService moduleService){
+        this.moduleService=moduleService;
+    }
     private final ProfessorService professorService;
     private final IncludeService includeService;
     private List<SessionDTO> uploadedSessionDTOs = new ArrayList<>();
@@ -166,6 +171,11 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime) {
         return sessionRepository.findModuleIdsByProfessorIdAndCurrentTimeAndDay(professorId, currentDay, currentTime);
+    }
+
+    @Override
+    public List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime) {
+        return sessionRepository.findLevelIdsByProfessorIdAndCurrentTimeAndDay(professorId,currentDay,currentTime);
     }
 
 

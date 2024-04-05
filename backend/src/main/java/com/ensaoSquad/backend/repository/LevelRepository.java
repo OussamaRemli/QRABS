@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface LevelRepository extends JpaRepository<Level, Long> {
     Level findByLevelName(String levelName);
+    Level findByLevelId(long levelId);
+
 
 }

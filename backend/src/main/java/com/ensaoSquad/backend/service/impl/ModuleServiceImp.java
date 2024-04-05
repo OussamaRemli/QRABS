@@ -10,18 +10,31 @@ import com.ensaoSquad.backend.mapper.ModuleMapper;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
 import com.ensaoSquad.backend.repository.ModuleRepository;
 import com.ensaoSquad.backend.service.ModuleService;
+import com.ensaoSquad.backend.service.SessionService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @AllArgsConstructor
 public class ModuleServiceImp implements ModuleService {
 
-
+    @Autowired
     private final ModuleRepository moduleRepository;
+    @Autowired
     private final DepartmentRepository departmentRepository;
+    private SessionService sessionService;
+    @Autowired
+    private void setSessionService(@Lazy SessionService sessionService){
+        this.sessionService=sessionService;
+    }
 
 
     @Override
@@ -78,6 +91,17 @@ public class ModuleServiceImp implements ModuleService {
         return ModuleMapper.toDTO(module);
     }
 
+    @Override
+    public ModuleDTO getCurrentModule(long id) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Time time = new Time(currentTimeMillis);
+        LocalDate currentDay =LocalDate.now();
+        String day = currentDay.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
+        Long ModuleId = sessionService.findModuleIdsByProfessorIdAndCurrentTimeAndDay(id,day,time);
+
+        return findModuleById(ModuleId);
+    }
 
 
 }

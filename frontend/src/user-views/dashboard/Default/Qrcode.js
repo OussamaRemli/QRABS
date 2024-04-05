@@ -28,7 +28,7 @@ const Qrcode = () => {
         <>
             <MainCard content={false}
                       style={{
-                          zIndex: isExpanded ? '1' : 'auto',
+                          zIndex: isExpanded ? '9999' : 'auto',
                           width: isExpanded ? '100vw' : 'auto',
                           height: isExpanded ? '100vh' : 'auto',
                           position: isExpanded ? 'fixed' : 'static',

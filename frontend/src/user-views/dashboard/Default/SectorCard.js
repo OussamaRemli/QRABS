@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 // material-ui
 import {styled} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
+import { Grid } from '@mui/material';
+
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -39,6 +41,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 const SectorCard = ({sectorName}) => {
     return (
         <>
+            <Grid item  sx={{flexBasis: '135px',flexGrow : 0, flexShrink : 0 }}>
             <CardWrapper border={false} content={false} >
                 <Box sx={{p: 2}}>
                     <List sx={{py: 0}}>
@@ -55,6 +58,7 @@ const SectorCard = ({sectorName}) => {
                     </List>
                 </Box>
             </CardWrapper>
+            </Grid>
         </>
     );
 };

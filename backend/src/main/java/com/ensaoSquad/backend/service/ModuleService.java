@@ -15,6 +15,7 @@ public interface ModuleService {
     ModuleDTO updateModule(Long moduleId, ModuleDTO moduleDto);
     ModuleDTO findModuleByName(String name);
     ModuleDTO findModuleById(long id) ;
+    ModuleDTO getCurrentModule(long id);
 
     List<ModuleDTO> getModulesByProfessor(Professor professor);
     List<ModuleDTO> getModulesByLevel(Level level);

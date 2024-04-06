@@ -26,5 +26,6 @@ public interface SessionService {
      void deleteAllSessionByLevelName(String levelName);
 
      Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
+     List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
 
-    }
+}

@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/api/levels","/api/levels/"})
+@CrossOrigin(origins = "*")
 public class LevelController {
 
     @Autowired
@@ -39,5 +40,10 @@ public class LevelController {
     public ResponseEntity<List<LevelDTO>> getAllLevels() {
         List<LevelDTO> levels = levelService.getAllLevels();
         return ResponseEntity.ok(levels);
+    }
+
+    @GetMapping("/curentlevel/{id}")
+    public List<LevelDTO> getCurrentLevel(@PathVariable Long id) {
+        return levelService.getCurrentLevel(id);
     }
 }

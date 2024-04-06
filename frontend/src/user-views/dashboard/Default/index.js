@@ -16,11 +16,18 @@ import Users from './StudentList';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
+  const [dataGi, setDataGi] = useState([]);
+
   useEffect(() => {
     fetch("http://localhost:8080/api/modules/currentModule/1")
         .then(response => response.json())
         .then(data => setData(data));
+    fetch("http://localhost:8080/api/levels/curentlevel/1")
+        .then(response => response.json())
+        .then(dataGi => setDataGi(dataGi));
   }, []);
+
+   const levelNames = dataGi.map(item=>item.levelName);
 
 
 
@@ -31,11 +38,11 @@ const Dashboard = () => {
           <Grid item sx={{flexBasis: '300px',flexGrow : 0, flexShrink : 0 }}>
             <ModuleCard moduleName={data.moduleName} startTime={"8:30"} endTime={"10:00"} />
           </Grid>
-          <Grid item  sx={{flexBasis: '150px',flexGrow : 0, flexShrink : 0 }}>
-            <SectorCard  sectorName={"Gi 4"} />
-          </Grid>
+            {levelNames.map((name, index) => (
+                <SectorCard key={index} sectorName={name} />
+            ))}
           <Grid item  sx={{flexBasis: '150px' ,flexGrow : 0, flexShrink : 0 }}>
-            <SectorCard  sectorName={"Gsier 4"}/>
+            {/*<SectorCard  sectorName={"Gsier 4"}/>*/}
           </Grid>
           <Grid item  sx={{flexBasis: '250px' ,flexGrow : 0, flexShrink : 0 }}>
             <PresentCountCard  presentCount={"45"}/>

@@ -1,7 +1,9 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.ModuleDTO;
-import com.ensaoSquad.backend.model.Session;
+import com.ensaoSquad.backend.model.Department;
+import com.ensaoSquad.backend.model.Professor;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.service.ModuleService;
 import com.ensaoSquad.backend.service.SessionService;
 import lombok.AllArgsConstructor;
@@ -70,7 +72,29 @@ public class ModuleController {
         return moduleService.findModuleById(ModuleId);
 
 
+    }
+    @GetMapping("/professor/{professorId}")
+    public ResponseEntity<List<ModuleDTO>> getModulesByProfessor(@PathVariable Long professorId) {
+        Professor professor = new Professor(); // Create Professor object based on professorId
+        professor.setProfessorId(professorId);
+        List<ModuleDTO> moduleDTOList = moduleService.getModulesByProfessor(professor);
+        return ResponseEntity.ok(moduleDTOList);
+    }
 
+    @GetMapping("/level/{levelId}")
+    public ResponseEntity<List<ModuleDTO>> getModulesByLevel(@PathVariable Long levelId) {
+        Level level = new Level(); // Create Level object based on levelId
+        level.setLevelId(levelId);
+        List<ModuleDTO> moduleDTOList = moduleService.getModulesByLevel(level);
+        return ResponseEntity.ok(moduleDTOList);
+    }
+
+    @GetMapping("/department/{departmentId}")
+    public ResponseEntity<List<ModuleDTO>> getModulesByDepartment(@PathVariable Long departmentId) {
+        Department department = new Department(); // Create Department object based on departmentId
+        department.setDepartmentId(departmentId);
+        List<ModuleDTO> moduleDTOList = moduleService.getModulesByDepartment(department);
+        return ResponseEntity.ok(moduleDTOList);
     }
 
 

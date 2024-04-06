@@ -19,10 +19,18 @@ public class Module {
     @Column(name = "module_name", nullable = false, unique = true)
     private String moduleName;
 
+    @Column(name="Intitule_Module" , nullable = false ,unique = true)
+    private String intituleModule;
+
+    @ManyToOne
+    @JoinColumn(name="id_professeur")
+    private Professor professor;
+
     @ManyToOne
     @JoinColumn(name ="department_id")
     private Department department;
 
-
-
+    @ManyToOne
+    @JoinColumn(name = "level_id")
+    private Level level;
 }

@@ -28,5 +28,5 @@ public class Professor {
 
     @ManyToOne
     @JoinColumn(name = "department_id")
-    Department department;
+    private Department department;
 }

@@ -31,6 +31,7 @@ public class ModuleServiceImp implements ModuleService {
 
         Department department = departmentRepository.findById(moduleDto.getDepartment().getDepartmentId())
                 .orElseThrow(() -> new RessourceNotFoundException("Department not found with ID: " + moduleDto.getDepartment().getDepartmentId()));
+
         com.ensaoSquad.backend.model.Module module = ModuleMapper.toEntity(moduleDto);
         com.ensaoSquad.backend.model.Module SavedModule = moduleRepository.save(module);
         return ModuleMapper.toDTO(SavedModule);

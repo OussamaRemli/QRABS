@@ -12,6 +12,7 @@ public class ModuleMapper {
         moduleDto.setModuleName(module.getModuleName());
         moduleDto.setDepartment(module.getDepartment());
         moduleDto.setIntituleModule(module.getIntituleModule());
+        moduleDto.setNameByDepartment(module.getNameByDepartment());
         moduleDto.setProfessor(module.getProfessor());
         moduleDto.setLevel(module.getLevel());
         return moduleDto;
@@ -24,6 +25,7 @@ public class ModuleMapper {
         module.setModuleName(moduleDto.getModuleName());
         module.setDepartment(moduleDto.getDepartment());
         module.setIntituleModule(moduleDto.getIntituleModule());
+        module.setNameByDepartment(moduleDto.getNameByDepartment());
         module.setProfessor(moduleDto.getProfessor());
         module.setLevel(moduleDto.getLevel());
         return module;

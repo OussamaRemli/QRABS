@@ -17,6 +17,8 @@ public class ModuleDTO {
 
     private String intituleModule;
 
+    private  String NameByDepartment;
+
     private Professor professor;
 
     private Level level;

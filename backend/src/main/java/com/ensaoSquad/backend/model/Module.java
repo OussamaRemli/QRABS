@@ -22,6 +22,9 @@ public class Module {
     @Column(name="Intitule_Module" , nullable = false ,unique = true)
     private String intituleModule;
 
+    @Column(name="Name_By_Department",nullable = false,unique = true)
+    private  String NameByDepartment;
+
     @ManyToOne
     @JoinColumn(name="id_professeur")
     private Professor professor;

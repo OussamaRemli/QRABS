@@ -4,6 +4,7 @@ import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface ModuleService {
     List<ModuleDTO> getModulesByProfessor(Professor professor);
     List<ModuleDTO> getModulesByLevel(Level level);
     List<ModuleDTO> getModulesByDepartment(Department department);
+
+    List<ModuleDTO> uploadByExcel(MultipartFile file);
 
     }

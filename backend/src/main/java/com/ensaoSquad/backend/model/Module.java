@@ -16,13 +16,13 @@ public class Module {
     @Column(name = "moduleI_id")
     private long moduleId;
 
-    @Column(name = "module_name", nullable = false, unique = true)
+    @Column(name = "module_name", nullable = false)
     private String moduleName;
 
-    @Column(name="Intitule_Module" , nullable = false ,unique = true)
+    @Column(name="Intitule_Module" , nullable = false )
     private String intituleModule;
 
-    @Column(name="Name_By_Department",nullable = false,unique = true)
+    @Column(name="Name_By_Department",nullable = false)
     private  String NameByDepartment;
 
     @ManyToOne

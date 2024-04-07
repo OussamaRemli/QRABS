@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.ModuleDTO;
+import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Level;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -95,6 +97,16 @@ public class ModuleController {
         department.setDepartmentId(departmentId);
         List<ModuleDTO> moduleDTOList = moduleService.getModulesByDepartment(department);
         return ResponseEntity.ok(moduleDTOList);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> uploadModulesFromExcel(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Uploaded file is empty");
+        }
+
+        List<ModuleDTO> uploadedModules = moduleService.uploadByExcel(file);
+        return ResponseEntity.ok(uploadedModules);
     }
 
 

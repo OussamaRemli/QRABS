@@ -1,6 +1,8 @@
 package com.ensaoSquad.backend.service.impl;
 
 
+import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Module;
@@ -10,11 +12,21 @@ import com.ensaoSquad.backend.mapper.ModuleMapper;
 
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
+import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.repository.ModuleRepository;
 import com.ensaoSquad.backend.service.ModuleService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -24,6 +36,7 @@ public class ModuleServiceImp implements ModuleService {
 
     private final ModuleRepository moduleRepository;
     private final DepartmentRepository departmentRepository;
+    private final LevelRepository levelRepository;
 
 
     @Override
@@ -123,5 +136,88 @@ public class ModuleServiceImp implements ModuleService {
                 .toList();
     }
 
+    @Override
+    public List<ModuleDTO> uploadByExcel(MultipartFile file) {
+        List<ModuleDTO> savedModules = new ArrayList<>();
+        try {
+            Workbook workbook = WorkbookFactory.create(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0); // Only one sheet
+
+            Iterator<Row> rowIterator = sheet.iterator();
+            rowIterator.next();
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                ModuleDTO moduleDTO = new ModuleDTO();
+
+                //get merged cells
+                String departmentName = getMergedCellValue(sheet, row.getRowNum(), 3);
+                String filiere = getMergedCellValue(sheet, row.getRowNum(), 4);
+                String semestre = getMergedCellValue(sheet, row.getRowNum(), 5);
+
+                //get ordinary cells
+                moduleDTO.setIntituleModule(getMergedCellValue(sheet, row.getRowNum(), 6));
+                moduleDTO.setModuleName(row.getCell(7).getStringCellValue());
+                moduleDTO.setNameByDepartment(row.getCell(8).getStringCellValue());
+
+                // Map DTO to entity
+                Module module = ModuleMapper.toEntity(moduleDTO);
+
+                // Find or create department
+                Department department = departmentRepository
+                        .findByDepartmentName(departmentName)
+                        .orElseGet(() -> {
+                            Department newDepartment = new Department();
+                            newDepartment.setDepartmentName(departmentName);
+                            return departmentRepository.save(newDepartment);
+                        });
+                module.setDepartment(department);
+
+                //find level
+                List<Level> levels = levelRepository.findBySectorName(filiere);
+                List<String> levelsName = levels.stream().map(level -> level.getLevelName()).toList();
+                String levelName = "";
+                if(semestre.equalsIgnoreCase("s1") ||
+                        semestre.equalsIgnoreCase("s2")){
+                    for(String l:levelsName){
+                        if(l.charAt(l.length()-1) == '3') levelName = l;
+                    }
+                }
+                if(semestre.equalsIgnoreCase("s3") ||
+                        semestre.equalsIgnoreCase("s4")){
+                    for(String l:levelsName){
+                        if(l.charAt(l.length()-1) == '4') levelName = l;
+                    }
+                }
+                if(semestre.equalsIgnoreCase("s5")){
+                    for(String l:levelsName){
+                        if(l.charAt(l.length()-1) == '5') levelName = l;
+                    }
+                }
+                Level level = levelRepository.findByLevelName(levelName);
+
+                module.setLevel(level);
+                // Save module entity
+                module = moduleRepository.save(module);
+
+                // Map entity back to DTO and add to list
+                savedModules.add(ModuleMapper.toDTO(module));
+            }
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception properly
+        }
+        return savedModules;
+    }
+
+    private String getMergedCellValue(Sheet sheet, int rowNum, int cellNum) {
+        for (CellRangeAddress range : sheet.getMergedRegions()) {
+            if (range.isInRange(rowNum, cellNum)) {
+                return sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()).getStringCellValue();
+            }
+        }
+        return sheet.getRow(rowNum).getCell(cellNum).getStringCellValue();
+    }
 
 }

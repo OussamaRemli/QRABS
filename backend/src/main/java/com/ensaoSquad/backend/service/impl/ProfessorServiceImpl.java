@@ -99,6 +99,7 @@ public class ProfessorServiceImpl implements ProfessorService {
         return savedProfs;
     }
 
+    //to get departement cell ; its a merged of multiple cells
     private String getMergedCellValue(Sheet sheet, int rowNum, int cellNum) {
         for (CellRangeAddress range : sheet.getMergedRegions()) {
             if (range.isInRange(rowNum, cellNum)) {

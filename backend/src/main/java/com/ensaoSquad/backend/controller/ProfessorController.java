@@ -30,7 +30,7 @@ public class ProfessorController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadStudentsFromExcel(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadProfsFromExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Uploaded file is empty");
         }

@@ -12,5 +12,6 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
 
     Level findByLevelId(long levelId);
 
+    List<Level> findBySectorName(String sectorName);
 
 }

@@ -1,18 +1,29 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.DepartmentMapper;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
+import com.ensaoSquad.backend.mapper.StudentMapper;
 import com.ensaoSquad.backend.model.Department;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
+import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
 import com.ensaoSquad.backend.repository.ProfessorRepository;
 import com.ensaoSquad.backend.service.ProfessorService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +38,9 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private final DepartmentRepository departmentRepository;
+
 
 
     @Override
@@ -36,6 +50,64 @@ public class ProfessorServiceImpl implements ProfessorService {
         professor = professorRepository.save(professor);
         return ProfessorMapper.toDTO(professor);
     }
+
+    @Override
+    public List<ProfessorDTO> saveByExcel(MultipartFile file) {
+        List<ProfessorDTO> savedProfs = new ArrayList<>();
+        try {
+            Workbook workbook = WorkbookFactory.create(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0); // Only one sheet
+
+            Iterator<Row> rowIterator = sheet.iterator();
+            rowIterator.next();
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                ProfessorDTO professorDTO = new ProfessorDTO();
+
+                // Extracting values from columns F, G, H, and I
+                String departmentName = getMergedCellValue(sheet, row.getRowNum(), 5); // Column F (0-indexed)
+                professorDTO.setLastName(row.getCell(6).getStringCellValue()); // Column G (0-indexed)
+                professorDTO.setFirstName(row.getCell(7).getStringCellValue()); // Column H (0-indexed)
+                professorDTO.setEmail(row.getCell(8).getStringCellValue()); // Column I (0-indexed)
+                professorDTO.setPassword("123456789"); // Assuming a default password
+
+                // Map DTO to entity
+                Professor prof = ProfessorMapper.toEntity(professorDTO);
+
+                // Find or create department
+                Department department = departmentRepository
+                        .findByDepartmentName(departmentName)
+                        .orElseGet(() -> {
+                            Department newDepartment = new Department();
+                            newDepartment.setDepartmentName(departmentName);
+                            return departmentRepository.save(newDepartment);
+                        });
+                prof.setDepartment(department);
+
+                // Save professor entity
+                prof = professorRepository.save(prof);
+
+                // Map entity back to DTO and add to list
+                savedProfs.add(ProfessorMapper.toDTO(prof));
+            }
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception properly
+        }
+        return savedProfs;
+    }
+
+    private String getMergedCellValue(Sheet sheet, int rowNum, int cellNum) {
+        for (CellRangeAddress range : sheet.getMergedRegions()) {
+            if (range.isInRange(rowNum, cellNum)) {
+                return sheet.getRow(range.getFirstRow()).getCell(range.getFirstColumn()).getStringCellValue();
+            }
+        }
+        return sheet.getRow(rowNum).getCell(cellNum).getStringCellValue();
+    }
+
 
     @Override
     public List<ProfessorDTO> findAll() {

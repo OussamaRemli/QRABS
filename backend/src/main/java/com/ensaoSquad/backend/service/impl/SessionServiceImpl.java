@@ -43,7 +43,6 @@ public class SessionServiceImpl implements SessionService {
         this.moduleService=moduleService;
     }
     private final ProfessorService professorService;
-    //private final IncludeService includeService;
     private List<SessionDTO> uploadedSessionDTOs = new ArrayList<>();
 
     @Transactional
@@ -58,8 +57,6 @@ public class SessionServiceImpl implements SessionService {
             Level level = LevelMapper.toEntity(levelDTO);
             //Delete the old sessions if exist
             deleteAllSessionByLevelName(levelDTO.getLevelName());
-            //Delete the old includes if  exist
-            //includeService.deleteAllIncludeByLevel(level);
              String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
             int startRow = 9;
             int startColumn = 7;
@@ -100,14 +97,7 @@ public class SessionServiceImpl implements SessionService {
                         professorDTO, startTime, endTime, sessionDay);
                 Session session = SessionMapper.toEntity(sessionDTO);
                 sessionRepository.save(session);
-                // Create Include
-                //IncludeDTO includeDTO = new IncludeDTO();
-                //Level level = LevelMapper.toEntity(levelDTO);
-                //includeDTO.setLevelId(level);
-                ////Module module = ModuleMapper.toEntity(moduleDTO);
-                //includeDTO.setModuleId(module);
-                //includeService.createInclude(includeDTO);
-                uploadedSessionDTOs.add(sessionDTO);
+
             }
         } else {
             String moduleName = sheet.getRow(startRow).getCell(startColumn).getStringCellValue();
@@ -133,14 +123,7 @@ public class SessionServiceImpl implements SessionService {
                         professorDTO, startTime, endTime, sessionDay);
                 Session session = SessionMapper.toEntity(sessionDTO);
                 sessionRepository.save(session);
-                // Create Include
-                //IncludeDTO includeDTO = new IncludeDTO();
-                //Level level = LevelMapper.toEntity(levelDTO);
-                //includeDTO.setLevelId(level);
-                //Module module = ModuleMapper.toEntity(moduleDTO);
-                //includeDTO.setModuleId(module);
-                //includeService.createInclude(includeDTO);
-                uploadedSessionDTOs.add(sessionDTO);
+
             }
         }
         return uploadedSessionDTOs;

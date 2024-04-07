@@ -11,43 +11,31 @@
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
+
+// ==============================|| UTILITIES MENU ITEMS ||============================== //
+
 const utilities = {
-  id: 'utilities',
-  title: 'Modules',
-  type: 'group',
-  children: [
-    {
-      id: 'Réseaux_informatique',
-      title: 'Réseaux informatique',
-      type: 'item',
-      url: '/utils/Réseaux_informatique'
-      // icon: icons.IconTypography,
-      // breadcrumbs: false
-    },
-    {
-      id: 'Adminstration_système',
-      title: 'Adminstration_système',
-      type: 'item',
-      url: '/utils/Adminstration_système'
-      // icon: icons.IconPalette,
-      // breadcrumbs: false
-    },
-    {
-      id: 'Interconnexion_réseaux',
-      title: 'Interconnexion réseaux',
-      type: 'item',
-      url: '/utils/Interconnexion_réseaux'
-      // icon: icons.IconShadow,
-      // breadcrumbs: false
-    },
-    {
-      id: 'Sécurité_informatique',
-      title: 'Sécurité informatique',
-      type: 'item',
-      url: '/utils/Sécurité_informatique'
-      // icon: icons.IconWindmill
-    }
-  ]
+    id: 'utilities',
+    title: 'Modules',
+    type: 'group',
+    children: []
 };
+
+// Fetch data from the endpoint
+fetch('http://localhost:8080/api/modules/professor/1')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(module => {
+            utilities.children.push({
+                id: module.moduleId.toString(), // Assuming moduleId is unique
+                title: module.moduleName,
+                type: 'item',
+                url: `/utils/${encodeURIComponent(module.intituleModule)}`,
+            });
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching utilities:', error);
+    });
 
 export default utilities;

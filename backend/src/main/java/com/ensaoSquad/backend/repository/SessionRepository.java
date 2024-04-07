@@ -15,6 +15,8 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     List<Session> findByProfessorAndSessionDayAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(
             Professor professor, String sessionDay, Time startTime, Time endTime);
 
+    Session findBySessionId(long sessionId);
+
     @Modifying
     @Query("DELETE FROM Session s WHERE s.level = :level")
     void deleteByLevel(@Param("level") Level level);

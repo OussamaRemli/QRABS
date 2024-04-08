@@ -128,6 +128,14 @@ public class ProfessorServiceImpl implements ProfessorService {
     public ProfessorDTO findByName(String lastName) {
         Professor professor = professorRepository.findByLastName(lastName).orElse(null);
         return professor != null ? ProfessorMapper.toDTO(professor) : null;    }
+    @Override
+    public List<ProfessorDTO> findByDepartmentName(String departmentName) {
+        List<Professor> professors = professorRepository.findByDepartmentDepartmentName(departmentName);
+        return professors.stream()
+                .map(ProfessorMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public void delete(Long id) {

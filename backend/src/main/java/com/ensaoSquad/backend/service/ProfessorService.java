@@ -12,6 +12,8 @@ public interface ProfessorService {
     ProfessorDTO findById(Long id);
 
     ProfessorDTO findByName(String name);
+    List<ProfessorDTO> findByDepartmentName(String departmentName);
+
     void delete(Long id);
     ProfessorDTO update(ProfessorDTO professorDto);
 

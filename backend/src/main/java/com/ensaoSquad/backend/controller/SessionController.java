@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/api/session","/api/session/"})
+@CrossOrigin(origins = "*")
 public class SessionController {
 
     @Autowired

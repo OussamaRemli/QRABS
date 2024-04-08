@@ -19,5 +19,5 @@ public interface ModuleRepository extends JpaRepository<Module,Long> {
     Optional<Module> findByModuleId(Long id);
     List<Module> findByProfessor(Professor professor);
     List<Module> findByLevel(Level level);
-    List<Module> findByDepartment(Department department);
+    List<Module> findByDepartmentDepartmentName(String departmentName);
 }

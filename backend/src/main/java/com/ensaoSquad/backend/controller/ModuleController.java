@@ -91,11 +91,9 @@ public class ModuleController {
         return ResponseEntity.ok(moduleDTOList);
     }
 
-    @GetMapping("/department/{departmentId}")
-    public ResponseEntity<List<ModuleDTO>> getModulesByDepartment(@PathVariable Long departmentId) {
-        Department department = new Department(); // Create Department object based on departmentId
-        department.setDepartmentId(departmentId);
-        List<ModuleDTO> moduleDTOList = moduleService.getModulesByDepartment(department);
+    @GetMapping("/department/{departmentName}")
+    public ResponseEntity<List<ModuleDTO>> getModulesByDepartmentName(@PathVariable String departmentName) {
+        List<ModuleDTO> moduleDTOList = moduleService.getModulesByDepartmentName(departmentName);
         return ResponseEntity.ok(moduleDTOList);
     }
 

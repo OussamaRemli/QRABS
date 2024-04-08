@@ -5,11 +5,8 @@ import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.service.ProfessorService;
 import com.ensaoSquad.backend.service.impl.JwtService;
 import lombok.AllArgsConstructor;
-<<<<<<< Updated upstream
 import org.springframework.http.ResponseEntity;
-=======
 import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> Stashed changes
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,6 +58,11 @@ public class ProfessorController {
 //    @PreAuthorize("hasAnyAuthority('ROLE_PROFESSOR')")
     public ProfessorDTO findById(@PathVariable Long id) {
         return professorService.findById(id);
+    }
+
+    @GetMapping("/department/{departmentName}")
+    public List<ProfessorDTO> findByDepartmentName(@PathVariable String departmentName) {
+        return professorService.findByDepartmentName(departmentName);
     }
 
     @DeleteMapping("/{id}")

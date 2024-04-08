@@ -124,17 +124,20 @@ public class ModuleServiceImp implements ModuleService {
                 .toList();
     }
 
-    @Override
-    public List<ModuleDTO> getModulesByDepartment(Department department) {
-        List<Module> modules = moduleRepository.findByDepartment(department);
-        if (modules.isEmpty()) {
-            throw new RessourceNotFoundException("No modules found for department: " + department.getDepartmentName());
-        }
 
+    @Override
+    public List<ModuleDTO> getModulesByDepartmentName(String departmentName) {
+        Department department = departmentRepository.findByDepartmentName(departmentName)
+                .orElseThrow(() -> new RessourceNotFoundException("Department not found with name: " + departmentName));
+        List<Module> modules = moduleRepository.findByDepartmentDepartmentName(departmentName);
+        if (modules.isEmpty()) {
+            throw new RessourceNotFoundException("No modules found for department: " + departmentName);
+        }
         return modules.stream()
                 .map(ModuleMapper::toDTO)
                 .toList();
     }
+
 
     @Override
     public List<ModuleDTO> uploadByExcel(MultipartFile file) {

@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import axios from 'axios';
+
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Avatar, Box, Grid, Menu, MenuItem, Typography,Button  } from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -60,6 +62,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,6 +70,27 @@ const EarningCard = ({ isLoading,name,abr }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    setSelectedFile(null);
+  };
+  // Function to handle file selection
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  // Function to handle importing students from the selected file
+  const handleImportStudents = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios.post('http://localhost:8011/api/students/upload', formData)
+        .then((response) => {
+          console.log('Students uploaded:', response.data);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error uploading students:', error);
+        });
+    }
   };
 
   return (
@@ -114,8 +138,20 @@ const EarningCard = ({ isLoading,name,abr }) => {
                         horizontal: 'right'
                       }}
                     >
-                      <MenuItem onClick={handleClose}>
-                        <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants
+                      <MenuItem onClick={handleImportStudents}>
+                        {/* <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants */}
+                        <input
+                          type="file"
+                          accept=".xls,.xlsx"
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                          id="file-upload"
+                        />
+                        <label htmlFor="file-upload">
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
+                            Import Liste Etudiants
+                          </Button>
+                        </label>
                       </MenuItem>
                       <MenuItem onClick={handleClose}>
                         <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Emploi Du Temps

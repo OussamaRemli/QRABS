@@ -30,7 +30,7 @@ public class StudentController {
         return ResponseEntity.ok(uploadedStudents);
     }
     @GetMapping("/{levelName}")
-    public ResponseEntity<List<StudentDTO>> getDepartmentByName(@PathVariable String levelName){
+    public ResponseEntity<List<StudentDTO>> getStudentsByLevelName(@PathVariable String levelName){
         return ResponseEntity.ok(studentService.getStudentsByLevelName(levelName));
     }
 

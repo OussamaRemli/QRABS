@@ -95,7 +95,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentDTO> getStudentsByLevelName(String levelName) {
-        return studentRepository.findByLevelName(levelName)
+        return studentRepository.findByLevelLevelName(levelName)
                 .stream().map(StudentMapper::toDTO).toList();
     }
 

@@ -51,7 +51,7 @@ import { flexbox } from '@mui/system';
 // ];
 //---------------------------
 const modulesColumns = [
-  { field: 'moduleId', headerName: 'Module ID', width: 130 },
+  { field: 'moduleId', headerName: 'ID', width: 100 },
   { field: 'moduleName', headerName: 'Module Name', width: 200 },
   { field: 'departmentName', headerName: 'Department', width: 200 },
   { field: 'intituleModule', headerName: 'Intitule Module', width: 200 },
@@ -61,9 +61,10 @@ const modulesColumns = [
 ];
 
 const professorsColumns = [
-  { field: 'professorId', headerName: 'Professor ID', width: 130 },
-  { field: 'firstName', headerName: 'First Name', width: 200 },
-  { field: 'lastName', headerName: 'Last Name', width: 200 }
+  { field: 'professorId', headerName: 'ID', width: 100 },
+  { field: 'firstName', headerName: 'First Name', width: 160 },
+  { field: 'lastName', headerName: 'Last Name', width: 160 },
+  { field: 'fullName', headerName: 'Full name', width: 200, valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`},
 ];
 
 const Departement = ({name,desc}) => {

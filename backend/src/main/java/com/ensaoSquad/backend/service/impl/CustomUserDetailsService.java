@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Professor professor = professorRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Professor not found with email: " + email));
-        System.out.println(professor.getRole());
+//        System.out.println(professor.getRole());
         return org.springframework.security.core.userdetails.User.builder()
                 .username(professor.getEmail())
                 .password(professor.getPassword())

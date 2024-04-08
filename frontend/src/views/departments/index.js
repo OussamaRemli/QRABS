@@ -58,7 +58,6 @@ const modulesColumns = [
   { field: 'NameByDepartment', headerName: 'Name By Department', width: 200 },
   { field: 'professorFirstName', headerName: 'Professor First Name', width: 200 },
   { field: 'professorLastName', headerName: 'Professor Last Name', width: 200 },
-  { field: 'professorId', headerName: 'Professor Id', width: 200 },
 ];
 
 const professorsColumns = [
@@ -85,7 +84,6 @@ const Departement = ({name,desc}) => {
           NameByDepartment: module.NameByDepartment,
           professorFirstName: module.professor.firstName,
           professorLastName: module.professor.lastName,
-          professorId: module.professor.professorId,
         }));
         setModules(formattedModules);
         setLoading(false);

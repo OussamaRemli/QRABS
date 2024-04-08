@@ -107,6 +107,16 @@ public class ModuleController {
         return ResponseEntity.ok(uploadedModules);
     }
 
+    @PostMapping("/uploadRespo")
+    public ResponseEntity<?> uploadModulesFromExcelRespo(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Uploaded file is empty");
+        }
+
+        moduleService.uploadRespoModule(file);
+        return ResponseEntity.ok("uploaded");
+    }
+
 
 
 }

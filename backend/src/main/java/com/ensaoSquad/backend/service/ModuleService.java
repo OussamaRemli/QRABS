@@ -24,4 +24,6 @@ public interface ModuleService {
 
     List<ModuleDTO> uploadByExcel(MultipartFile file);
 
+    void uploadRespoModule(MultipartFile file);
+
     }

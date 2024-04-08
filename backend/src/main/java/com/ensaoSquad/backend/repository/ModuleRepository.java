@@ -20,4 +20,6 @@ public interface ModuleRepository extends JpaRepository<Module,Long> {
     List<Module> findByProfessor(Professor professor);
     List<Module> findByLevel(Level level);
     List<Module> findByDepartmentDepartmentName(String departmentName);
+
+    Module findByModuleNameAndLevel(String moduleName,Level level);
 }

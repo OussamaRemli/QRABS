@@ -16,7 +16,9 @@ import Users from './StudentList';
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
-  const [dataGi, setDataGi] = useState([]);
+  const [dataLevel, setDataLevel] = useState([]);
+  const [dataSession, setDataSession] = useState([]);
+
 
   useEffect(() => {
     fetch("http://localhost:8080/api/modules/currentModule/1")
@@ -24,10 +26,15 @@ const Dashboard = () => {
         .then(data => setData(data));
     fetch("http://localhost:8080/api/levels/curentlevel/1")
         .then(response => response.json())
-        .then(dataGi => setDataGi(dataGi));
+        .then(dataLevel => setDataLevel(dataLevel));
+    fetch("http://localhost:8080/api/session/currentSession")
+        .then(response => response.json())
+        .then(dataSession => setDataSession(dataSession));
   }, []);
 
-   const levelNames = dataGi.map(item=>item.levelName);
+   const levelNames = dataLevel.map(item=>item.levelName);
+   const levelIds = dataLevel.map(item=>item.levelId);
+
 
 
 
@@ -64,7 +71,7 @@ const Dashboard = () => {
             <Users/>
           </Grid>
           <Grid item xs={6} md={4}>
-            <Qrcode />
+                <Qrcode url={`http://192.168.1.103:8080/Qr/scan/${dataSession.sessionId}/${levelIds[0]}`}/>
           </Grid>
         </Grid>
       </Grid>

@@ -9,7 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface SessionRepository extends JpaRepository<Session ,Long> {
     List<Session> findByProfessorAndSessionDayAndStartTimeGreaterThanEqualAndEndTimeLessThanEqual(
@@ -33,4 +36,7 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
             "AND s.sessionDay = :currentDay " +
             "AND :currentTime BETWEEN s.startTime AND s.endTime")
     List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
+
+    @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime")
+    Optional<Session> findSessionForCurrentDayAndTime(String currentDay, Time currentTime);
 }

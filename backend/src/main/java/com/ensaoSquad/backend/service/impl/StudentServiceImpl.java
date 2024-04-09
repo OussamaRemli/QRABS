@@ -1,6 +1,5 @@
 package com.ensaoSquad.backend.service.impl;
 
-import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
@@ -108,6 +107,11 @@ public class StudentServiceImpl implements StudentService {
             // Handle the case when the level does not exist
             throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
         }
+    }
+
+    @Override
+    public Student findByApogee(long apogee) {
+        return studentRepository.findByApogee(apogee);
     }
 
     @Override

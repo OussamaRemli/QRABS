@@ -13,7 +13,7 @@ import CloseFullscreenOutlinedIcon from '@mui/icons-material/CloseFullscreenOutl
 import QRCode from "react-qr-code";
 
 
-const Qrcode = () => {
+const Qrcode = ({url}) => {
 
     const [isExpanded, setQrIsExpanded] = useState(false);
     const expandQrSize = () => {
@@ -51,7 +51,7 @@ const Qrcode = () => {
                         <Grid item xs={30}>
                             <Grid container alignContent="center" justifyContent="center">
                                 <QRCode
-                                    value="Subscribe"
+                                    value={url}
                                     style={{
                                         width: isExpanded ? '35%' : '80%',
                                         height: isExpanded ? '35%' : '80%',

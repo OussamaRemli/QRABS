@@ -15,6 +15,9 @@ public interface StudentService {
 
     void deleteAllStudentsByLevel(String levelName);
 
+    Student findByApogee(long apogee);
+
+
     List<List<StudentDTO>> getStudentsTaughtByProfessorInTimeframe(
             String professorEmail, String sessionDay, Time startTime, Time endTime
     );

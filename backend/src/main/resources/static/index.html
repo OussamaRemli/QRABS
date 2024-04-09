@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Apogee</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f6f6f6;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+
+        .form__field {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5C6BC0;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-submit-btn:hover {
+            background-color: #7986CB;
+        }
+
+        .message {
+            color: #4CAF50; /* Change this to #F44336 for error messages */
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Enter Your Apogee</h2>
+    <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form">
+        <div class="form-group">
+        <label for="Apogee"></label>
+            <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">
+        </div>
+        <button type="submit" class="form-submit-btn">Submit</button>
+    </form>
+    <div id="message" class="message"></div>
+</div>
+</body>
+</html>
+
+    <script>
+        function submitForm() {
+            var Apogee = encodeURIComponent(document.getElementById('Apogee').value);
+            var urlParams = new URLSearchParams(window.location.search);
+            var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
+            var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
+            var form = document.getElementById('studentForm');
+            form.action = "http://192.168.1.103:8080/api/absence/scan/" + sessionId + "/" + levelId + "?Apogee=" + Apogee;
+
+            fetch(form.action, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        // Renvoie le texte de la réponse en cas d'erreur
+                        return response.text().then(errorText => {
+                            throw new Error(errorText);
+                        });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Afficher le message de succès ou effectuer d'autres actions si nécessaire
+                    console.log(data);
+                })
+                .catch(error => {
+                    // Afficher le message d'erreur à l'utilisateur
+                    document.getElementById('message').innerText = error.message;
+                });
+        }
+
+    </script>
+    </body>
+    </html>

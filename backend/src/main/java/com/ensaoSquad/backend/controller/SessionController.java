@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping({"/api/session","/api/session/"})
-@CrossOrigin(origins = "*")
 public class SessionController {
 
     @Autowired
@@ -26,6 +27,11 @@ public class SessionController {
 
          List<SessionDTO> uploadedSessions = sessionService.uploadSessionFromExcel(file);
          return ResponseEntity.ok(uploadedSessions);
+     }
+
+     @GetMapping("/currentSession")
+    public Optional<Session> getCurrentSession(){
+         return sessionService.getCurrentSession();
      }
 
 

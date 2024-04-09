@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Optional;
 
 public interface SessionService {
 
@@ -26,6 +27,9 @@ public interface SessionService {
      void deleteAllSessionByLevelName(String levelName);
 
      Long findModuleIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
+
      List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
+
+     public Optional<Session> getCurrentSession();
 
 }

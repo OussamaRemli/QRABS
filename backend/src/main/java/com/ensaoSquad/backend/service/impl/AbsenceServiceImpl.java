@@ -10,6 +10,8 @@ import com.ensaoSquad.backend.repository.SessionRepository;
 import com.ensaoSquad.backend.repository.StudentRepository;
 import com.ensaoSquad.backend.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,41 +30,39 @@ public class AbsenceServiceImpl implements AbsenceService {
     @Autowired
     private SessionRepository sessionRepository;
 
-    private Map<Long, List<Long>> presentStudents = new HashMap<>();
+    private Map<Long, Set<Long>> presentStudents = new HashMap<>();
 
     @Override
     public void markPresnt(long seanceId, long studentId, long levelId) {
-        presentStudents.computeIfAbsent(levelId, k -> new ArrayList<>()).add(studentId);
-
+        Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
+        if (!students.contains(studentId)) {
+            students.add(studentId);
+        }
     }
+
 
     @Override
     public void markAbsent(long sessionId, long levelId) {
         Level level = levelRepository.findByLevelId(levelId);
         Session session = sessionRepository.findBySessionId(sessionId);
         if (level == null || session == null) {
-            // Handle invalid session or level ID
             return;
         }
 
         List<Student> studentsInLevel = studentRepository.findByLevel(level);
 
-        // Get the list of present student IDs for this level
-        List<Long> presentStudentIds = presentStudents.getOrDefault(levelId, Collections.emptyList());
+        Set<Long> presentStudentIds = presentStudents.getOrDefault(levelId, Collections.emptySet());
 
-        // Iterate through students in the level
         for (Student student : studentsInLevel) {
-            // Check if the student is absent
             if (!presentStudentIds.contains(student.getStudentId())) {
-                // Create Absence object
                 Absence absence = new Absence();
                 absence.setSession(session);
                 absence.setStudent(student);
                 absence.setDateAbsence(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                // Save the absence in the database
                 absenceRepository.save(absence);
             }
         }
-
+        presentStudents.remove(levelId);
     }
+
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // material-ui
-import { Grid,Box,TextField,Typography,Divider } from '@mui/material';
+import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,InputLabel } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
@@ -70,6 +70,7 @@ const professorsColumns = [
 const Departement = ({name,desc}) => {
   const [modules, setModules] = useState([]);
   const [professors, setProfessors] = useState([]);
+  const [departmentId, setDepartmentId] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('modules');
   useEffect(() => {
@@ -120,6 +121,10 @@ const Departement = ({name,desc}) => {
     return `${module.moduleId}-${module.departmentName}`;
   };
   const getProfessorRowId = (professor) => `${professor.professorId}-${professor.department}`;
+  const handleDepartmentChange = (event) => {
+    setDepartmentId(event.target.value);
+  };
+
 
   return (
     <Grid container spacing={gridSpacing}>
@@ -203,7 +208,20 @@ const Departement = ({name,desc}) => {
                   > 
                     <Typography variant="h4" textAlign={'center'}>Ajouter module</Typography>
                     <TextField id="standard-basic" label="Nom De Module" variant="standard" />
-                    <TextField id="standard-basic" label="ID De Departement" variant="standard" />
+                    {/* <TextField id="standard-basic" label="ID De Departement" variant="standard" /> */}
+                    <Select
+                      id="department-id"
+                      value={departmentId}
+                      onChange={handleDepartmentChange}
+                      labelId="department-select-label"
+                      variant="standard"
+                      displayEmpty
+                    >
+                      <MenuItem value="" disabled>Sélectionner le département</MenuItem>
+                      <MenuItem value={1}>MMA</MenuItem>
+                      <MenuItem value={2}>EIT</MenuItem>
+                      <MenuItem value={3}>LC</MenuItem>
+                    </Select>
                     <Button variant="outlined" color="primary" style={{marginTop:'30px'}}>Ajouter</Button>
                 </Box>
               </Grid>
@@ -230,7 +248,20 @@ const Departement = ({name,desc}) => {
                     <TextField id="standard-basic" label="Nom " variant="standard" />
                     <TextField id="standardstandard-basic" label="Prénom" variant="standard" />
                     <TextField id="standardstandard-basic" label="Email"standard variant="standard" />
-                    <TextField id="standardstandard-basic" label="ID De Departement" variant="standard" />
+                    {/* <TextField id="standardstandard-basic" label="ID De Departement" variant="standard" /> */}
+                    <Select
+                      id="professor-department-id"
+                      value={departmentId}
+                      onChange={handleDepartmentChange}
+                      labelId="department-select-label"
+                      variant="standard"
+                      displayEmpty
+                    >
+                      <MenuItem value="" disabled>Sélectionner le département</MenuItem>
+                      <MenuItem value={1}>MMA</MenuItem>
+                      <MenuItem value={2}>EIT</MenuItem>
+                      <MenuItem value={3}>LC</MenuItem>
+                    </Select>
                     <Button variant="outlined" color="primary" style={{marginTop:'30px'}}>Ajouter</Button>
                 </Box>
               </Grid>

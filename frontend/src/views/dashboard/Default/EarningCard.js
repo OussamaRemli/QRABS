@@ -92,6 +92,22 @@ const EarningCard = ({ isLoading,name,abr }) => {
         });
     }
   };
+  // Function to handle importing sessions from the selected file
+  const handleImportSessions = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios.post('http://localhost:8011/api/session/upload', formData)
+        .then((response) => {
+          console.log('Sessions uploaded:', response.data);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error uploading sessions:', error);
+        });
+    }
+  };
 
   return (
     <>
@@ -153,8 +169,23 @@ const EarningCard = ({ isLoading,name,abr }) => {
                           </Button>
                         </label>
                       </MenuItem>
-                      <MenuItem onClick={handleClose}>
+                      {/* <MenuItem onClick={handleClose}>
                         <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Emploi Du Temps
+                      </MenuItem> */}
+                      <MenuItem onClick={handleImportSessions}>
+                        {/* <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants */}
+                        <input
+                          type="file"
+                          accept=".xls,.xlsx"
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                          id="file-upload"
+                        />
+                        <label htmlFor="file-upload">
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
+                            Import Emploi Du Temps
+                          </Button>
+                        </label>
                       </MenuItem>
                     </Menu>
                   </Grid>

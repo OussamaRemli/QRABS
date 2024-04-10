@@ -13,8 +13,10 @@ import java.util.Optional;
 import com.ensaoSquad.backend.dto.*;
 import com.ensaoSquad.backend.mapper.LevelMapper;
 import com.ensaoSquad.backend.mapper.ModuleMapper;
+import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Module;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.service.*;
 import jakarta.transaction.Transactional;
@@ -167,14 +169,14 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Optional<Session> getCurrentSession() {
+    public Optional<Session> getCurrentSession(Long professorId) {
         long currentTimeMillis = System.currentTimeMillis();
         Time time = new Time(currentTimeMillis);
         LocalDate currentDay =LocalDate.now();
         String day = currentDay.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
         // Call the repository method to find the session for the current day and time
-        return sessionRepository.findSessionForCurrentDayAndTime(day, time);
+        return sessionRepository.findSessionForCurrentDayAndTimeAndProfessor(day, time,professorId);
     }
 
 

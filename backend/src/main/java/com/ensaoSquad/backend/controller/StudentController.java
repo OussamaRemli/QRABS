@@ -3,6 +3,7 @@ package com.ensaoSquad.backend.controller;
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.model.Professor;
+import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ public class StudentController {
         return ResponseEntity.ok(uploadedStudents);
     }
     @GetMapping("/{levelName}")
-    public ResponseEntity<List<StudentDTO>> getStudentsByLevelName(@PathVariable String levelName){
-        return ResponseEntity.ok(studentService.getStudentsByLevelName(levelName));
+    public List<StudentDTO> getStudentsByLevelName(@PathVariable String levelName){
+        return studentService.getStudentsByLevelName(levelName);
     }
 
     @GetMapping("/taughtByProf")

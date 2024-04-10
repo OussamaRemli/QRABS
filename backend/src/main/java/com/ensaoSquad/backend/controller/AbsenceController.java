@@ -9,14 +9,17 @@ import com.ensaoSquad.backend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 
 @RestController
 @RequestMapping("/api/absence")
 @CrossOrigin(origins = "*")
 public class AbsenceController {
+    @Autowired
+    private SimpMessagingTemplate template;
     @Autowired
     private AbsenceService absenceService;
     @Autowired
@@ -36,6 +39,7 @@ public class AbsenceController {
 
         Long studentId = student.getStudentId();
         absenceService.markPresnt(sessionId,studentId,levelId);
+        this.template.convertAndSend("/topic/presence", Apogee);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 

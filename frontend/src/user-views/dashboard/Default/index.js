@@ -12,13 +12,12 @@ import SectorCard from './SectorCard';
 // import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 import Users from './StudentList';
-// ==============================|| DEFAULT DASHBOARD ||============================== //
+
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [dataLevel, setDataLevel] = useState([]);
   const [dataSession, setDataSession] = useState([]);
-
 
   useEffect(() => {
     fetch("http://localhost:8080/api/modules/currentModule/1")
@@ -27,9 +26,10 @@ const Dashboard = () => {
     fetch("http://localhost:8080/api/levels/curentlevel/1")
         .then(response => response.json())
         .then(dataLevel => setDataLevel(dataLevel));
-    fetch("http://localhost:8080/api/session/currentSession")
+    fetch("http://localhost:8080/api/session/currentSession/1")
         .then(response => response.json())
         .then(dataSession => setDataSession(dataSession));
+
   }, []);
 
    const levelNames = dataLevel.map(item=>item.levelName);
@@ -68,7 +68,7 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
-            <Users/>
+            <Users level={levelNames[0]}/>
           </Grid>
           <Grid item xs={6} md={4}>
                 <Qrcode url={`http://192.168.1.103:8080/Qr/scan/${dataSession.sessionId}/${levelIds[0]}`}/>

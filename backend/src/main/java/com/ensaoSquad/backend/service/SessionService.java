@@ -30,6 +30,6 @@ public interface SessionService {
 
      List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
 
-     public Optional<Session> getCurrentSession();
+     public Optional<Session> getCurrentSession(Long Professor);
 
 }

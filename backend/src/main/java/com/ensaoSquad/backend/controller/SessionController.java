@@ -29,9 +29,9 @@ public class SessionController {
          return ResponseEntity.ok(uploadedSessions);
      }
 
-     @GetMapping("/currentSession")
-    public Optional<Session> getCurrentSession(){
-         return sessionService.getCurrentSession();
+     @GetMapping("/currentSession/{professorId}")
+    public Optional<Session> getCurrentSession(@PathVariable Long professorId){
+         return sessionService.getCurrentSession(professorId);
      }
 
 

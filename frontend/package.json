@@ -20,6 +20,8 @@
     "framer-motion": "^11.0.3",
     "material-ui-popup-state": "^5.0.10",
     "moment": "^2.30.1",
+    "net": "^1.0.2",
+    "net-browserify": "^0.1.4",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
@@ -32,6 +34,8 @@
     "react-router-dom": "6.21.3",
     "react-scripts": "^5.0.1",
     "redux": "^5.0.1",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "yup": "^1.3.3"
   },
   "scripts": {

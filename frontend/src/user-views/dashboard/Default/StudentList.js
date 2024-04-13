@@ -13,15 +13,15 @@ function Users({ level }) {
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         const stompClient = Stomp.over(socket);
-    
+
         stompClient.connect({}, function () {
             stompClient.subscribe('/topic/presence', function (message) {
-                setUsers(users => users.map(item => 
+                setUsers(users => users.map(item =>
                     item.Apogee == message.body ? { ...item, present: true } : item
                 ));
             });
         });
-    
+
         fetch(`http://localhost:8080/api/students/${level}`)
             .then(response => response.json())
             .then(data => {

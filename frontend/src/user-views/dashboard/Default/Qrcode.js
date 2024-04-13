@@ -25,7 +25,7 @@ const Qrcode = ({url}) => {
     }
 
     return (
-        <>
+      (<>
             <MainCard content={false}
                       style={{
                           zIndex: isExpanded ? '9999' : 'auto',
@@ -75,7 +75,7 @@ const Qrcode = ({url}) => {
                     }
                 </CardActions>
             </MainCard>
-        </>
+        </>)
     );
 };
 

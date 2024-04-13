@@ -30,7 +30,7 @@ public class SessionController {
      }
 
      @GetMapping("/currentSession/{professorId}")
-    public Optional<Session> getCurrentSession(@PathVariable Long professorId){
+    public List<Session> getCurrentSession(@PathVariable Long professorId){
          return sessionService.getCurrentSession(professorId);
      }
 

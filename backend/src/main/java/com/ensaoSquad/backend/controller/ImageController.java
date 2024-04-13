@@ -62,8 +62,8 @@ public class ImageController {
         return "redirect:/uploadStatus";
     }
 
-    @GetMapping("/image")
-    public ResponseEntity<Resource> getImage(@RequestParam("name")long apogee) {
+    @GetMapping("/image/{apogee}")
+    public ResponseEntity<Resource> getImage(@PathVariable long apogee) {
         // Retrieve the student details from the database based on their name
         Student student = studentRepository.findByApogee(apogee);
         if (student == null) {

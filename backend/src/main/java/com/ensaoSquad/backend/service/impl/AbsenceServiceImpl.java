@@ -12,6 +12,7 @@ import com.ensaoSquad.backend.service.AbsenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,15 +30,24 @@ public class AbsenceServiceImpl implements AbsenceService {
     private LevelRepository levelRepository;
     @Autowired
     private SessionRepository sessionRepository;
+    @Autowired
+    private SimpMessagingTemplate template;
 
     private Map<Long, Set<Long>> presentStudents = new HashMap<>();
+
+    private int count;
 
     @Override
     public void markPresnt(long seanceId, long studentId, long levelId) {
         Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
         if (!students.contains(studentId)) {
             students.add(studentId);
+            count = students.size();
+            System.out.println(count);
+            this.template.convertAndSend("/topic/count", count);
         }
+
+
     }
 
 

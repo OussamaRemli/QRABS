@@ -38,12 +38,12 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 }));
 
 
-const SectorCard = ({sectorName}) => {
+const SectorCard = ({sectorName , onClick}) => {
     return (
         <>
             <Grid item  sx={{flexBasis: '135px',flexGrow : 0, flexShrink : 0 }}>
             <CardWrapper border={false} content={false} >
-                <Box sx={{p: 2}}>
+                <Box onClick={onClick} sx={{p: 2}}>
                     <List sx={{py: 0}}>
                         <ListItem alignItems="center" disableGutters sx={{py: 0}}>
                             <ListItemText

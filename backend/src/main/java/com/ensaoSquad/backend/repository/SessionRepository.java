@@ -38,5 +38,5 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
 
     @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime AND s.professor.professorId= :professorId")
-    Optional<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);
+    List<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);
 }

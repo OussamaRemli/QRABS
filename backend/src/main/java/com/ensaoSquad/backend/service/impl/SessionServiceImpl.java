@@ -169,7 +169,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public Optional<Session> getCurrentSession(Long professorId) {
+    public List<Session> getCurrentSession(Long professorId) {
         long currentTimeMillis = System.currentTimeMillis();
         Time time = new Time(currentTimeMillis);
         LocalDate currentDay =LocalDate.now();

@@ -42,7 +42,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const ModuleCard = ({moduleName, startTime, endTime}) => {
+const ModuleCard = ({moduleName, sessionType,startTime, endTime}) => {
 
 
 
@@ -65,7 +65,7 @@ const ModuleCard = ({moduleName, startTime, endTime}) => {
                                 }
                                 secondary={
                                     <Typography variant="subtitle2" sx={{color: 'primary.light', mt: 0.25}}>
-                                        {startTime}-{endTime}
+                                        {sessionType} : {startTime} - {endTime}
                                     </Typography>
                                 }
                             />

@@ -74,7 +74,7 @@
             var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
             var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
             var form = document.getElementById('studentForm');
-            form.action = "http://192.168.1.103:8080/api/absence/scan/" + sessionId + "/" + levelId + "?Apogee=" + Apogee;
+            form.action = "http://192.168.1.59:8080/api/absence/scan/" + sessionId + "/" + levelId + "?Apogee=" + Apogee;
 
             fetch(form.action, {
                 method: 'POST'

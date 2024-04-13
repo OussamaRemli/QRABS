@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 function Users({ level }) {
     const [dataStudent, setDataStudent] = useState([]);
+    const [dataImages , setDataImages] =useState([]);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -25,20 +26,36 @@ function Users({ level }) {
         fetch(`http://localhost:8080/api/students/${level}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 setDataStudent(data);
-                setUsers(data.map(student => ({
+                const updatedUsers = data.map(student => ({
                     _id: uuidv4(),
-                    photoURL: `c://Users//LLLNNN//OneDrive//Desktop//GestAbs//backend//src//main//resources//students-images//2017466.jpeg`,
-                    Apogee: `${student.apogee}`,
+                    Apogee: student.apogee,
                     name: `${student.firstName} ${student.lastName}`,
                     present: null
-                })));
+                }));
+                setUsers(updatedUsers);
+
+                data.forEach(student => {
+                    fetch(`http://localhost:8080/api/import-files/image/${student.apogee}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Image not found');
+                            }
+                            return response.blob();
+                        })
+                        .then(imageBlob => {
+                            const imageUrl = URL.createObjectURL(imageBlob);
+                            const updatedUser = updatedUsers.find(user => user.Apogee === student.apogee);
+                            updatedUser.photoURL = imageUrl;
+                            setUsers([...updatedUsers]);
+                        })
+                        .catch(error => console.error('Error fetching image data:', error));
+                });
             })
             .catch(error => console.error('Error fetching student data:', error));
     }, [level]);
-    
-    // Define the columns for the data grid
+
+
     const columns = [
         {
             field: 'photoURL',

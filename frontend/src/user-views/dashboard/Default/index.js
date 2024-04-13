@@ -62,7 +62,7 @@ const Dashboard = () => {
                         {selectedSector !== null && <Users level={levelNames[selectedSector]}/>}
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        {selectedSector !== null && <Qrcode url={`http://192.168.1.103:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
+                        {selectedSector !== null && <Qrcode url={`http://192.168.1.59:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
                     </Grid>
                 </Grid>
             </Grid>

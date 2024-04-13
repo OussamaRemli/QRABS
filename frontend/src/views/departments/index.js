@@ -58,6 +58,7 @@ const modulesColumns = [
   { field: 'NameByDepartment', headerName: 'Name By Department', width: 200 },
   { field: 'professorFirstName', headerName: 'Professor First Name', width: 200 },
   { field: 'professorLastName', headerName: 'Professor Last Name', width: 200 },
+  { field: 'level', headerName: 'Level', width: 200 },
 ];
 
 const professorsColumns = [
@@ -70,50 +71,96 @@ const professorsColumns = [
 const Departement = ({name,desc}) => {
   const [modules, setModules] = useState([]);
   const [professors, setProfessors] = useState([]);
+  const [allProfessors, setAllProfessors] = useState([]);
+  const [levels, setLevels] = useState([]);
   const [departmentId, setDepartmentId] = useState('');
+  const [professorId, setProfessorId] = useState('');
+  const [password, setPassword] = useState('');
+  const [levelId, setLevelId] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('modules');
-  useEffect(() => {
-    // Fonction pour récupérer les modules par le nom du département
-    const fetchModulesByDepartment = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8011/api/modules/department/${name}`);
-        const formattedModules = response.data.map(module => ({
-          moduleId: module.moduleId,
-          moduleName: module.moduleName,
-          departmentName: module.department.departmentName,
-          intituleModule: module.intituleModule,
-          NameByDepartment: module.NameByDepartment,
-          professorFirstName: module.professor.firstName,
-          professorLastName: module.professor.lastName,
-        }));
-        setModules(formattedModules);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching modules:', error);
-      }
-    };
+  const [newModuleName, setNewModuleName] = useState('');
+  const [newIntituleModule, setNewIntituleModule] = useState('');
+  const [newNameByDepartment, setNewNameByDepartment] = useState('');
+  const [newProfessorFirstName, setNewProfessorFirstName] = useState('');
+  const [newProfessorLastName, setNewProfessorLastName] = useState('');
+  const [newProfessorEmail, setNewProfessorEmail] = useState('');
 
-    // Fonction pour récupérer les professeurs par le nom du département
-    const fetchProfessorsByDepartment = async () => {
+  // Fonction pour récupérer les professeurs par le nom du département
+  const fetchProfessorsByDepartment = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8011/api/professors/department/${name}`);
+      const formattedProfessors = response.data.map(professor => ({
+        professorId: professor.professorId,
+        firstName: professor.firstName,
+        lastName: professor.lastName
+      }));
+      setProfessors(formattedProfessors);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching professors:', error);
+    }
+  };
+  // Fonction pour récupérer les modules par le nom du département
+  const fetchModulesByDepartment = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8011/api/modules/department/${name}`);
+      console.log(response.data)
+      const formattedModules = response.data.map(module => ({
+        moduleId: module.moduleId,
+        moduleName: module.moduleName,
+        departmentName: module.department.departmentName,
+        intituleModule: module.intituleModule,
+        NameByDepartment: module.nameByDepartment,
+        professorFirstName: module.professor.firstName,
+        professorLastName: module.professor.lastName,
+        level: module.level.levelName,
+      }));
+      setModules(formattedModules);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching modules:', error);
+    }
+  };
+  useEffect(() => {
+
+    // Fonction pour récupérer tous les professeurs (pour le formulaire)
+    const fetchProfessors = async () => {
       try {
-        const response = await axios.get(`http://localhost:8011/api/professors/department/${name}`);
+        const response = await axios.get(`http://localhost:8011/api/professors/all`);
         const formattedProfessors = response.data.map(professor => ({
           professorId: professor.professorId,
           firstName: professor.firstName,
-          lastName: professor.lastName
+          lastName: professor.lastName,
         }));
-        setProfessors(formattedProfessors);
-        setLoading(false);
+        setAllProfessors(formattedProfessors);
       } catch (error) {
         console.error('Error fetching professors:', error);
+      }
+    };
+    // Fonction pour récupérer les niveaux
+    const fetchLevels = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8011/api/levels`);
+        const formattedLevels = response.data.map(level => ({
+          levelId: level.levelId,
+          levelName: level.levelName,
+        }));
+        setLevels(formattedLevels);
+      } catch (error) {
+        console.error('Error fetching levels:', error);
       }
     };
 
     // Appeler les fonctions pour récupérer les données
     fetchModulesByDepartment();
     fetchProfessorsByDepartment();
+    fetchProfessors();
+    fetchLevels();
+    
   }, [name]);
+
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -123,6 +170,70 @@ const Departement = ({name,desc}) => {
   const getProfessorRowId = (professor) => `${professor.professorId}-${professor.department}`;
   const handleDepartmentChange = (event) => {
     setDepartmentId(event.target.value);
+  };
+  const handleProfessorChange = (event) => {
+    setProfessorId(event.target.value);
+  };
+  const handleLevelChange = (event) => {
+    setLevelId(event.target.value);
+  };
+
+
+  const handleModuleAdd = async () => {
+    try {
+      const moduleData = {
+        moduleName: newModuleName,
+        department: {
+          departmentId: departmentId
+        },
+        intituleModule: newIntituleModule,
+        professor: {
+          professorId: professorId
+        },
+        level: {
+          levelId: levelId
+        },
+        nameByDepartment: newNameByDepartment
+      };
+      await axios.post('http://localhost:8011/api/modules', moduleData);
+      // Refresh modules list after adding
+      fetchModulesByDepartment();
+      setNewModuleName('');
+      setNewIntituleModule('');
+      setNewNameByDepartment('');
+    } catch (error) {
+      console.error('Error adding module:', error);
+    }
+  };
+
+  const handleProfessorAdd = async () => {
+    try {
+      // Créer un objet contenant les données à envoyer
+      const professorData = {
+        firstName: newProfessorFirstName,
+        lastName: newProfessorLastName,
+        email: newProfessorEmail,
+        password: password,
+        role: "ROLE_PROFESSOR",
+        department: {
+          departmentId: departmentId
+        }
+      };
+  
+      // Envoyer les données au backend avec Axios
+      await axios.post('http://localhost:8011/api/professors', professorData);
+  
+      // Actualiser la liste des professeurs après l'ajout
+      fetchProfessorsByDepartment();
+  
+      // Réinitialiser les champs du formulaire après l'ajout
+      setNewProfessorFirstName('');
+      setNewProfessorLastName('');
+      setNewProfessorEmail('');
+      setPassword('');
+    } catch (error) {
+      console.error('Error adding professor:', error);
+    }
   };
 
 
@@ -172,7 +283,7 @@ const Departement = ({name,desc}) => {
               </div>
                 )}
             {activeTab === 'professors' && (
-              <div style={{ height: 400, width: '100%' }}>
+              <div style={{ height: '100%', width: '100%' }}>
                 <DataGrid
                   loading={isLoading}
                   rows={professors} // Utilisez la variable d'état des professeurs
@@ -190,81 +301,109 @@ const Departement = ({name,desc}) => {
           </Grid> */}
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing} justifyContent={'center'}>
-              <Grid item lg={12} sm={6} xs={12} md={6}>
-                {/* <TotalIncomeDarkCard isLoading={isLoading} /> */}
-                <Box
-                    component="form"
-                    sx={{
-                      '& > :not(style)': { m: 1, },
-                    }}
-                    noValidate
-                    padding={'20px 10px 20px 10px'}
-                    width={'100%'}
-                    autoComplete="off"
-                    bgcolor={'#fff'}
-                    borderRadius={'20px'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                  > 
-                    <Typography variant="h4" textAlign={'center'}>Ajouter module</Typography>
-                    <TextField id="standard-basic" label="Nom De Module" variant="standard" />
-                    {/* <TextField id="standard-basic" label="ID De Departement" variant="standard" /> */}
-                    <Select
-                      id="department-id"
-                      value={departmentId}
-                      onChange={handleDepartmentChange}
-                      labelId="department-select-label"
-                      variant="standard"
-                      displayEmpty
-                    >
-                      <MenuItem value="" disabled>Sélectionner le département</MenuItem>
-                      <MenuItem value={1}>MMA</MenuItem>
-                      <MenuItem value={2}>EIT</MenuItem>
-                      <MenuItem value={3}>LC</MenuItem>
-                    </Select>
-                    <Button variant="outlined" color="primary" style={{marginTop:'30px'}}>Ajouter</Button>
-                </Box>
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <div style={{backgroundColor:"#000",height:'1px'}}></div>
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12} >
-                {/* <TotalIncomeLightCard isLoading={isLoading} /> */}
-                <Box
-                    component="form"
-                    sx={{
-                      '& > :not(style)': { m: 1, },
-                    }}
-                    noValidate
-                    padding={'20px 10px 20px 10px'}
-                    width={'100%'}
-                    autoComplete="off"
-                    bgcolor={'#fff'}
-                    borderRadius={'20px'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                  > 
-                    <Typography variant="h4" textAlign={'center'}>Ajouter Professeur</Typography>
-                    <TextField id="standard-basic" label="Nom " variant="standard" />
-                    <TextField id="standardstandard-basic" label="Prénom" variant="standard" />
-                    <TextField id="standardstandard-basic" label="Email"standard variant="standard" />
-                    {/* <TextField id="standardstandard-basic" label="ID De Departement" variant="standard" /> */}
-                    <Select
-                      id="professor-department-id"
-                      value={departmentId}
-                      onChange={handleDepartmentChange}
-                      labelId="department-select-label"
-                      variant="standard"
-                      displayEmpty
-                    >
-                      <MenuItem value="" disabled>Sélectionner le département</MenuItem>
-                      <MenuItem value={1}>MMA</MenuItem>
-                      <MenuItem value={2}>EIT</MenuItem>
-                      <MenuItem value={3}>LC</MenuItem>
-                    </Select>
-                    <Button variant="outlined" color="primary" style={{marginTop:'30px'}}>Ajouter</Button>
-                </Box>
-              </Grid>
+                      {activeTab === 'modules' && (
+                      <Grid item lg={12} sm={6} xs={12} md={6}>
+                        {/* <TotalIncomeDarkCard isLoading={isLoading} /> */}
+                        <Box
+                            component="form"
+                            sx={{
+                              '& > :not(style)': { m: 1, },
+                            }}
+                            noValidate
+                            padding={'20px 10px 20px 10px'}
+                            width={'100%'}
+                            autoComplete="off"
+                            bgcolor={'#fff'}
+                            borderRadius={'20px'}
+                            display={'flex'}
+                            flexDirection={'column'}
+                          > 
+                            <Typography variant="h4" textAlign={'center'}>Ajouter module</Typography>
+                            <TextField id="standard-basic" label="Nom De Module" variant="standard" onChange={(e) => setNewModuleName(e.target.value)}/>
+                            <TextField id="standard-basic" label="Intitulé De Module" variant="standard" onChange={(e) => setNewIntituleModule(e.target.value)}/>
+                            <TextField id="standard-basic" label="Nom By Département" variant="standard" onChange={(e) => setNewNameByDepartment(e.target.value)}/>
+                            <Select
+                              id="department-id"
+                              value={departmentId}
+                              onChange={handleDepartmentChange}
+                              labelId="department-select-label"
+                              variant="standard"
+                              displayEmpty
+                            >
+                              <MenuItem value="" disabled>Sélectionner le département</MenuItem>
+                              <MenuItem value={1}>MMA</MenuItem>
+                              <MenuItem value={2}>EIT</MenuItem>
+                              <MenuItem value={3}>LC</MenuItem>
+                            </Select>
+                            <Select
+                              id="professor-id"
+                              value={professorId}
+                              onChange={handleProfessorChange}
+                              labelId="professor-select-label"
+                              variant="standard"
+                              displayEmpty
+                            >
+                              <MenuItem value="" disabled>Sélectionner le professeur</MenuItem>
+                              {allProfessors.map(professor => (
+                                <MenuItem key={professor.professorId} value={professor.professorId}>{`${professor.firstName} ${professor.lastName}`}</MenuItem>
+                              ))}
+                            </Select>
+                            <Select
+                              id="level-id"
+                              value={levelId}
+                              onChange={handleLevelChange}
+                              labelId="level-select-label"
+                              variant="standard"
+                              displayEmpty
+                            >
+                              <MenuItem value="" disabled>Sélectionner le niveau</MenuItem>
+                              {levels.map(level => (
+                                <MenuItem key={level.levelId} value={level.levelId}>{level.levelName}</MenuItem>
+                              ))}
+                            </Select>
+                            <Button variant="outlined" color="primary" style={{marginTop:'30px'}} onClick={handleModuleAdd}>Ajouter</Button>
+                        </Box>
+                      </Grid>)}
+
+                      {activeTab === 'professors' && (
+                      <Grid item sm={6} xs={12} md={6} lg={12} >
+                        {/* <TotalIncomeLightCard isLoading={isLoading} /> */}
+                        <Box
+                            component="form"
+                            sx={{
+                              '& > :not(style)': { m: 1, },
+                            }}
+                            noValidate
+                            padding={'20px 10px 20px 10px'}
+                            width={'100%'}
+                            autoComplete="off"
+                            bgcolor={'#fff'}
+                            borderRadius={'20px'}
+                            display={'flex'}
+                            flexDirection={'column'}
+                          > 
+                            <Typography variant="h4" textAlign={'center'}>Ajouter Professeur</Typography>
+                            <TextField id="standard-basic" label="Nom " variant="standard" onChange={(e) => setNewProfessorLastName(e.target.value)} />
+                            <TextField id="standardstandard-basic" label="Prénom" variant="standard" onChange={(e) => setNewProfessorFirstName(e.target.value)}/>
+                            <TextField id="standardstandard-basic" label="Email"standard variant="standard" onChange={(e) => setNewProfessorEmail(e.target.value)}/>
+                            <TextField id="standard-password-input" label="Password" type="password" autoComplete="current-password" variant="standard" onChange={(e) => setPassword(e.target.value)}/>
+                            {/* <TextField id="standardstandard-basic" label="ID De Departement" variant="standard" /> */}
+                            <Select
+                              id="professor-department-id"
+                              value={departmentId}
+                              onChange={handleDepartmentChange}
+                              labelId="department-select-label"
+                              variant="standard"
+                              displayEmpty
+                            >
+                              <MenuItem value="" disabled>Sélectionner le département</MenuItem>
+                              <MenuItem value={1}>MMA</MenuItem>
+                              <MenuItem value={2}>EIT</MenuItem>
+                              <MenuItem value={3}>LC</MenuItem>
+                            </Select>
+                            <Button variant="outlined" color="primary" style={{marginTop:'30px'}} onClick={handleProfessorAdd}>Ajouter</Button>
+                        </Box>
+                      </Grid>)}
             </Grid>
           </Grid>
         </Grid>

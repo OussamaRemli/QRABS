@@ -7,6 +7,7 @@ import com.ensaoSquad.backend.mapper.DepartmentMapper;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
 import com.ensaoSquad.backend.service.DepartmentService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
+    @Autowired
     private final DepartmentRepository repo;
     @Override
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO) {
@@ -39,13 +41,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         );
         return DepartmentMapper.toDTO(department);
     }
-
     @Override
-    public DepartmentDTO findDepartmentById(long departmentId) {
-        return repo.findById(departmentId)
-                .map(DepartmentMapper::toDTO)
-                .orElseThrow(() ->  new RessourceNotFoundException("Department not found with ID: " + departmentId));
+    public DepartmentDTO findDepartmentById(long id) {
+        Department department = repo.findByDepartmentId(id).orElseThrow(() ->
+                new RessourceNotFoundException("Departement avec l'Id: "+id+" n'existe pas")
+        );
+        return DepartmentMapper.toDTO(department);
     }
+
+
 
 
 }

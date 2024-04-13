@@ -14,6 +14,6 @@ public interface DepartmentService {
     List<DepartmentDTO> getAllDepartment();
 
     DepartmentDTO findDepartmentByName(String name);
-    DepartmentDTO findDepartmentById(long departmentId);
+    DepartmentDTO findDepartmentById(long id);
 
 }

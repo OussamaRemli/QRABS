@@ -14,6 +14,8 @@ public class ProfessorMapper {
         dto.setLastName(professor.getLastName());
         dto.setEmail(professor.getEmail());
         dto.setPassword(professor.getPassword());
+        dto.setRole(professor.getRole());
+        dto.setDepartment(DepartmentMapper.toDTO(professor.getDepartment()));
         return dto;
     }
 
@@ -24,6 +26,8 @@ public class ProfessorMapper {
         professor.setLastName(professorDto.getLastName());
         professor.setEmail(professorDto.getEmail());
         professor.setPassword(professorDto.getPassword());
+        professor.setRole(professorDto.getRole());
+        professor.setDepartment(DepartmentMapper.toEntity(professorDto.getDepartment()));
         return professor;
     }
 }

@@ -19,12 +19,28 @@ import Stomp from "stompjs";
 const Dashboard = () => {
     const [dataSession, setDataSession] = useState([]);
     const [selectedSector, setSelectedSector] = useState(null);
-
+    const [apogee, setApogee] = useState([]);
 
     useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = Stomp.over(socket);
+
+        // Subscribe to WebSocket topic
+        stompClient.connect({}, function () {
+            stompClient.subscribe('/topic/presence', function (message) {
+                setApogee(apogee => [...apogee, Number(message.body)]);
+            });
+        });
+
+        // Fetch data after WebSocket subscription is established
         fetch("http://localhost:8080/api/session/currentSession/1")
             .then(response => response.json())
             .then(dataSession => setDataSession(dataSession));
+
+        // Clean up WebSocket connection on component unmount
+        return () => {
+            stompClient.disconnect();
+        };
     }, []);
 
     const levelNames = dataSession.map(item=>item.level.levelName);
@@ -49,7 +65,7 @@ const Dashboard = () => {
                         <ModuleCard moduleName={modules[0]} sessionType={sessionType[0]} startTime={startTime[0]} endTime={endTime[0]} />
                     </Grid>
                     {levelNames.map((name, index) => (
-                        <SectorCard key={index} sectorName={name} onClick={() => handleSectorClick(index)} />
+                        <SectorCard key={index} sectorName={name} onClick={() => {handleSectorClick(index)}} />
                     ))}
                     <Grid item  sx={{flexBasis: '250px' ,flexGrow : 0, flexShrink : 0 }}>
                         <PresentCountCard  presentCount={"45"}/>
@@ -59,7 +75,7 @@ const Dashboard = () => {
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={8}>
-                        {selectedSector !== null && <Users level={levelNames[selectedSector]}/>}
+                        {selectedSector !== null && <Users level={levelNames[selectedSector]} apogee={apogee}/>}
                     </Grid>
                     <Grid item xs={6} md={4}>
                         {selectedSector !== null && <Qrcode url={`http://192.168.1.59:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
@@ -128,7 +144,7 @@ export default Dashboard;
 //               {levelNames.map((item,index)=> <Users key={index} level={item}/>)}
 //           </Grid>
 //           <Grid item xs={6} md={4}>
-//               {sessions.map((item,index)=><Qrcode key={index} url={`http://192.168.1.103:8080/Qr/scan/${item.sessionId}/${item.level.levelId}`}/>)}
+//               {sessions.map((item,index)=><Qrcode key={index} url={`http://.1.103:8080/Qr/scan/${item.sessionId}/${item.level.levelId}`}/>)}
 //           </Grid>
 //         </Grid>
 //       </Grid>

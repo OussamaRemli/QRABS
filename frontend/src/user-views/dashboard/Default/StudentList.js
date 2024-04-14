@@ -6,23 +6,11 @@ import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
 import { v4 as uuidv4 } from 'uuid';
 
-function Users({ level }) {
+function Users({ level ,apogee}) {
     const [dataStudent, setDataStudent] = useState([]);
-    const [dataImages , setDataImages] =useState([]);
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        const stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, function () {
-            stompClient.subscribe('/topic/presence', function (message) {
-                setUsers(users => users.map(item =>
-                    item.Apogee == message.body ? { ...item, present: true } : item
-                ));
-            });
-        });
-
         fetch(`http://localhost:8080/api/students/${level}`)
             .then(response => response.json())
             .then(data => {
@@ -31,10 +19,9 @@ function Users({ level }) {
                     _id: uuidv4(),
                     Apogee: student.apogee,
                     name: `${student.firstName} ${student.lastName}`,
-                    present: null
+                    present: !!apogee.includes(student.apogee) // Removed unnecessary semicolon
                 }));
                 setUsers(updatedUsers);
-
                 data.forEach(student => {
                     fetch(`http://localhost:8080/api/import-files/image/${student.apogee}`)
                         .then(response => {
@@ -52,8 +39,9 @@ function Users({ level }) {
                         .catch(error => console.error('Error fetching image data:', error));
                 });
             })
-            .catch(error => console.error('Error fetching student data:', error));
-    }, [level]);
+            .catch(error => console.error('Error fetching student data:', error)); // Added closing parenthesis and brace
+
+    }, [level,apogee]);
 
 
     const columns = [
@@ -99,7 +87,7 @@ function Users({ level }) {
                 rows={users}
                 getRowId={(row) => row._id}
                 rowsPerPageOptions={[5, 10, 20]}
-                pageSize={20} 
+                pageSize={20}
                 getRowSpacing={(params) => ({
                     top: params.isFirstVisible ? 0 : 5,
                     bottom: params.isLastVisible ? 0 : 5,

@@ -20,6 +20,7 @@ const Dashboard = () => {
     const [dataSession, setDataSession] = useState([]);
     const [selectedSector, setSelectedSector] = useState(null);
     const [apogee, setApogee] = useState([]);
+    const [count,setCount]=useState([]);
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
@@ -27,9 +28,18 @@ const Dashboard = () => {
 
         // Subscribe to WebSocket topic
         stompClient.connect({}, function () {
-            stompClient.subscribe('/topic/presence', function (message) {
+            const presenceSubscription = stompClient.subscribe('/topic/presence', function (message) {
                 setApogee(apogee => [...apogee, Number(message.body)]);
             });
+
+            const countSubscription = stompClient.subscribe('/topic/count', function (message) {
+                setCount(message.body);
+            });
+            return () => {
+                presenceSubscription.unsubscribe();
+                countSubscription.unsubscribe();
+                stompClient.disconnect();
+            };
         });
 
         // Fetch data after WebSocket subscription is established
@@ -68,7 +78,7 @@ const Dashboard = () => {
                         <SectorCard key={index} sectorName={name} onClick={() => {handleSectorClick(index)}} />
                     ))}
                     <Grid item  sx={{flexBasis: '250px' ,flexGrow : 0, flexShrink : 0 }}>
-                        <PresentCountCard  presentCount={"45"}/>
+                        <PresentCountCard  count={count}/>
                     </Grid>
                 </Grid>
             </Grid>

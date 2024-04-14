@@ -41,7 +41,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const PresentCountCard = ({presentCount}) => {
+const PresentCountCard = ({count}) => {
 
     return (
         <>
@@ -57,7 +57,7 @@ const PresentCountCard = ({presentCount}) => {
                                 }}
                                 primary={
                                     <Typography variant="h4" sx={{color: '#fff'}}>
-                                        Etudiant présent :{presentCount}
+                                        Etudiant présent :{count}
                                     </Typography>
                                 }
                                 secondary={

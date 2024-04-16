@@ -3,6 +3,7 @@ import com.ensaoSquad.backend.dto.ProfessorDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProfessorService {
     ProfessorDTO save(ProfessorDTO professorDto);
@@ -12,6 +13,7 @@ public interface ProfessorService {
     ProfessorDTO findById(Long id);
 
     ProfessorDTO findByName(String name);
+    Optional<ProfessorDTO> findByEmail(String email);
     List<ProfessorDTO> findByDepartmentName(String departmentName);
 
     void delete(Long id);

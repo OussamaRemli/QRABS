@@ -16,14 +16,33 @@ import { gridSpacing } from 'store/constant';
 
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
+  const [adminInfo, setAdminInfo] = useState(null);
   useEffect(() => {
     setLoading(false);
+    // Récupérer le token depuis le localStorage
+    const token = localStorage.getItem('token');
+    
+    // Vérifier si le token existe
+    if (token) {
+      // Extraire les informations du token (ici, nous supposons que le token est au format JWT)
+      const tokenParts = token.split('.');
+      const tokenPayload = JSON.parse(atob(tokenParts[1]));
+
+      // Afficher les informations dans la console
+      // console.log('Informations de l\'admin :', tokenPayload);
+      setAdminInfo({
+        firstName: tokenPayload.firstName,
+        lastName: tokenPayload.lastName
+      });
+    } else {
+      console.log('Aucun token trouvé dans le localStorage');
+    }
   }, []);
 
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
       <Grid item lg={2} >
-        <h2>Hi Admin!</h2>
+      <h2>Hi {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.firstName} ${adminInfo.lastName}` : 'Admin'}!</h2>
       </Grid>
       {/* <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>

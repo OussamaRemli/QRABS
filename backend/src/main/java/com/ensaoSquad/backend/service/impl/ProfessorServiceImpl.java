@@ -1,15 +1,10 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
-import com.ensaoSquad.backend.dto.StudentDTO;
-import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.DepartmentMapper;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
-import com.ensaoSquad.backend.mapper.StudentMapper;
 import com.ensaoSquad.backend.model.Department;
-import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
-import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
 import com.ensaoSquad.backend.repository.ProfessorRepository;
 import com.ensaoSquad.backend.service.ProfessorService;
@@ -128,6 +123,14 @@ public class ProfessorServiceImpl implements ProfessorService {
     public ProfessorDTO findByName(String lastName) {
         Professor professor = professorRepository.findByLastName(lastName).orElse(null);
         return professor != null ? ProfessorMapper.toDTO(professor) : null;    }
+
+    @Override
+    public Optional<ProfessorDTO> findByEmail(String email) {
+        Optional<Professor> optionalProfessor = professorRepository.findByEmail(email);
+        return optionalProfessor.map(ProfessorMapper::toDTO);
+    }
+
+
     @Override
     public List<ProfessorDTO> findByDepartmentName(String departmentName) {
         List<Professor> professors = professorRepository.findByDepartmentDepartmentName(departmentName);

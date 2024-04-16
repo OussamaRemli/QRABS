@@ -1,4 +1,5 @@
 package com.ensaoSquad.backend.service.impl;
+import com.ensaoSquad.backend.dto.ProfessorDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -53,9 +54,12 @@ public class JwtService {
     }
 
 
-    public String generateToken(String userName){
+    public String generateToken(ProfessorDTO professorDTO){
         Map<String,Object> claims=new HashMap<>();
-        return createToken(claims,userName);
+        claims.put("firstName", professorDTO.getFirstName());
+        claims.put("lastName", professorDTO.getLastName());
+        claims.put("role", professorDTO.getRole());
+        return createToken(claims, professorDTO.getEmail());
     }
 
     private String createToken(Map<String, Object> claims, String userName) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -79,11 +80,17 @@ public class ProfessorController {
     public String authenticateAndGetToken(@RequestBody ProfessorDTO professorDTO) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(professorDTO.getEmail(), professorDTO.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(professorDTO.getEmail());
+            // Récupérer les informations du professeur à partir de la base de données ou de toute autre source
+            Optional<ProfessorDTO> optionalAuthenticatedProfessor = professorService.findByEmail(professorDTO.getEmail());
+            // Vérifier si le professeur existe
+            if (optionalAuthenticatedProfessor.isPresent()) {
+                // Générer le token JWT avec les informations du professeur authentifié
+                return jwtService.generateToken(optionalAuthenticatedProfessor.get());
+            } else {
+                throw new UsernameNotFoundException("Professor not found with email: " + professorDTO.getEmail());
+            }
         } else {
-            throw new UsernameNotFoundException("invalid user request !");
+            throw new UsernameNotFoundException("Invalid user request !");
         }
-
-
     }
 }

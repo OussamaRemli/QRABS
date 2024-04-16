@@ -1,9 +1,7 @@
 package com.ensaoSquad.backend.service.impl;
 
-import com.ensaoSquad.backend.model.Absence;
-import com.ensaoSquad.backend.model.Level;
-import com.ensaoSquad.backend.model.Session;
-import com.ensaoSquad.backend.model.Student;
+import com.ensaoSquad.backend.model.*;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.repository.AbsenceRepository;
 import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.repository.SessionRepository;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AbsenceServiceImpl implements AbsenceService {
@@ -73,6 +72,17 @@ public class AbsenceServiceImpl implements AbsenceService {
             }
         }
         presentStudents.remove(levelId);
+    }
+
+    @Override
+    public Map<Student, Long> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level) {
+        List<Object[]> results = absenceRepository.getAbsenceCountByProfessorModuleAndLevel(professor, module, level);
+
+        return results.stream()
+                .collect(Collectors.toMap(
+                        result -> (Student) result[0],
+                        result -> (Long) result[1]
+                ));
     }
 
 }

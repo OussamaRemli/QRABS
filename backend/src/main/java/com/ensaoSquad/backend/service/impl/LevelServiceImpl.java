@@ -88,5 +88,10 @@ public class LevelServiceImpl implements LevelService {
         return levelDTOS;
     }
 
+    @Override
+    public Level findById(Long levelId) {
+        return levelRepository.findByLevelId(levelId);
+    }
+
 
 }

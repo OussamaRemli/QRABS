@@ -272,6 +272,7 @@ public class ModuleServiceImp implements ModuleService {
         }
     }
 
+
     private boolean isRowEmpty(Row row) {
         for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
             Cell cell = row.getCell(c, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
@@ -299,5 +300,10 @@ public class ModuleServiceImp implements ModuleService {
             default:
                 return "";
         }
+    }
+
+    @Override
+    public Module findById(Long moduleId) {
+        return moduleRepository.findById(moduleId).orElse(null);
     }
 }

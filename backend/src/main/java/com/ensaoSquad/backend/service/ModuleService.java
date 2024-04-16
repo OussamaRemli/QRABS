@@ -3,6 +3,7 @@ package com.ensaoSquad.backend.service;
 import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.model.Department;
 import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Professor;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,5 +26,7 @@ public interface ModuleService {
     List<ModuleDTO> uploadByExcel(MultipartFile file);
 
     void uploadRespoModule(MultipartFile file);
+
+    Module findById(Long moduleId);
 
     }

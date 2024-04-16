@@ -14,4 +14,6 @@ public interface LevelService {
 
     List<LevelDTO> getCurrentLevel(Long id);
 
+    Level findById(Long levelId);
+
 }

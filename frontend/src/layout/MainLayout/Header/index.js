@@ -18,6 +18,7 @@ import { IconMenu2 } from '@tabler/icons-react';
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
 
+  if (!localStorage.getItem('token')) return null;
   return (
     <>
       {/* logo & toggler button */}

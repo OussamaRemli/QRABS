@@ -39,10 +39,13 @@ const Dashboard = () => {
     }
   }, []);
 
+  // Si le token n'existe pas, ne rend pas ce composant
+  if (!localStorage.getItem('token')) return null;
+
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
       <Grid item lg={2} >
-      <h2>Hi {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.firstName} ${adminInfo.lastName}` : 'Admin'}!</h2>
+      <h2>Hi {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.firstName} ${adminInfo.lastName}` : 'Admin :)'}!</h2>
       </Grid>
       {/* <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>

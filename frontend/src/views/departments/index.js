@@ -15,6 +15,7 @@ import TotalIncomeDarkCard from '../dashboard/Default/TotalIncomeDarkCard';
 import PopularCard from '../dashboard/Default/PopularCard';
 import { gridSpacing } from 'store/constant';
 import { flexbox } from '@mui/system';
+import { red } from '@mui/material/colors';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -85,6 +86,18 @@ const Departement = ({name,desc}) => {
   const [newProfessorFirstName, setNewProfessorFirstName] = useState('');
   const [newProfessorLastName, setNewProfessorLastName] = useState('');
   const [newProfessorEmail, setNewProfessorEmail] = useState('');
+
+  const [showAddModuleForm, setShowAddModuleForm] = useState(false);
+  const [showAddProfessorForm, setShowAddProfessorForm] = useState(false);
+  // Fonction pour afficher ou masquer le formulaire d'ajout de module
+  const toggleAddModuleForm = () => {
+    setShowAddModuleForm(!showAddModuleForm);
+  };
+
+  // Fonction pour afficher ou masquer le formulaire d'ajout de professeur
+  const toggleAddProfessorForm = () => {
+    setShowAddProfessorForm(!showAddProfessorForm);
+  };
 
   // Fonction pour récupérer les professeurs par le nom du département
   const fetchProfessorsByDepartment = async () => {
@@ -163,6 +176,14 @@ const Departement = ({name,desc}) => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    // Afficher ou masquer les formulaires d'ajout en fonction de l'onglet sélectionné
+    if (tab === 'modules') {
+      setShowAddModuleForm(false);
+      setShowAddProfessorForm(false);
+    } else if (tab === 'professors') {
+      setShowAddProfessorForm(false);
+      setShowAddModuleForm(false);
+    }
   };
   const getModuleRowId = (module) => {
     return `${module.moduleId}-${module.departmentName}`;
@@ -236,7 +257,7 @@ const Departement = ({name,desc}) => {
     }
   };
 
-
+  if (!localStorage.getItem('token')) return null;
   return (
     <Grid container spacing={gridSpacing}>
 
@@ -248,14 +269,16 @@ const Departement = ({name,desc}) => {
           {/* <Grid item lg={4} md={6} sm={6} xs={12}>
             <TotalOrderLineChartCard isLoading={isLoading} />
           </Grid> */}
-          <Grid item lg={8} md={6} sm={6} xs={12} justifyContent={'center'}>
+          <Grid item lg={12} md={6} sm={6} xs={12} justifyContent={'center'}>
             {/* <TotalOrderLineChartCard isLoading={isLoading} />*/}
-            <Stack direction="row" spacing={2} justifyContent={'center'}>
+            <Stack direction="row" spacing={3} justifyContent={'center'}>
             <Button color="secondary" size="large" variant={activeTab === 'modules' ? 'contained' : 'outlined'} onClick={() => handleTabChange('modules')} >Voir Modules</Button>
+            <Button color="secondary" size="large" variant={showAddModuleForm ? 'contained' : 'outlined'} onClick={toggleAddModuleForm}>Ajouter Module</Button>
             <Button color="secondary" size="large" variant={activeTab === 'professors' ? 'contained' : 'outlined'} onClick={() => handleTabChange('professors')} >Voir Professeurs</Button>
+            <Button color="secondary" size="large" variant={showAddProfessorForm ? 'contained' : 'outlined'} onClick={toggleAddProfessorForm}>Ajouter Professeur</Button>
             </Stack>
           </Grid>
-          <Grid item lg={8} xs={12} md={8}>
+          <Grid item lg={showAddModuleForm || showAddProfessorForm ? 8 : 12} xs={12} md={8}>
               {/* <div style={{ height: 400, width: '100%' }}>
                 <DataGrid
                   rows={rows}
@@ -301,7 +324,7 @@ const Departement = ({name,desc}) => {
           </Grid> */}
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing} justifyContent={'center'}>
-                      {activeTab === 'modules' && (
+                      {showAddModuleForm  && (
                       <Grid item lg={12} sm={6} xs={12} md={6}>
                         {/* <TotalIncomeDarkCard isLoading={isLoading} /> */}
                         <Box
@@ -311,6 +334,7 @@ const Departement = ({name,desc}) => {
                             }}
                             noValidate
                             padding={'20px 10px 20px 10px'}
+                            boxShadow={'0px 4px 12px rgba(0, 0, 0, 0.1)'}
                             width={'100%'}
                             autoComplete="off"
                             bgcolor={'#fff'}
@@ -318,7 +342,7 @@ const Departement = ({name,desc}) => {
                             display={'flex'}
                             flexDirection={'column'}
                           > 
-                            <Typography variant="h4" textAlign={'center'}>Ajouter module</Typography>
+                            <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter module</Typography>
                             <TextField id="standard-basic" label="Nom De Module" variant="standard" onChange={(e) => setNewModuleName(e.target.value)}/>
                             <TextField id="standard-basic" label="Intitulé De Module" variant="standard" onChange={(e) => setNewIntituleModule(e.target.value)}/>
                             <TextField id="standard-basic" label="Nom By Département" variant="standard" onChange={(e) => setNewNameByDepartment(e.target.value)}/>
@@ -365,7 +389,7 @@ const Departement = ({name,desc}) => {
                         </Box>
                       </Grid>)}
 
-                      {activeTab === 'professors' && (
+                      {showAddProfessorForm  && (
                       <Grid item sm={6} xs={12} md={6} lg={12} >
                         {/* <TotalIncomeLightCard isLoading={isLoading} /> */}
                         <Box
@@ -374,6 +398,7 @@ const Departement = ({name,desc}) => {
                               '& > :not(style)': { m: 1, },
                             }}
                             noValidate
+                            boxShadow={'0px 4px 12px rgba(0, 0, 0, 0.1)'}
                             padding={'20px 10px 20px 10px'}
                             width={'100%'}
                             autoComplete="off"

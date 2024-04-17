@@ -47,24 +47,27 @@ const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  // fetch professor name
-  const [data, setData] = useState(null);
+  const [adminInfo, setAdminInfo] = useState(null);
   useEffect(() => {
-      fetchData();
+      // Récupérer le token depuis le localStorage
+    const token = localStorage.getItem('token');
+    
+    // Vérifier si le token existe
+    if (token) {
+      // Extraire les informations du token (ici, nous supposons que le token est au format JWT)
+      const tokenParts = token.split('.');
+      const tokenPayload = JSON.parse(atob(tokenParts[1]));
+
+      // Afficher les informations dans la console
+      // console.log('Informations de l\'admin :', tokenPayload);
+      setAdminInfo({
+        firstName: tokenPayload.firstName,
+        lastName: tokenPayload.lastName
+      });
+    } else {
+      console.log('Aucun token trouvé dans le localStorage');
+    }
       }, []);
-    const fetchData = async () => {
-        try {
-            console.log(10);
-            const response = await fetch(`http://localhost:8011/api/professors/4`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const jsonData = await response.json();
-            setData(jsonData);
-        } catch (error) {
-            console.error('Error fetching data:', error.message);
-        }
-    };
 
 
 
@@ -78,8 +81,13 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
-  const handleLogout = async () => {
-    console.log('Logout');
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
+    if (confirmLogout) {
+      localStorage.removeItem('token');
+      navigate('/');
+    }
   };
 
   const handleClose = (event) => {
@@ -110,6 +118,8 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
 
+
+if (!localStorage.getItem('token')) return null;
   return (
     <>
       <Chip
@@ -182,7 +192,7 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Bonjour,</Typography>
                         <Typography component="span" variant="h3" sx={{ fontWeight: 400 }}>
-                            {/* {data.firstName} {data.lastName} */} Admin!
+                        {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.lastName}` : 'Admin :)'}!
                         </Typography>
                       </Stack>
                       {/*<Typography variant="subtitle2">Project Admin</Typography>*/}

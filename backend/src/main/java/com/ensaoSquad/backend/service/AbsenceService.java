@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface AbsenceService {
-    public void markPresnt(long seanceId , long studentId , long levelId);
+    public void markPresnt(long seanceId , long studentId , long levelId , String ip , Long apogee);
     public void markAbsent(long idSeance , long levelId);
 
     public Map<Student, Long> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level);

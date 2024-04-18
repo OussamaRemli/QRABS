@@ -33,21 +33,27 @@ public class AbsenceServiceImpl implements AbsenceService {
     private SimpMessagingTemplate template;
 
     private Map<Long, Set<Long>> presentStudents = new HashMap<>();
+    private Map<Long, Set<String>> scannedIps = new HashMap<>(); // Nouveau
+
 
     private int count;
 
     @Override
-    public void markPresnt(long seanceId, long studentId, long levelId) {
-        Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
-        if (!students.contains(studentId)) {
-            students.add(studentId);
-            count = students.size();
-            System.out.println(count);
-            this.template.convertAndSend("/topic/count", count);
-        }
-
-
-    }
+    public void markPresnt(long seanceId, long studentId, long levelId , String ip ,Long Apogee) {
+        Set<String> sessionIps = scannedIps.computeIfAbsent(seanceId, k -> new HashSet<>());
+        if (!sessionIps.contains(ip)) {
+            Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
+            if (!students.contains(studentId)) {
+                students.add(studentId);
+                sessionIps.add(ip); // Ajoute l'IP à la liste des IPs scannées pour cette séance
+                count = students.size(); // Met à jour le compteur avec la taille du nouveau set
+                this.template.convertAndSend("/topic/presence", Apogee);
+                System.out.println(count);
+                this.template.convertAndSend("/topic/count", count);
+            }
+        } else {
+            System.out.println("L'adresse IP a déjà été utilisée pour scanner lors de cette séance.");
+        }}
 
 
     @Override

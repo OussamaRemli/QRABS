@@ -36,7 +36,7 @@ public class AbsenceController {
     LevelService levelService;
 
     @PostMapping("/scan/{sessionId}/{levelId}")
-    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId){
+    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@RequestParam String ip){
         Student student = studentService.findByApogee(Apogee);
         if (student == null) {
             return new ResponseEntity<>("Étudiant introuvable avec l'apogée : " + Apogee, HttpStatus.NOT_FOUND);
@@ -48,8 +48,7 @@ public class AbsenceController {
         }
 
         Long studentId = student.getStudentId();
-        absenceService.markPresnt(sessionId,studentId,levelId);
-        this.template.convertAndSend("/topic/presence", Apogee);
+        absenceService.markPresnt(sessionId,studentId,levelId,ip,Apogee);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 

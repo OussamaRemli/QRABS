@@ -65,7 +65,7 @@ public class ProfessorServiceImpl implements ProfessorService {
                 professorDTO.setLastName(row.getCell(6).getStringCellValue()); // Column G (0-indexed)
                 professorDTO.setFirstName(row.getCell(7).getStringCellValue()); // Column H (0-indexed)
                 professorDTO.setEmail(row.getCell(8).getStringCellValue()); // Column I (0-indexed)
-                professorDTO.setPassword("123456789"); // Assuming a default password
+                professorDTO.setPassword(passwordEncoder.encode("12345")); // Assuming a default password
 
 
 

@@ -93,7 +93,7 @@ const MainRoutes = {
         {
           path: 'MMA',
           // element: <UtilsTypography />
-          element: <Departement desc='Mécanique et Mathématique Appliqué' name='MMA'/>
+          element: <Departement abr='MMA' name='Département de Mécanique et Mathématiques appliquées'/>
         }
       ]
     },
@@ -103,7 +103,7 @@ const MainRoutes = {
         {
           path: 'EIT',
           // element: <UtilsTypography />
-          element: <Departement desc='Electronique Informatique & Télécommunication' name='EIT'/>
+          element: <Departement abr='EIT' name="Département d'Electronique Informatique & Télécommunications"/>
         }
       ]
     },
@@ -113,7 +113,7 @@ const MainRoutes = {
         {
           path: 'LC',
           // element: <UtilsTypography />
-          element: <Departement desc='Humanités & Management' name='LC'/>
+          element: <Departement abr='LC' name="Département des Humanités & Management"/>
         }
       ]
     },

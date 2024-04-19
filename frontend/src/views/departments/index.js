@@ -73,7 +73,7 @@ const professorsColumns = [
   { field: 'fullName', headerName: 'Full name', width: 200, valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`},
 ];
 
-const Departement = ({name,desc}) => {
+const Departement = ({name,abr}) => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const [modules, setModules] = useState([]);
@@ -95,6 +95,7 @@ const Departement = ({name,desc}) => {
 
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
   const [showAddProfessorForm, setShowAddProfessorForm] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   // Fonction pour afficher ou masquer le formulaire d'ajout de module
   const toggleAddModuleForm = () => {
     setShowAddModuleForm(!showAddModuleForm);
@@ -289,7 +290,7 @@ const Departement = ({name,desc}) => {
 
       axios.post('http://localhost:8011/api/professors/upload', formData)
         .then((response) => {
-          console.log('professors uploaded:', response.data);
+          console.log('professors uploaded!');
         })
         .catch((error) => {
           console.error('Error uploading professors:', error);
@@ -302,10 +303,10 @@ const Departement = ({name,desc}) => {
   return (
     <Grid container spacing={gridSpacing}>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} marginTop={'16px'}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={12} md={6} sm={6} xs={12}>
-            <TotalIncomeLightCard isLoading={isLoading} desc={desc} name={name} />
+            <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
           </Grid>
           {/* <Grid item lg={4} md={6} sm={6} xs={12}>
             <TotalOrderLineChartCard isLoading={isLoading} />
@@ -505,8 +506,8 @@ const Departement = ({name,desc}) => {
                                   type="file"
                                   accept=".xls,.xlsx"
                                   onChange={(e) => {
-                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
                                     handleImportProfessors(); // Appeler la fonction handleImportProfessors lorsqu'un fichier est sélectionné
+                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
                                   }}
                                   style={{ display: 'none' }}
                                   id="file-upload"

@@ -90,7 +90,7 @@ const Filieres = ({name,abr}) => {
 
   return (
     <Grid container spacing={gridSpacing}>
-      <Grid item xs={12}>
+      <Grid item xs={12} marginTop={'16px'}>
         <Grid container spacing={gridSpacing} justifyContent={'center'}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} name={name} abr={abr}/>

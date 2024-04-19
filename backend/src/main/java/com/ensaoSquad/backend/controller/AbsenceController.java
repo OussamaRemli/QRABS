@@ -60,7 +60,7 @@ public class AbsenceController {
     }
 
     @GetMapping("/absence/count")
-    public ResponseEntity<Map<Student, Long>> getAbsenceCounts(
+    public ResponseEntity<Map<Student, Map<String, Long>>> getAbsenceCounts(
             @RequestParam("professorId") long professorId,
             @RequestParam("moduleId") long moduleId,
             @RequestParam("levelId") long levelId) {
@@ -70,7 +70,7 @@ public class AbsenceController {
         Module module = moduleService.findById(moduleId);
         Level level = levelService.findById(levelId);
 
-        Map<Student, Long> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
+        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
 
         return ResponseEntity.ok(absenceCounts);
     }

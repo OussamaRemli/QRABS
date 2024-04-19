@@ -81,14 +81,18 @@ public class AbsenceServiceImpl implements AbsenceService {
     }
 
     @Override
-    public Map<Student, Long> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level) {
+    public Map<Student, Map<String, Long>> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level) {
         List<Object[]> results = absenceRepository.getAbsenceCountByProfessorModuleAndLevel(professor, module, level);
 
         return results.stream()
-                .collect(Collectors.toMap(
+                .collect(Collectors.groupingBy(
                         result -> (Student) result[0],
-                        result -> (Long) result[1]
+                        Collectors.toMap(
+                                result -> (String) result[1],
+                                result -> (Long) result[2]
+                        )
                 ));
     }
+
 
 }

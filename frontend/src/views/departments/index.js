@@ -1,11 +1,15 @@
- import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useTheme } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
+
 
 // material-ui
 import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,InputLabel } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
+import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 
 // project imports
 
@@ -70,6 +74,8 @@ const professorsColumns = [
 ];
 
 const Departement = ({name,desc}) => {
+  const theme = useTheme();
+  const customization = useSelector((state) => state.customization);
   const [modules, setModules] = useState([]);
   const [professors, setProfessors] = useState([]);
   const [allProfessors, setAllProfessors] = useState([]);
@@ -256,6 +262,41 @@ const Departement = ({name,desc}) => {
       console.error('Error adding professor:', error);
     }
   };
+  // Function to handle file selection
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  // Function to handle importing modules from the selected file
+  const handleImportModules = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios.post('http://localhost:8011/api/modules/upload', formData)
+        .then((response) => {
+          console.log('modules uploaded:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error uploading modules:', error);
+        });
+    }
+  };
+  // Function to handle importing professors from the selected file
+  const handleImportProfessors = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios.post('http://localhost:8011/api/professors/upload', formData)
+        .then((response) => {
+          console.log('professors uploaded:', response.data);
+        })
+        .catch((error) => {
+          console.error('Error uploading professors:', error);
+        });
+    }
+  };
+
 
   if (!localStorage.getItem('token')) return null;
   return (
@@ -341,7 +382,57 @@ const Departement = ({name,desc}) => {
                             borderRadius={'20px'}
                             display={'flex'}
                             flexDirection={'column'}
-                          > 
+                          >  
+                          <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter modules via Excel</Typography>
+                          <Grid container direction="column" justifyContent="center" spacing={0}>
+                          <Grid item lg={12} textAlign={'center'} style={{ marginLeft: '-20px' }}>
+                                <input
+                                  type="file"
+                                  accept=".xls,.xlsx"
+                                  onChange={(e) => {
+                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
+                                    handleImportModules(); // Appeler la fonction handleImportModuless lorsqu'un fichier est sélectionné
+                                  }}
+                                  style={{ display: 'none' }}
+                                  id="file-upload"
+                                />
+                                <label htmlFor="file-upload" >
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
+                                    Import Liste Des Modules
+                                  </Button>
+                                </label>
+                            </Grid>
+                            <Grid item xs={12} lg={12}>
+                              <Box
+                                sx={{
+                                  alignItems: 'center',
+                                  display: 'flex'
+                                }}
+                                marginLeft={'-16px'}
+                              >
+                                <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+
+                                <Button
+                                  variant="outlined"
+                                  sx={{
+                                    cursor: 'unset',
+                                    m: 2,
+                                    py: 0.5,
+                                    px: 7,
+                                    borderColor: `${theme.palette.grey[100]} !important`,
+                                    color: `${theme.palette.grey[800]}!important`,
+                                    fontWeight: 500,
+                                    borderRadius: `${customization.borderRadius}px`
+                                  }}
+                                  disableRipple
+                                  disabled
+                                >
+                                  OR
+                                </Button>
+                                <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+                              </Box>
+                            </Grid>
+                          </Grid>
                             <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter module</Typography>
                             <TextField id="standard-basic" label="Nom De Module" variant="standard" onChange={(e) => setNewModuleName(e.target.value)}/>
                             <TextField id="standard-basic" label="Intitulé De Module" variant="standard" onChange={(e) => setNewIntituleModule(e.target.value)}/>
@@ -407,7 +498,57 @@ const Departement = ({name,desc}) => {
                             display={'flex'}
                             flexDirection={'column'}
                           > 
-                            <Typography variant="h4" textAlign={'center'}>Ajouter Professeur</Typography>
+                            <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter professeurs via Excel</Typography>
+                            <Grid container direction="column" justifyContent="center" spacing={0}>
+                              <Grid item lg={12} textAlign={'center'} style={{ marginLeft: '-20px' }}>
+                                <input
+                                  type="file"
+                                  accept=".xls,.xlsx"
+                                  onChange={(e) => {
+                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
+                                    handleImportProfessors(); // Appeler la fonction handleImportProfessors lorsqu'un fichier est sélectionné
+                                  }}
+                                  style={{ display: 'none' }}
+                                  id="file-upload"
+                                />
+                                <label htmlFor="file-upload" >
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
+                                    Import Liste Des Professeurs
+                                  </Button>
+                                </label>
+                              </Grid>
+                              <Grid item xs={12} lg={12}>
+                                <Box
+                                  sx={{
+                                    alignItems: 'center',
+                                    display: 'flex'
+                                  }}
+                                  marginLeft={'-16px'}
+                                >
+                                  <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+
+                                  <Button
+                                    variant="outlined"
+                                    sx={{
+                                      cursor: 'unset',
+                                      m: 2,
+                                      py: 0.5,
+                                      px: 7,
+                                      borderColor: `${theme.palette.grey[100]} !important`,
+                                      color: `${theme.palette.grey[900]}!important`,
+                                      fontWeight: 500,
+                                      borderRadius: `${customization.borderRadius}px`
+                                    }}
+                                    disableRipple
+                                    disabled
+                                  >
+                                    OR
+                                  </Button>
+                                  <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+                                </Box>
+                              </Grid>
+                            </Grid>
+                            <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter Professeur</Typography>
                             <TextField id="standard-basic" label="Nom " variant="standard" onChange={(e) => setNewProfessorLastName(e.target.value)} />
                             <TextField id="standardstandard-basic" label="Prénom" variant="standard" onChange={(e) => setNewProfessorFirstName(e.target.value)}/>
                             <TextField id="standardstandard-basic" label="Email"standard variant="standard" onChange={(e) => setNewProfessorEmail(e.target.value)}/>

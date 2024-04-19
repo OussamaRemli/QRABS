@@ -67,8 +67,7 @@ public class ProfessorServiceImpl implements ProfessorService {
                 professorDTO.setEmail(row.getCell(8).getStringCellValue()); // Column I (0-indexed)
                 professorDTO.setPassword("123456789"); // Assuming a default password
 
-                // Map DTO to entity
-                Professor prof = ProfessorMapper.toEntity(professorDTO);
+
 
                 // Find or create department
                 Department department = departmentRepository
@@ -78,7 +77,10 @@ public class ProfessorServiceImpl implements ProfessorService {
                             newDepartment.setDepartmentName(departmentName);
                             return departmentRepository.save(newDepartment);
                         });
-                prof.setDepartment(department);
+                professorDTO.setDepartment(DepartmentMapper.toDTO(department));
+
+                // Map DTO to entity
+                Professor prof = ProfessorMapper.toEntity(professorDTO);
 
                 // Save professor entity
                 prof = professorRepository.save(prof);

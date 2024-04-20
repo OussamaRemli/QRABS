@@ -21,7 +21,7 @@ import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.dark,
+  backgroundColor: '#0B6E4F',
   color: '#fff',
   overflow: 'hidden',
   position: 'relative',
@@ -30,13 +30,14 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     position: 'absolute',
     width: 210,
     height: 210,
-    background: theme.palette.secondary[800],
+    background: '#08A045',
     borderRadius: '50%',
-    top: -95,
-    right: -105,
+    top: -120,
+    right: -125,
+    opacity: 0.8,
     [theme.breakpoints.down('sm')]: {
       top: -105,
-      right: -140
+      right: -160
     }
   },
   '&:before': {
@@ -44,10 +45,10 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     position: 'absolute',
     width: 210,
     height: 210,
-    background: theme.palette.secondary[800],
+    background: '#08A045',
     borderRadius: '50%',
-    top: -135,
-    right: -25,
+    top: -155,
+    right: -60,
     opacity: 0.5,
     [theme.breakpoints.down('sm')]: {
       top: -155,
@@ -115,7 +116,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
         <SkeletonEarningCard />
       ) : (
         <CardWrapper border={false} content={false}>
-          <Box sx={{ p: 2.25 }}>
+          <Box sx={{ p: 1.25 }}>
             <Grid container direction="column">
               <Grid item>
                 <Grid container justifyContent="space-between">
@@ -128,7 +129,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
                       sx={{
                         ...theme.typography.commonAvatar,
                         ...theme.typography.mediumAvatar,
-                        backgroundColor: theme.palette.secondary.dark,
+                        backgroundColor: '#0B6E4F',
                         color: theme.palette.secondary[200],
                         zIndex: 1
                       }}
@@ -193,7 +194,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
               </Grid>
               <Grid item>
                 <Grid container alignItems="center" justifyContent='center'>
-                  <Grid item>
+                  <Grid item marginTop={'-30px'}>
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500}}>{abr}</Typography>
                   </Grid>
                   <Grid item>
@@ -211,12 +212,12 @@ const EarningCard = ({ isLoading,name,abr }) => {
                 </Grid>
               </Grid>
               <Grid container alignItems="center" justifyContent='center'>
-                <Grid item sx={{ mb: 1.25 }}>
+                <Grid item sx={{ mb: 1 }}>
                   <Typography
                     sx={{
                       fontSize: '1rem',
                       fontWeight: 500,
-                      color: theme.palette.secondary[200]
+                      color: 'primary.light'
                     }}
                   >
                     {name}

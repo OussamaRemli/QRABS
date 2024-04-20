@@ -18,5 +18,4 @@ public class Level {
     private String levelName;
     @Column(nullable = false)
     private String sectorName;
-
 }

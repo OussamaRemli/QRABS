@@ -12,6 +12,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 // project imports
 import EarningCard from '../dashboard/Default/EarningCard';
+import Module from './Module';
 //import UpgradePlanCard from '../../layout/MainLayout/Header/ProfileSection/UpgradePlanCard';
 // import PopularCard from './PopularCard';
 // import TotalOrderLineChartCard from './TotalOrderLineChartCard';
@@ -64,6 +65,7 @@ const studentsColumns = [
 const Filieres = ({name,abr}) => {
   const [isLoading, setLoading] = useState(true);
   const [students, setStudents] = useState([]);
+  const [modules, setModules] = useState([]);
 
   useEffect(() => {
     // Fonction pour récupérer les modules par le nom du département
@@ -84,8 +86,25 @@ const Filieres = ({name,abr}) => {
       }
     };
 
+    // Fonction pour récupérer les modules par le nom du département
+    const fetchModulessByLevelName = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8011/api/modules/levelName/${abr}`);
+        console.log(response.data)
+        const formattedModules = response.data.map(module => ({
+          moduleName: module.moduleName,
+          professorName: `${module.professor.firstName} ${module.professor.lastName}`
+        }));
+        setModules(formattedModules);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching modules:', error);
+      }
+    };
+
     // Appeler la fonction pour récupérer les données
     fetchStudentsByLevelName();
+    fetchModulessByLevelName();
   }, [abr]);
 
   return (
@@ -95,7 +114,7 @@ const Filieres = ({name,abr}) => {
           <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} name={name} abr={abr}/>
           </Grid>
-          <Grid item lg={10} md={6} sm={6} xs={12}>
+          {/* <Grid item lg={10} md={6} sm={6} xs={12}>
             <div style={{ height: 400, width: '80%'}}>
                 <DataGrid
                   rows={students}
@@ -109,7 +128,7 @@ const Filieres = ({name,abr}) => {
                   checkboxSelection
                 />
             </div>
-          </Grid>
+          </Grid> */}
           {/* <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
               <Grid item sm={6} xs={12} md={6} lg={12}>
@@ -120,6 +139,15 @@ const Filieres = ({name,abr}) => {
               </Grid>
             </Grid>
           </Grid> */}
+        </Grid>
+      </Grid>
+      <Grid item xs={12} marginTop={'16px'}>
+        <Grid container spacing={gridSpacing}>
+        {modules.map((module) => (
+          <Grid item lg={4} md={6} sm={6} xs={12}>
+                <Module key={module.moduleId} isLoading={isLoading} name={module.moduleName} professor={module.professorName}/>
+          </Grid>
+          ))}
         </Grid>
       </Grid>
       {/* <Grid item xs={12}>

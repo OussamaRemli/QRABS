@@ -226,9 +226,12 @@ const Departement = ({name,abr}) => {
       await axios.post('http://localhost:8011/api/modules', moduleData);
       // Refresh modules list after adding
       fetchModulesByDepartment();
-      setNewModuleName('');
-      setNewIntituleModule('');
-      setNewNameByDepartment('');
+      setTimeout(()=>{
+        setNewModuleName('');
+        setNewIntituleModule('');
+        setNewNameByDepartment('');
+    },1000)
+      
     } catch (error) {
       console.error('Error adding module:', error);
     }
@@ -255,10 +258,12 @@ const Departement = ({name,abr}) => {
       fetchProfessorsByDepartment();
   
       // Réinitialiser les champs du formulaire après l'ajout
-      setNewProfessorFirstName('');
-      setNewProfessorLastName('');
-      setNewProfessorEmail('');
-      setPassword('');
+      setTimeout(()=>{
+        setNewProfessorFirstName('');
+        setNewProfessorLastName('');
+        setNewProfessorEmail('');
+        setPassword('');
+    },1000)
     } catch (error) {
       console.error('Error adding professor:', error);
     }
@@ -372,17 +377,18 @@ const Departement = ({name,abr}) => {
                         <Box
                             component="form"
                             sx={{
-                              '& > :not(style)': { m: 1, },
+                              '& > :not(style)': { m: 1 },
+                              boxShadow: '4px 12px 20px #fff',
+                              padding: '20px 10px',
+                              width: '100%',
+                              autoComplete: 'off',
+                              bgcolor: '#fff',
+                              borderRadius: '20px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              border: `1px solid ${theme.palette.primary.main}`
                             }}
                             noValidate
-                            padding={'20px 10px 20px 10px'}
-                            boxShadow={'0px 4px 12px rgba(0, 0, 0, 0.1)'}
-                            width={'100%'}
-                            autoComplete="off"
-                            bgcolor={'#fff'}
-                            borderRadius={'20px'}
-                            display={'flex'}
-                            flexDirection={'column'}
                           >  
                           <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter modules via Excel</Typography>
                           <Grid container direction="column" justifyContent="center" spacing={0}>
@@ -487,17 +493,18 @@ const Departement = ({name,abr}) => {
                         <Box
                             component="form"
                             sx={{
-                              '& > :not(style)': { m: 1, },
+                              '& > :not(style)': { m: 1 },
+                              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                              padding: '20px 10px',
+                              width: '100%',
+                              autoComplete: 'off',
+                              bgcolor: '#fff',
+                              borderRadius: '20px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              border: `1px solid ${theme.palette.primary.main}`
                             }}
                             noValidate
-                            boxShadow={'0px 4px 12px rgba(0, 0, 0, 0.1)'}
-                            padding={'20px 10px 20px 10px'}
-                            width={'100%'}
-                            autoComplete="off"
-                            bgcolor={'#fff'}
-                            borderRadius={'20px'}
-                            display={'flex'}
-                            flexDirection={'column'}
                           > 
                             <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter professeurs via Excel</Typography>
                             <Grid container direction="column" justifyContent="center" spacing={0}>

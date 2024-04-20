@@ -22,6 +22,7 @@ public interface ModuleService {
     List<ModuleDTO> getModulesByProfessor(Professor professor);
     List<ModuleDTO> getModulesByLevel(Level level);
     List<ModuleDTO> getModulesByDepartmentName(String departmentName);
+    List<ModuleDTO> getModulesByLevelName(String levelName);
 
     List<ModuleDTO> uploadByExcel(MultipartFile file);
 

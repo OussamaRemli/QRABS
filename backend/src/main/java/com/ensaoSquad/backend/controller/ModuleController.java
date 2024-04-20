@@ -90,6 +90,11 @@ public class ModuleController {
         List<ModuleDTO> moduleDTOList = moduleService.getModulesByLevel(level);
         return ResponseEntity.ok(moduleDTOList);
     }
+    @GetMapping("/levelName/{levelName}")
+    public ResponseEntity<List<ModuleDTO>> getModulesByLevelName(@PathVariable String levelName) {
+        List<ModuleDTO> moduleDTOList = moduleService.getModulesByLevelName(levelName);
+        return ResponseEntity.ok(moduleDTOList);
+    }
 
     @GetMapping("/department/{departmentName}")
     public ResponseEntity<List<ModuleDTO>> getModulesByDepartmentName(@PathVariable String departmentName) {

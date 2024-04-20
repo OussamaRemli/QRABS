@@ -137,6 +137,18 @@ public class ModuleServiceImp implements ModuleService {
                 .map(ModuleMapper::toDTO)
                 .toList();
     }
+    @Override
+    public List<ModuleDTO> getModulesByLevelName(String levelName) {
+        Optional<Level> optionalLevel = Optional.of(levelRepository.findByLevelName(levelName));
+        Level level = optionalLevel.orElseThrow(() -> new RessourceNotFoundException("Level not found with name: " + levelName));
+        List<Module> modules = moduleRepository.findByLevelLevelName(levelName);
+        if (modules.isEmpty()) {
+            throw new RessourceNotFoundException("No modules found for level: " + levelName);
+        }
+        return modules.stream()
+                .map(ModuleMapper::toDTO)
+                .toList();
+    }
 
 
     @Override

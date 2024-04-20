@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
 import { Avatar, Box } from '@mui/material';
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 import { grey } from '@mui/material/colors';
 import { v4 as uuidv4 } from 'uuid';
-
-import IconButton from '@mui/material/IconButton';
-import CancelIcon from '@mui/icons-material/Cancel';
-import HowToRegIcon from '@mui/icons-material/HowToReg';
-
-
-
-
-function Users({ level ,apogee}) {
-    const [dataStudent, setDataStudent] = useState([]);
+import IconButton from "@mui/material/IconButton";
+import InfoIcon from '@mui/icons-material/Info';
+function AbsenceList({ levelId, moduleId ,SessionType }) {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/students/${level}`)
+        fetch(`http://localhost:8080/api/absence/absence/count?professorId=1&moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
-                setDataStudent(data);
-                const updatedUsers = data.map(student => ({
-                    _id: uuidv4(),
-                    Apogee: student.apogee,
-                    name: `${student.firstName} ${student.lastName}`,
-                    present: !!apogee.includes(student.apogee) // Removed unnecessary semicolon
-                }));
+                const updatedUsers = Object.keys(data).map(key => {
+                    // Extraction des informations de l'étudiant depuis la clé
+                    const studentString = key.match(/\(([^)]+)\)/)[1];
+                    const studentFields = studentString.split(', ').reduce((acc, current) => {
+                        const [k, v] = current.split('=');
+                        acc[k.trim()] = v.trim();
+                        return acc;
+                    }, {});
+
+                    // Création de l'objet utilisateur avec les données extraites
+                    return {
+                        _id: uuidv4(),
+                        Apogee: studentFields.apogee,
+                        name: `${studentFields.firstName} ${studentFields.lastName}`,
+                        Nombredabsence: data[key],
+                        photoURL: '',
+                    };
+                });
                 setUsers(updatedUsers);
-                data.forEach(student => {
-                    fetch(`http://localhost:8080/api/import-files/image/${student.apogee}`)
+                updatedUsers.forEach(user => {
+                    fetch(`http://localhost:8080/api/import-files/image/${user.Apogee}`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Image not found');
@@ -39,17 +41,15 @@ function Users({ level ,apogee}) {
                         })
                         .then(imageBlob => {
                             const imageUrl = URL.createObjectURL(imageBlob);
-                            const updatedUser = updatedUsers.find(user => user.Apogee === student.apogee);
+                            const updatedUser = updatedUsers.find(u => u.Apogee === user.Apogee);
                             updatedUser.photoURL = imageUrl;
                             setUsers([...updatedUsers]);
                         })
                         .catch(error => console.error('Error fetching image data:', error));
                 });
             })
-            .catch(error => console.error('Error fetching student data:', error)); // Added closing parenthesis and brace
-
-    }, [level,apogee]);
-
+            .catch(error => console.error('Error fetching student data:', error));
+    }, [levelId, moduleId]);
 
     const columns = [
         {
@@ -74,21 +74,9 @@ function Users({ level ,apogee}) {
             width: 170
         },
         {
-            field: 'present',
-            headerName: 'Present',
-            width: 100,
-            type: 'boolean',
-        },
-        {
-            field: 'notpresent',
-            headerName: '',
-            width: 80,
-            renderCell: (params) =>
-                <IconButton>
-                    <CancelIcon/>
-                </IconButton>,
-            sortable: false,
-            filterable: false,
+            field: 'Nombredabsence',
+            headerName: 'Nombre d\'absence',
+            width: 150,
         },
         {
             field: 'ispresent',
@@ -96,19 +84,17 @@ function Users({ level ,apogee}) {
             width: 80,
             renderCell: (params) =>
                 <IconButton>
-                    <HowToRegIcon/>
+                    <InfoIcon/>
                 </IconButton>,
             sortable: false,
             filterable: false,
         },
     ];
-
-    // Render the data grid
     return (
         <Box
             sx={{
                 height: 700,
-                width: '100%',
+                width: '80%',
             }}
         >
             <DataGrid
@@ -132,4 +118,4 @@ function Users({ level ,apogee}) {
     );
 }
 
-export default Users;
+export default AbsenceList;

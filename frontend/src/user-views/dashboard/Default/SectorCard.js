@@ -38,12 +38,12 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 }));
 
 
-const SectorCard = ({sectorName , onClick}) => {
+const SectorCard = ({levelNames}) => {
     return (
         <>
             <Grid item  sx={{flexBasis: '135px',flexGrow : 0, flexShrink : 0 }}>
             <CardWrapper border={false} content={false} >
-                <Box onClick={onClick} sx={{p: 2}}>
+                <Box  sx={{p: 2}}>
                     <List sx={{py: 0}}>
                         <ListItem alignItems="center" disableGutters sx={{py: 0}}>
                             <ListItemText
@@ -52,7 +52,7 @@ const SectorCard = ({sectorName , onClick}) => {
                                     mt: 0.45,
                                     mb: 0.45
                                 }}
-                                primary={<Typography variant="h4">{sectorName}</Typography>}
+                                primary={<Typography variant="h4">Niveau: {levelNames.join(', ')}</Typography>}
                             />
                         </ListItem>
                     </List>
@@ -64,7 +64,7 @@ const SectorCard = ({sectorName , onClick}) => {
 };
 
 SectorCard.propTypes = {
-    sectorName: PropTypes.string
+    levelsNames: PropTypes.string
 };
 
 export default SectorCard;

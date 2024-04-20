@@ -42,7 +42,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const ModuleCard = ({moduleName, sessionType,startTime, endTime}) => {
+const ModuleCard = ({moduleName, sessionType,levelNames,startTime, endTime}) => {
 
 
 
@@ -65,9 +65,10 @@ const ModuleCard = ({moduleName, sessionType,startTime, endTime}) => {
                                 }
                                 secondary={
                                     <Typography variant="subtitle2" sx={{color: 'primary.light', mt: 0.25}}>
-                                        {sessionType} : {startTime} - {endTime}
+                                        {sessionType} : de {startTime} á {endTime}
                                     </Typography>
                                 }
+
                             />
                         </ListItem>
                     </List>
@@ -80,7 +81,8 @@ const ModuleCard = ({moduleName, sessionType,startTime, endTime}) => {
 ModuleCard.propTypes = {
     moduleName: PropTypes.string,
     startTime: PropTypes.string,
-    endTime: PropTypes.string
+    endTime: PropTypes.string,
+    levelNames : PropTypes.array
 };
 
 export default ModuleCard;

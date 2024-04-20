@@ -1,20 +1,60 @@
-// material-ui
-import { Typography } from '@mui/material';
+import {Button, ButtonGroup, Grid} from '@mui/material';
+import { gridSpacing } from 'store/constant';
 
-// project imports
-import MainCard from 'ui-component/cards/MainCard';
+import AbsenceList from  './AbsenceList';
+import Chart from  './PieChart';
 
-// ==============================|| SAMPLE PAGE ||============================== //
+import PersonalAbsemce from './PesonalAbsence';
+const Index = ({levelId,moduleId}) => {
 
-const SamplePage = () => (
-  <MainCard title="Sample Card">
-    <Typography variant="body2">
-      Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif ad
-      minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in reprehended
-      in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa qui officiate
-      descent molls anim id est labours.
-    </Typography>
-  </MainCard>
-);
+    return (
+        <Grid container spacing={gridSpacing}>
+            <Grid item xs={12}>
+                <Grid container spacing={gridSpacing}>
+                    <Grid item lg={4} md={6} sm={6} xs={12}>
+                     <Chart/>
+                    </Grid>
 
-export default SamplePage;
+                    <Grid item lg={10} md={6} sm={6} xs={12}>
+                     <Grid>
+                    <ButtonGroup variant="outlined" aria-label="Basic button group">
+                            <Button>Total</Button>
+                            <Button>Cours</Button>
+                            <Button>TD</Button>
+                            <Button>TP</Button>
+                        </ButtonGroup>
+                     </Grid>
+                        <br/>
+                        <AbsenceList levelId={levelId} moduleId={moduleId}/>
+
+                    </Grid>
+                    {/* <Grid item lg={4} md={12} sm={12} xs={12}>
+            <Grid container spacing={gridSpacing}>
+              <Grid item sm={6} xs={12} md={6} lg={12}>
+                <TotalIncomeDarkCard isLoading={isLoading} />
+              </Grid>
+              <Grid item sm={6} xs={12} md={6} lg={12}>
+                <TotalIncomeLightCard isLoading={isLoading} />
+              </Grid>
+            </Grid>
+          </Grid> */}
+                </Grid>
+            </Grid>
+            {/* <Grid item xs={12}>
+        <Grid container spacing={gridSpacing}>
+          <Grid item xs={12} md={8}>
+            <TotalGrowthBarChart isLoading={isLoading} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <PopularCard isLoading={isLoading} />
+          </Grid>
+        </Grid>
+
+        <Grid item lg={6} md={6} sm={6} xs={12}>
+        </Grid>
+      </Grid> */}
+        </Grid>
+    );
+};
+
+export default Index;

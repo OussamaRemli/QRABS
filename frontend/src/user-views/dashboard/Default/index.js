@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 // material-ui
-import { Grid } from '@mui/material';
+import {Button, ButtonGroup, Grid} from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ResponsiveDialog from "./ResponsiveDialog";
+import AlertProvider from './AlertContext';
+
 
 // project imports
 import PresentCountCard from './PresentCountCard';
@@ -10,7 +14,7 @@ import Qrcode from './Qrcode';
 import ModuleCard from './ModuleCard';
 import SectorCard from './SectorCard';
 // import TotalGrowthBarChart from './TotalGrowthBarChart';
-import { gridSpacing } from 'store/constant';
+import {gridSpacing} from 'store/constant';
 import Users from './StudentList';
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -20,7 +24,7 @@ const Dashboard = () => {
     const [dataSession, setDataSession] = useState([]);
     const [selectedSector, setSelectedSector] = useState(null);
     const [apogee, setApogee] = useState([]);
-    const [count,setCount]=useState([]);
+    const [count, setCount] = useState([]);
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
@@ -53,14 +57,12 @@ const Dashboard = () => {
         };
     }, []);
 
-    const levelNames = dataSession.map(item=>item.level.levelName);
-    const modules = dataSession.map(item=>item.module.moduleName);
-    const sessions = dataSession.map(item=>item);
-    const startTime = dataSession.map(item=>item.startTime);
-    const endTime = dataSession.map(item=>item.endTime);
-    const sessionType = dataSession.map(item=>item.sessionType);
-
-
+    const levelNames = dataSession.map(item => item.level.levelName);
+    const modules = dataSession.map(item => item.module.moduleName);
+    const sessions = dataSession.map(item => item);
+    const startTime = dataSession.map(item => item.startTime);
+    const endTime = dataSession.map(item => item.endTime);
+    const sessionType = dataSession.map(item => item.sessionType);
 
 
     const handleSectorClick = (index) => {
@@ -71,24 +73,50 @@ const Dashboard = () => {
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item sx={{flexBasis: '300px',flexGrow : 0, flexShrink : 0 }}>
-                        <ModuleCard moduleName={modules[0]} sessionType={sessionType[0]} startTime={startTime[0]} endTime={endTime[0]} />
+                    <Grid item sx={{flexBasis: '350px', flexGrow: 0, flexShrink: 0}}>
+                        <ModuleCard moduleName={modules[0]} levelNames={levelNames} sessionType={sessionType[0]}
+                                    startTime={startTime[0]} endTime={endTime[0]}/>
                     </Grid>
-                    {levelNames.map((name, index) => (
-                        <SectorCard key={index} sectorName={name} onClick={() => {handleSectorClick(index)}} />
-                    ))}
-                    <Grid item  sx={{flexBasis: '250px' ,flexGrow : 0, flexShrink : 0 }}>
-                        <PresentCountCard  count={count}/>
+
+                    <Grid item sx={{flexBasis: '250px', flexGrow: 0, flexShrink: 0}}>
+                        <SectorCard levelNames={levelNames}/>
                     </Grid>
+
+                    <Grid item sx={{flexBasis: '250px', flexGrow: 0, flexShrink: 0}}>
+                        <PresentCountCard count={count}/>
+                    </Grid>
+
                 </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
                     <Grid item xs={12} md={8}>
+                        <ButtonGroup variant="outlined" aria-label="Basic button group">
+                            {levelNames.map((name, index) => (
+                                <Button key={index} onClick={() => {
+                                    handleSectorClick(index)
+                                }}>{name}</Button>
+                            ))}
+                        </ButtonGroup>
+                    </Grid>
+                    <Grid item xs={12} md={8}>
                         {selectedSector !== null && <Users level={levelNames[selectedSector]} apogee={apogee}/>}
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        {selectedSector !== null && <Qrcode url={`http://192.168.1.103:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
+                        <Grid>
+                            {selectedSector !== null &&
+                                <AlertProvider>
+                                    <ResponsiveDialog dialogContent={"est vous sur de marquer l'absence"}
+                                                      button={'marquer absence'}
+                                                      levelid={sessions[selectedSector].level.levelId}
+                                                      sessionid={sessions[selectedSector].sessionId}/>
+                                </AlertProvider>
+                            }
+                        </Grid>
+                        <br/>
+                        {selectedSector !== null && <Qrcode
+                            url={`http://192.168.1.109:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
+
                     </Grid>
                 </Grid>
             </Grid>

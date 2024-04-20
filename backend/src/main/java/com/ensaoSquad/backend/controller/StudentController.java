@@ -45,4 +45,9 @@ public class StudentController {
 
         return studentService.getStudentsTaughtByProfessorInTimeframe(professorEmail,sessionDay,startTime,endTime);
     }
+
+    @GetMapping("/student/{apogee}")
+    public Student getStudentByApogee(@PathVariable Long apogee){
+        return studentService.findByApogee(apogee);
+    }
 }

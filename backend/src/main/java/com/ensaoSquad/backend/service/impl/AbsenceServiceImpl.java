@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.service.impl;
 
+import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
 import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.repository.AbsenceRepository;
@@ -93,6 +94,24 @@ public class AbsenceServiceImpl implements AbsenceService {
                         )
                 ));
     }
+    //getting one student and their absence dates and the session type each date
+    @Override
+    public Map<Student, List<StudentAbsenceDTO>> getStudentAbsenceDetail(long appoge,Module module){
+        Student student = studentRepository.findByApogee(appoge);
+        List<Object[]> results = absenceRepository.getStudentAbsencesByStudentIdAndModule(student, module);
+        List<StudentAbsenceDTO> studentAbsences = new ArrayList<>();
 
+        for (Object[] result : results) {
+            String sessionType = (String) result[0];
+            Date absenceDate = (Date) result[1];
+
+            studentAbsences.add(new StudentAbsenceDTO(absenceDate, sessionType));
+        }
+
+        Map<Student, List<StudentAbsenceDTO>> studentAbsencesMap = new HashMap<>();
+        studentAbsencesMap.put(student,studentAbsences);
+
+        return studentAbsencesMap;
+    }
 
 }

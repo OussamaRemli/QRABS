@@ -1,9 +1,7 @@
 package com.ensaoSquad.backend.repository;
 
-import com.ensaoSquad.backend.model.Absence;
-import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
-import com.ensaoSquad.backend.model.Professor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,6 +33,14 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long>{
 List<Object[]> getAbsenceCountByProfessorModuleAndLevel(@Param("professor") Professor professor,
                                                         @Param("module") Module module,
                                                         @Param("level") Level level);
-
-
+@Query("SELECT ses.sessionType, a.dateAbsence " +
+        "FROM Absence a " +
+        "JOIN a.session ses " +
+        "WHERE a.student = :student " +
+        "AND ses.module = :module")
+    List<Object[]> getStudentAbsencesByStudentIdAndModule(@Param("student") Student student, @Param("module") Module module);
 }
+
+
+
+

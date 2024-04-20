@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 
+import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
 import com.ensaoSquad.backend.exception.StudentNotFoundException;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.Level;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -73,6 +75,18 @@ public class AbsenceController {
         Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
 
         return ResponseEntity.ok(absenceCounts);
+    }
+
+    @GetMapping("/absence/details")
+    public ResponseEntity<Map<Student, List<StudentAbsenceDTO>>> getAbsenceDetailsOfStudent(
+            @RequestParam("studentApogee") long studentApogee,
+            @RequestParam("moduleId") Long moduleId) {
+
+        Module module = moduleService.findById(moduleId);
+
+        Map<Student, List<StudentAbsenceDTO>> absenceDetails = absenceService.getStudentAbsenceDetail(studentApogee,module);
+
+        return ResponseEntity.ok(absenceDetails);
     }
 
 

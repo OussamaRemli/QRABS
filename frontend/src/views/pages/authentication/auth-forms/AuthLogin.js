@@ -87,9 +87,10 @@ const FirebaseLogin = ({ ...others }) => {
                 // Rediriger l'utilisateur vers la page Dashboard après la connexion réussie
                 navigate('/dashboard/default');
               } else {
+                console.log("error auth!!")
                 // Si la réponse n'est pas réussie, afficher une erreur
                 const errorData = await response.text();
-                throw new Error(errorData);
+                throw new Error("Email or Password doesn't matched!");
               }
             }
           } catch (err) {

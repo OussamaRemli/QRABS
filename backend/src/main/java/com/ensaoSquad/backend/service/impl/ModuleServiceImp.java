@@ -41,6 +41,12 @@ public class ModuleServiceImp implements ModuleService {
 
     @Override
     public ModuleDTO createModule(ModuleDTO moduleDto) {
+        boolean moduleExists = moduleRepository.existsByModuleNameAndLevel_LevelId(moduleDto.getModuleName(), moduleDto.getLevel().getLevelId());
+
+        // Si le module existe déjà, déclencher une exception
+        if (moduleExists) {
+            throw new RuntimeException("Module with the same name and level already exists");
+        }
 
         Department department = departmentRepository.findById(moduleDto.getDepartment().getDepartmentId())
                 .orElseThrow(() -> new RessourceNotFoundException("Department not found with ID: " + moduleDto.getDepartment().getDepartmentId()));

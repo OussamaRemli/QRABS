@@ -86,11 +86,10 @@ const Filieres = ({name,abr}) => {
       }
     };
 
-    // Fonction pour récupérer les modules par le nom du département
+    // Fonction pour récupérer les modules par levelName
     const fetchModulessByLevelName = async () => {
       try {
         const response = await axios.get(`http://localhost:8011/api/modules/levelName/${abr}`);
-        console.log(response.data)
         const formattedModules = response.data.map(module => ({
           moduleName: module.moduleName,
           professorName: `${module.professor.firstName} ${module.professor.lastName}`

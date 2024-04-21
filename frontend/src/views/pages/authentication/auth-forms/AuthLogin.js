@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-
+import jwt_decode from "jwt-decode";
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -54,6 +54,23 @@ const FirebaseLogin = ({ ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const parseToken = (token) => {
+    if (!token) return null; // Vérifier si le token est présent
+  
+    const tokenParts = token.split('.'); // Diviser le token en parties
+    const tokenPayload = tokenParts[1];
+    
+    try {
+      const decodedPayload = JSON.parse(atob(tokenPayload));
+      // console.log(decodedPayload.role);
+      return decodedPayload.role;
+    } catch (error) {
+      console.error("Error parsing token payload:", error);
+      return null;
+    }
+  };
+  
+  
 
   return (
     <>
@@ -74,7 +91,7 @@ const FirebaseLogin = ({ ...others }) => {
               setSubmitting(false);
 
               // Récupérer le token JWT depuis la réponse de votre API (assumant que le token est dans la réponse user)
-              const response = await fetch('http://localhost:8011/api/professors/authenticate', {
+              const response = await fetch('http://localhost:8080/api/professors/authenticate', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -82,10 +99,18 @@ const FirebaseLogin = ({ ...others }) => {
                 body: JSON.stringify(values), // Envoyer les données de connexion au format JSON
               });
               if (response.ok) {
-                const token = await response.text(); // Récupérer directement le token sous forme de texte
+                const token = await response.text();
                 localStorage.setItem('token', token);
+                // Récupérer le rôle à partir du token JWT
+                const role = parseToken(token);
+                // Rediriger l'utilisateur en fonction de son rôle
+                if (role === 'ROLE_ADMIN') {
+                  navigate('/dashboard/default'); // Redirection vers la route admin
+                } else{
+                  navigate('/'); // Redirection vers la route professeur
+                }
                 // Rediriger l'utilisateur vers la page Dashboard après la connexion réussie
-                navigate('/dashboard/default');
+                // navigate('/dashboard/default');
               } else {
                 console.log("error auth!!")
                 // Si la réponse n'est pas réussie, afficher une erreur

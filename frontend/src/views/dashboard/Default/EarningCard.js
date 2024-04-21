@@ -89,7 +89,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/students/upload', formData)
+      axios.post('http://localhost:8080/api/students/upload', formData)
         .then((response) => {
           console.log('Students uploaded:');
           setSnackbarSeverity('success');
@@ -111,7 +111,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/session/upload', formData)
+      axios.post('http://localhost:8080/api/session/upload', formData)
         .then((response) => {
           console.log('Sessions uploaded:', response.data);
           setSnackbarSeverity('success');

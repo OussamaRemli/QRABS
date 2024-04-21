@@ -113,7 +113,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les professeurs par le nom du département
   const fetchProfessorsByDepartment = async () => {
     try {
-      const response = await axios.get(`http://localhost:8011/api/professors/department/${name}`);
+      const response = await axios.get(`http://localhost:8080/api/professors/department/${name}`);
       const formattedProfessors = response.data.map(professor => ({
         professorId: professor.professorId,
         firstName: professor.firstName,
@@ -128,7 +128,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les modules par le nom du département
   const fetchModulesByDepartment = async () => {
     try {
-      const response = await axios.get(`http://localhost:8011/api/modules/department/${name}`);
+      const response = await axios.get(`http://localhost:8080/api/modules/department/${name}`);
       console.log(response.data)
       const formattedModules = response.data.map(module => ({
         moduleId: module.moduleId,
@@ -151,7 +151,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer tous les professeurs (pour le formulaire)
     const fetchProfessors = async () => {
       try {
-        const response = await axios.get(`http://localhost:8011/api/professors/all`);
+        const response = await axios.get(`http://localhost:8080/api/professors/all`);
         const formattedProfessors = response.data.map(professor => ({
           professorId: professor.professorId,
           firstName: professor.firstName,
@@ -165,7 +165,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer les niveaux
     const fetchLevels = async () => {
       try {
-        const response = await axios.get(`http://localhost:8011/api/levels`);
+        const response = await axios.get(`http://localhost:8080/api/levels`);
         const formattedLevels = response.data.map(level => ({
           levelId: level.levelId,
           levelName: level.levelName,
@@ -227,7 +227,7 @@ const Departement = ({name,abr}) => {
         },
         nameByDepartment: newNameByDepartment
       };
-      await axios.post('http://localhost:8011/api/modules', moduleData);
+      await axios.post('http://localhost:8080/api/modules', moduleData);
       // Refresh modules list after adding
       fetchModulesByDepartment();
       setSnackbarSeverity('success');
@@ -262,7 +262,7 @@ const Departement = ({name,abr}) => {
       };
   
       // Envoyer les données au backend avec Axios
-      await axios.post('http://localhost:8011/api/professors', professorData);
+      await axios.post('http://localhost:8080/api/professors', professorData);
   
       // Actualiser la liste des professeurs après l'ajout
       fetchProfessorsByDepartment();
@@ -294,7 +294,7 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/modules/upload', formData)
+      axios.post('http://localhost:8080/api/modules/upload', formData)
         .then((response) => {
           console.log('modules uploaded:');
           setSnackbarSeverity('success');
@@ -315,7 +315,7 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/professors/upload', formData)
+      axios.post('http://localhost:8080/api/professors/upload', formData)
         .then((response) => {
           console.log('professors uploaded!');
           setSnackbarSeverity('success');

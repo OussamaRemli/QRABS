@@ -46,8 +46,8 @@ public class AbsenceServiceImpl implements AbsenceService {
             Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
             if (!students.contains(studentId)) {
                 students.add(studentId);
-                sessionIps.add(ip); // Ajoute l'IP à la liste des IPs scannées pour cette séance
-                count = students.size(); // Met à jour le compteur avec la taille du nouveau set
+                sessionIps.add(ip);
+                count = students.size();
                 this.template.convertAndSend("/topic/presence", Apogee);
                 System.out.println(count);
                 this.template.convertAndSend("/topic/count", count);
@@ -79,6 +79,17 @@ public class AbsenceServiceImpl implements AbsenceService {
             }
         }
         presentStudents.remove(levelId);
+    }
+
+    @Override
+    public void isNotPresent(long studentId, long levelId, Long apogee) {
+        Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
+        if (students.contains(studentId)) {
+        students.remove(studentId);
+        this.template.convertAndSend("/topic/count", students.size());
+        this.template.convertAndSend("/topic/absence", apogee);
+
+        }
     }
 
     @Override

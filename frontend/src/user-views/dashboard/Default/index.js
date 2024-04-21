@@ -1,19 +1,13 @@
 import {useEffect, useState} from 'react';
-
 // material-ui
 import {Button, ButtonGroup, Grid} from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ResponsiveDialog from "./ResponsiveDialog";
 import AlertProvider from './AlertContext';
-
-
 // project imports
 import PresentCountCard from './PresentCountCard';
 import Qrcode from './Qrcode';
-// import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 import ModuleCard from './ModuleCard';
 import SectorCard from './SectorCard';
-// import TotalGrowthBarChart from './TotalGrowthBarChart';
 import {gridSpacing} from 'store/constant';
 import Users from './StudentList';
 import SockJS from "sockjs-client";
@@ -25,7 +19,6 @@ const Dashboard = () => {
     const [selectedSector, setSelectedSector] = useState(null);
     const [apogee, setApogee] = useState([]);
     const [count, setCount] = useState([]);
-
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         const stompClient = Stomp.over(socket);
@@ -39,14 +32,17 @@ const Dashboard = () => {
             const countSubscription = stompClient.subscribe('/topic/count', function (message) {
                 setCount(message.body);
             });
+            const absenceSubscription = stompClient.subscribe('/topic/absence', function (message) {
+                setApogee(apogee => [...apogee].filter(apogee=>apogee!==Number(message.body)) );
+            });
             return () => {
                 presenceSubscription.unsubscribe();
+                absenceSubscription.unsubscribe();
                 countSubscription.unsubscribe();
                 stompClient.disconnect();
             };
         });
 
-        // Fetch data after WebSocket subscription is established
         fetch("http://localhost:8080/api/session/currentSession/1")
             .then(response => response.json())
             .then(dataSession => setDataSession(dataSession));
@@ -100,13 +96,13 @@ const Dashboard = () => {
                         </ButtonGroup>
                     </Grid>
                     <Grid item xs={12} md={8}>
-                        {selectedSector !== null && <Users level={levelNames[selectedSector]} apogee={apogee}/>}
+                        {selectedSector !== null && <Users sessionId={sessions[selectedSector].sessionId} levelId={sessions[selectedSector].level.levelId} level={levelNames[selectedSector]} apogee={apogee}/>}
                     </Grid>
-                    <Grid item xs={6} md={4}>
+                    <Grid item xs={6} md={4} sx={{display:'flex' ,flexDirection:'column', alignItems:'center'}}>
                         <Grid>
                             {selectedSector !== null &&
                                 <AlertProvider>
-                                    <ResponsiveDialog dialogContent={"est vous sur de marquer l'absence"}
+                                    <ResponsiveDialog dialogContent={"etes vous sur de marquer l'absence"}
                                                       button={'marquer absence'}
                                                       levelid={sessions[selectedSector].level.levelId}
                                                       sessionid={sessions[selectedSector].sessionId}/>
@@ -115,7 +111,7 @@ const Dashboard = () => {
                         </Grid>
                         <br/>
                         {selectedSector !== null && <Qrcode
-                            url={`http://192.168.1.109:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
+                            url={`http://192.168.116.101:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
 
                     </Grid>
                 </Grid>

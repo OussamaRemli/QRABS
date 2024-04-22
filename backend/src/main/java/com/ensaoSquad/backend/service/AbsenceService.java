@@ -14,6 +14,8 @@ public interface AbsenceService {
     public void markPresnt(long seanceId , long studentId , long levelId , String ip , Long apogee);
     public void markAbsent(long idSeance , long levelId);
 
+    public void isNotPresent(long studentId , long levelId , Long apogee);
+
     public Map<Student, Map<String, Long>> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level);
 
     public Map<Student, List<StudentAbsenceDTO>> getStudentAbsenceDetail(long appoge, Module module);

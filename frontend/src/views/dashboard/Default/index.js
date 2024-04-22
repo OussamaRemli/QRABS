@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // material-ui
 import { Grid } from '@mui/material';
@@ -17,6 +18,7 @@ import { gridSpacing } from 'store/constant';
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
   const [adminInfo, setAdminInfo] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     setLoading(false);
     // Récupérer le token depuis le localStorage
@@ -40,14 +42,15 @@ const Dashboard = () => {
   }, []);
 
   // Si le token n'existe pas, ne rend pas ce composant
-  if (!localStorage.getItem('token')) return null;
+  if (!localStorage.getItem('token')) navigate('/');
 
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
       <Grid item lg={2} >
       <h2>Hi {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.firstName} ${adminInfo.lastName}` : 'Admin :)'}!</h2>
       </Grid>
-      <Grid item xs={12}>
+      
+      {/* <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
             <EarningCard isLoading={isLoading} />
@@ -66,7 +69,7 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
 
 {/* <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>

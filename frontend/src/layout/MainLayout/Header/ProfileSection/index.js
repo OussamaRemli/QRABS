@@ -24,7 +24,13 @@ import {
   Popper,
   Stack,
   // Switch,
-  Typography
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button
 } from '@mui/material';
 
 // third-party
@@ -46,6 +52,7 @@ import { IconLogout, IconSettings } from '@tabler/icons-react';
 const ProfileSection = () => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const navigate = useNavigate();
   const [adminInfo, setAdminInfo] = useState(null);
   useEffect(() => {
@@ -58,8 +65,6 @@ const ProfileSection = () => {
       const tokenParts = token.split('.');
       const tokenPayload = JSON.parse(atob(tokenParts[1]));
 
-      // Afficher les informations dans la console
-      // console.log('Informations de l\'admin :', tokenPayload);
       setAdminInfo({
         firstName: tokenPayload.firstName,
         lastName: tokenPayload.lastName
@@ -83,11 +88,14 @@ const ProfileSection = () => {
   const anchorRef = useRef(null);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?');
-    if (confirmLogout) {
-      localStorage.removeItem('token');
-      navigate('/');
-    }
+    setOpenLogoutDialog(true); // Ouvrir la boîte de dialogue de déconnexion
+  };
+  const confirmLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+  const handleCloseLogoutDialog = () => {
+    setOpenLogoutDialog(false); // Fermer la boîte de dialogue de déconnexion
   };
 
   const handleClose = (event) => {
@@ -164,6 +172,18 @@ if (!localStorage.getItem('token')) return null;
         onClick={handleToggle}
         color="primary"
       />
+      <Dialog open={openLogoutDialog} onClose={handleCloseLogoutDialog}>
+        <DialogTitle sx={{fontSize: '1.25rem', fontWeight: 'bold' }}>Êtes-vous sûr de vouloir vous déconnecter ?</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ fontSize: '1rem', color: 'text.secondary' }}>
+            En vous déconnectant, vous serez redirigé vers la page de connexion.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{padding: '8px 24px' }}>
+          <Button onClick={handleCloseLogoutDialog} color="primary" variant="outlined" sx={{ marginRight: '16px', borderRadius: '8px', textTransform: 'none' }}>Annuler</Button>
+          <Button onClick={confirmLogout} color="primary" variant="contained" autoFocus sx={{ borderRadius: '8px', textTransform: 'none' }}>Se déconnecter</Button>
+        </DialogActions>
+      </Dialog>
       <Popper
         placement="bottom-end"
         open={open}

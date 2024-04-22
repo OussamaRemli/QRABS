@@ -1,6 +1,8 @@
 package com.ensaoSquad.backend.repository;
 
+import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +41,7 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
 
     @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime AND s.professor.professorId= :professorId")
     List<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);
+
+    List<Session> findByModule(Module module);
+
 }

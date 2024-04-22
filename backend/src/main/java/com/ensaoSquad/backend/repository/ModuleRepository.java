@@ -21,6 +21,7 @@ public interface ModuleRepository extends JpaRepository<Module,Long> {
     List<Module> findByLevel(Level level);
     List<Module> findByDepartmentDepartmentName(String departmentName);
     List<Module> findByLevelLevelName(String levelName);
+    boolean existsByModuleNameAndLevel_LevelId(String moduleName, Long levelId);
 
     Module findByModuleNameAndLevel(String moduleName,Level level);
 }

@@ -54,6 +54,13 @@ public class AbsenceController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    @PostMapping("/isnotpresent/{levelId}/{Apogee}")
+    public void isNotpresent(@PathVariable Long levelId , @PathVariable Long Apogee){
+        Student student = studentService.findByApogee(Apogee);
+        Long studentId = student.getStudentId();
+        absenceService.isNotPresent(studentId,levelId,Apogee);
+    }
+
 
     @PostMapping("/{sessionId}/{levelId}")
     public  void endSession(@PathVariable long sessionId ,@PathVariable long levelId){

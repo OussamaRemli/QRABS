@@ -1,60 +1,63 @@
-import {Button, ButtonGroup, Grid} from '@mui/material';
-import { gridSpacing } from 'store/constant';
+import {Button, ButtonGroup, Grid, IconButton} from '@mui/material';
+import {gridSpacing} from 'store/constant';
 
-import AbsenceList from  './AbsenceList';
-import Chart from  './PieChart';
+import AbsenceList from './AbsenceList';
+import Chart from './PieChart';
 
-import PersonalAbsemce from './PesonalAbsence';
-const Index = ({levelId,moduleId}) => {
+import StudentCard from './StudentCard';
+import AbsenceDetails from './AbsenceDetails';
+import {useState} from "react";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+const Index = ({levelId, moduleId}) => {
+
+    const [Apogee, setApogee] = useState(null);
+    const [selector ,setSelector] =useState(null);
+    const handleButtonClick = (Apogee) => {
+        setApogee(Apogee);
+        setSelector(!selector);
+    };
 
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
-                    <Grid item lg={4} md={6} sm={6} xs={12}>
-                     <Chart/>
-                    </Grid>
-
-                    <Grid item lg={10} md={6} sm={6} xs={12}>
-                     <Grid>
-                    <ButtonGroup variant="outlined" aria-label="Basic button group">
-                            <Button>Total</Button>
-                            <Button>Cours</Button>
-                            <Button>TD</Button>
-                            <Button>TP</Button>
-                        </ButtonGroup>
-                     </Grid>
-                        <br/>
-                        <AbsenceList levelId={levelId} moduleId={moduleId}/>
-
-                    </Grid>
-                    {/* <Grid item lg={4} md={12} sm={12} xs={12}>
-            <Grid container spacing={gridSpacing}>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeDarkCard isLoading={isLoading} />
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeLightCard isLoading={isLoading} />
-              </Grid>
-            </Grid>
-          </Grid> */}
+                    {/* Affiche le graphique si le sélecteur n'est pas activé */}
+                    {!selector && (
+                        <Grid item lg={4} md={6} sm={6} xs={12}>
+                            <Chart />
+                        </Grid>
+                    )}
+                    {/* Grille pour la liste des absences */}
+                    {!selector && (
+                        <Grid item lg={10} md={6} sm={6} xs={12}>
+                            <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
+                        </Grid>
+                    )}
+                    {/* Afficher les détails de l'apogée sélectionné s'il y en a un */}
+                    {selector && (
+                        <>
+                            <Grid>
+                                <IconButton onClick={()=>{setSelector(!selector)}}>
+                                    <ArrowBackIcon />
+                                </IconButton>
+                            </Grid>
+                            {/* Grille pour la carte de l'étudiant */}
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
+                                <StudentCard Apogee={Apogee} />
+                            </Grid>
+                            <br />
+                            {/* Grille pour les détails de l'absence */}
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
+                                <AbsenceDetails moduleId={moduleId} studentApogee={Apogee} />
+                            </Grid>
+                        </>
+                    )}
                 </Grid>
             </Grid>
-            {/* <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
-          </Grid>
-        </Grid>
-
-        <Grid item lg={6} md={6} sm={6} xs={12}>
-        </Grid>
-      </Grid> */}
         </Grid>
     );
+
 };
 
 export default Index;

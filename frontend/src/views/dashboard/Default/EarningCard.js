@@ -3,9 +3,10 @@ import { useState } from 'react';
 import axios from 'axios';
 
 
+
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Menu, MenuItem, Typography,Button  } from '@mui/material';
+import { Avatar, Box, Grid, Menu, MenuItem, Typography,Button,Snackbar,Alert  } from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
@@ -62,6 +63,10 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 const EarningCard = ({ isLoading,name,abr }) => {
   const theme = useTheme();
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -73,6 +78,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
     setAnchorEl(null);
     setSelectedFile(null);
   };
+
   // Function to handle file selection
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -83,13 +89,19 @@ const EarningCard = ({ isLoading,name,abr }) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/students/upload', formData)
+      axios.post('http://localhost:8080/api/students/upload', formData)
         .then((response) => {
-          console.log('Students uploaded:', response.data);
+          console.log('Students uploaded:');
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Students uploaded successfully');
+          setOpenSnackbar(true);
           handleClose();
         })
         .catch((error) => {
           console.error('Error uploading students:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error uploading students');
+          setOpenSnackbar(true);
         });
     }
   };
@@ -99,15 +111,31 @@ const EarningCard = ({ isLoading,name,abr }) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/session/upload', formData)
+      axios.post('http://localhost:8080/api/session/upload', formData)
         .then((response) => {
           console.log('Sessions uploaded:', response.data);
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Sessions uploaded successfully');
+          setOpenSnackbar(true);
           handleClose();
         })
         .catch((error) => {
           console.error('Error uploading sessions:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error uploading sessions');
+          setOpenSnackbar(true);
         });
     }
+  };
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };   
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -117,6 +145,21 @@ const EarningCard = ({ isLoading,name,abr }) => {
       ) : (
         <CardWrapper border={false} content={false}>
           <Box sx={{ p: 1.25 }}>
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4000}
+              onClose={handleSnackbarClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert 
+                severity={snackbarSeverity}
+                onClose={handleSnackbarClose}
+                variant="filled"
+                sx={{ width: '100%' }}
+              >
+              {snackbarMessage}
+              </Alert>
+            </Snackbar>
             <Grid container direction="column">
               <Grid item>
                 <Grid container justifyContent="space-between">

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 // material-ui
-import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,InputLabel } from '@mui/material';
+import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,InputLabel,Snackbar,Alert } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
@@ -96,6 +96,10 @@ const Departement = ({name,abr}) => {
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
   const [showAddProfessorForm, setShowAddProfessorForm] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   // Fonction pour afficher ou masquer le formulaire d'ajout de module
   const toggleAddModuleForm = () => {
     setShowAddModuleForm(!showAddModuleForm);
@@ -109,7 +113,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les professeurs par le nom du département
   const fetchProfessorsByDepartment = async () => {
     try {
-      const response = await axios.get(`http://localhost:8011/api/professors/department/${name}`);
+      const response = await axios.get(`http://localhost:8080/api/professors/department/${name}`);
       const formattedProfessors = response.data.map(professor => ({
         professorId: professor.professorId,
         firstName: professor.firstName,
@@ -124,7 +128,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les modules par le nom du département
   const fetchModulesByDepartment = async () => {
     try {
-      const response = await axios.get(`http://localhost:8011/api/modules/department/${name}`);
+      const response = await axios.get(`http://localhost:8080/api/modules/department/${name}`);
       console.log(response.data)
       const formattedModules = response.data.map(module => ({
         moduleId: module.moduleId,
@@ -147,7 +151,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer tous les professeurs (pour le formulaire)
     const fetchProfessors = async () => {
       try {
-        const response = await axios.get(`http://localhost:8011/api/professors/all`);
+        const response = await axios.get(`http://localhost:8080/api/professors/all`);
         const formattedProfessors = response.data.map(professor => ({
           professorId: professor.professorId,
           firstName: professor.firstName,
@@ -161,7 +165,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer les niveaux
     const fetchLevels = async () => {
       try {
-        const response = await axios.get(`http://localhost:8011/api/levels`);
+        const response = await axios.get(`http://localhost:8080/api/levels`);
         const formattedLevels = response.data.map(level => ({
           levelId: level.levelId,
           levelName: level.levelName,
@@ -223,9 +227,12 @@ const Departement = ({name,abr}) => {
         },
         nameByDepartment: newNameByDepartment
       };
-      await axios.post('http://localhost:8011/api/modules', moduleData);
+      await axios.post('http://localhost:8080/api/modules', moduleData);
       // Refresh modules list after adding
       fetchModulesByDepartment();
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Module added successfully');
+      setOpenSnackbar(true);
       setTimeout(()=>{
         setNewModuleName('');
         setNewIntituleModule('');
@@ -234,6 +241,9 @@ const Departement = ({name,abr}) => {
       
     } catch (error) {
       console.error('Error adding module:', error);
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Error adding module');
+      setOpenSnackbar(true)
     }
   };
 
@@ -252,10 +262,13 @@ const Departement = ({name,abr}) => {
       };
   
       // Envoyer les données au backend avec Axios
-      await axios.post('http://localhost:8011/api/professors', professorData);
+      await axios.post('http://localhost:8080/api/professors', professorData);
   
       // Actualiser la liste des professeurs après l'ajout
       fetchProfessorsByDepartment();
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Professor added successfully');
+      setOpenSnackbar(true);
   
       // Réinitialiser les champs du formulaire après l'ajout
       setTimeout(()=>{
@@ -266,6 +279,9 @@ const Departement = ({name,abr}) => {
     },1000)
     } catch (error) {
       console.error('Error adding professor:', error);
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Error adding professor');
+      setOpenSnackbar(true);
     }
   };
   // Function to handle file selection
@@ -278,12 +294,18 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/modules/upload', formData)
+      axios.post('http://localhost:8080/api/modules/upload', formData)
         .then((response) => {
-          console.log('modules uploaded:', response.data);
+          console.log('modules uploaded:');
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Modules uploaded successfully');
+          setOpenSnackbar(true);
         })
         .catch((error) => {
           console.error('Error uploading modules:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error uploading modules');
+          setOpenSnackbar(true);
         });
     }
   };
@@ -293,14 +315,30 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post('http://localhost:8011/api/professors/upload', formData)
+      axios.post('http://localhost:8080/api/professors/upload', formData)
         .then((response) => {
           console.log('professors uploaded!');
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Professors uploaded successfully');
+          setOpenSnackbar(true);
         })
         .catch((error) => {
           console.error('Error uploading professors:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error uploading professors');
+          setOpenSnackbar(true);
         });
     }
+  };
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };   
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
 
@@ -325,6 +363,21 @@ const Departement = ({name,abr}) => {
             <Button color="secondary" size="large" variant={showAddProfessorForm ? 'contained' : 'outlined'} onClick={toggleAddProfessorForm}>Ajouter Professeur</Button>
             </Stack>
           </Grid>
+          <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4000}
+              onClose={handleSnackbarClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+              <Alert 
+                severity={snackbarSeverity}
+                onClose={handleSnackbarClose}
+                variant="filled"
+                sx={{ width: '100%' }}
+              >
+              {snackbarMessage}
+              </Alert>
+            </Snackbar>
           <Grid item lg={showAddModuleForm || showAddProfessorForm ? 8 : 12} xs={12} md={8}>
               {/* <div style={{ height: 400, width: '100%' }}>
                 <DataGrid

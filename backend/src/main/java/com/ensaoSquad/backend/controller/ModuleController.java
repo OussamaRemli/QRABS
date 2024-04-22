@@ -1,8 +1,11 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.ModuleDTO;
+import com.ensaoSquad.backend.dto.ModuleStatsDTO;
 import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.mapper.ModuleMapper;
 import com.ensaoSquad.backend.model.Department;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.service.ModuleService;
@@ -120,6 +123,22 @@ public class ModuleController {
 
         moduleService.uploadRespoModule(file);
         return ResponseEntity.ok("uploaded");
+    }
+
+    @GetMapping("/{moduleId}/stats")
+    public ResponseEntity<ModuleStatsDTO> getModuleStats(@PathVariable Long moduleId) {
+        ModuleDTO moduleDto = moduleService.findModuleById(moduleId);
+
+        Module module= ModuleMapper.toEntity(moduleDto);
+        int totalSessions = moduleService.getNombreDeSeancesPourModule(module);
+        int totalAbsences = moduleService.getNombreTotalAbsencesPourModule(module);
+
+
+        ModuleStatsDTO moduleStatsDTO = new ModuleStatsDTO();
+        moduleStatsDTO.setTotalSessions(totalSessions);
+        moduleStatsDTO.setTotalAbsences(totalAbsences);
+
+        return ResponseEntity.ok(moduleStatsDTO);
     }
 
 

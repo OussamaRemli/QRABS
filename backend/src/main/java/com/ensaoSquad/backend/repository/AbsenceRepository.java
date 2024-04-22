@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.repository;
 
+import com.ensaoSquad.backend.dto.SessionDTO;
 import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,6 +40,8 @@ List<Object[]> getAbsenceCountByProfessorModuleAndLevel(@Param("professor") Prof
         "WHERE a.student = :student " +
         "AND ses.module = :module")
     List<Object[]> getStudentAbsencesByStudentIdAndModule(@Param("student") Student student, @Param("module") Module module);
+
+    int countBySession(Session session);
 }
 
 

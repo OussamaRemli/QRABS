@@ -30,4 +30,7 @@ public interface ModuleService {
 
     Module findById(Long moduleId);
 
+    int getNombreDeSeancesPourModule(Module module);
+    int getNombreTotalAbsencesPourModule(Module module);
+
     }

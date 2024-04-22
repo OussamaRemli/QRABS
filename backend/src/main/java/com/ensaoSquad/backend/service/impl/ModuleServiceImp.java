@@ -3,18 +3,13 @@ package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
-import com.ensaoSquad.backend.model.Department;
-import com.ensaoSquad.backend.model.Level;
-import com.ensaoSquad.backend.model.Module;
+import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.ModuleMapper;
 
-import com.ensaoSquad.backend.model.Professor;
-import com.ensaoSquad.backend.repository.DepartmentRepository;
-import com.ensaoSquad.backend.repository.LevelRepository;
-import com.ensaoSquad.backend.repository.ModuleRepository;
-import com.ensaoSquad.backend.repository.ProfessorRepository;
+import com.ensaoSquad.backend.model.Module;
+import com.ensaoSquad.backend.repository.*;
 import com.ensaoSquad.backend.service.ModuleService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -37,6 +32,8 @@ public class ModuleServiceImp implements ModuleService {
     private final DepartmentRepository departmentRepository;
     private final LevelRepository levelRepository;
     private final ProfessorRepository professorRepository;
+    private final SessionRepository sessionRepository;
+    private final AbsenceRepository absenceRepository;
 
 
     @Override
@@ -324,4 +321,26 @@ public class ModuleServiceImp implements ModuleService {
     public Module findById(Long moduleId) {
         return moduleRepository.findById(moduleId).orElse(null);
     }
+
+        @Override
+        public int getNombreDeSeancesPourModule(Module module) {
+
+
+            List<Session> sessions=sessionRepository.findByModule(module);
+
+            if(sessions.isEmpty()){
+                throw new RessourceNotFoundException("module not found"+module.getModuleName());
+            }
+            return sessions.size();
+        }
+
+        @Override
+        public int getNombreTotalAbsencesPourModule(Module module) {
+            List<Session> sessions = sessionRepository.findByModule(module);
+            int totalAbsences = 0;
+            for (Session session : sessions) {
+                totalAbsences += absenceRepository.countBySession(session);
+            }
+            return totalAbsences;
+        }
 }

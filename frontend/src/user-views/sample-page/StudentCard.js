@@ -37,11 +37,11 @@ export default function StudentCard({ Apogee }) {
     }, [Apogee]);
 
     return (
-        <List justifyContent="space-around" sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List sx={{ width: '100%', bgcolor: 'background.paper', border: '1px solid #ccc', borderRadius: '4px' }}>
             {studentData && (
-                <ListItem >
+                <ListItem style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                     <ListItemAvatar>
-                        {imageUrl && <Avatar alt="Student" src={imageUrl} sx={{ width: 100, height: 100 }} />}
+                        {imageUrl && <Avatar alt="Student" src={imageUrl} sx={{ width: 100, height: 100, marginRight: '40px', border: '1px solid #ccc' }} />}
                     </ListItemAvatar>
                     <ListItemText
                         primary={`${studentData.firstName} ${studentData.lastName}`}
@@ -53,7 +53,9 @@ export default function StudentCard({ Apogee }) {
                                     variant="body2"
                                     color="text.primary"
                                 >
-                                    Apogee: {Apogee}
+                                    Filière : {studentData.level.levelName}
+                                    <br />
+                                    Apogée : {Apogee}
                                 </Typography>
                                 <br />
                                 {studentData.email}
@@ -63,6 +65,7 @@ export default function StudentCard({ Apogee }) {
                 </ListItem>
             )}
         </List>
+
 
     );
 }

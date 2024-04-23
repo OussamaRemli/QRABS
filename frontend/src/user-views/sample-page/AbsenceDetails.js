@@ -20,10 +20,8 @@ export default function BasicTable({ moduleId, studentApogee }) {
         fetch(`http://localhost:8080/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
             .then(response => response.json())
             .then(data => {
-                // data est un objet dont les clés sont les étudiants
-                // nous prenons la première clé ici et ses valeurs correspondantes
                 const studentData = data[Object.keys(data)[0]];
-                const rowData = studentData.map(item => ({ Date: item.absenceDate, Seance: item.sessionType, Justifie : 'Non' }));
+                const rowData = studentData.map(item => ({ Date: item.absenceDate.slice(0, 10), Seance: item.sessionType, Justifie : 'Non' }));
                 setRows(rowData);
             })
             .catch(error => {

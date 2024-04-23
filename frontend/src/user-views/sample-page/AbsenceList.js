@@ -73,7 +73,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
             width: 100,
             renderCell: (params) =>
                 <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                    <Avatar src={params.row.photoURL} />
+                    <Avatar sx={{ width: 60, height: 60}} src={params.row.photoURL} />
                 </div>,
             sortable: false,
             filterable: false,
@@ -81,12 +81,12 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         {
             field: 'Apogee',
             headerName: 'Apogee',
-            width: 100
+            width: 80
         },
         {
             field: 'name',
-            headerName: 'Name',
-            width: 170
+                headerName: 'Nom',
+            width: 150
         },
         {
             field: 'Nombredabsence',
@@ -96,7 +96,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         {
             field: 'ispresent',
             headerName: '',
-            width: 80,
+            width: 60,
             renderCell: (params) =>
                 <IconButton onClick={() => onButtonClick(params.row.Apogee)}> {/* Modifié */}
                     <InfoIcon />
@@ -129,6 +129,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
                         getRowId={(row) => row._id}
                         rowsPerPageOptions={[5, 10, 20]}
                         pageSize={20}
+                        rowHeight={70}
                         getRowSpacing={(params) => ({
                             top: params.isFirstVisible ? 0 : 5,
                             bottom: params.isLastVisible ? 0 : 5,

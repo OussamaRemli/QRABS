@@ -8,6 +8,7 @@ import StudentCard from './StudentCard';
 import AbsenceDetails from './AbsenceDetails';
 import {useState} from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MeanAbsence from "./MeanAbsence";
 
 const Index = ({levelId, moduleId}) => {
 
@@ -21,39 +22,41 @@ const Index = ({levelId, moduleId}) => {
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
-                <Grid container spacing={gridSpacing}>
-                    {/* Affiche le graphique si le sélecteur n'est pas activé */}
-                    {!selector && (
-                        <Grid item lg={4} md={6} sm={6} xs={12}>
-                            <Chart />
-                        </Grid>
-                    )}
-                    {/* Grille pour la liste des absences */}
-                    {!selector && (
-                        <Grid item lg={10} md={6} sm={6} xs={12}>
+                {!selector && ( <Grid container spacing={gridSpacing}>
+
+                        <Grid item lg={7} md={10} sm={6} xs={12}>
                             <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
                         </Grid>
-                    )}
-                    {/* Afficher les détails de l'apogée sélectionné s'il y en a un */}
-                    {selector && (
+
+                        <Grid item lg={3} md={6} sm={6} xs={12} style={{marginLeft : '50px' , marginTop : '50px'}}>
+                            <Grid>
+                            <MeanAbsence moduleId={moduleId}/>
+                            </Grid>
+                            <br/>
+                            <Grid>
+                            <Chart />
+                            </Grid>
+                        </Grid>
+
+                </Grid> )}
+                {selector && (  <Grid container spacing={gridSpacing}>
+
                         <>
                             <Grid>
                                 <IconButton onClick={()=>{setSelector(!selector)}}>
                                     <ArrowBackIcon />
                                 </IconButton>
                             </Grid>
-                            {/* Grille pour la carte de l'étudiant */}
-                            <Grid item lg={4} md={6} sm={6} xs={12}>
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
                                 <StudentCard Apogee={Apogee} />
                             </Grid>
                             <br />
-                            {/* Grille pour les détails de l'absence */}
-                            <Grid item lg={4} md={6} sm={6} xs={12}>
+                            <Grid item lg={10} md={6} sm={6} xs={12}>
                                 <AbsenceDetails moduleId={moduleId} studentApogee={Apogee} />
                             </Grid>
                         </>
-                    )}
-                </Grid>
+
+                </Grid>)}
             </Grid>
         </Grid>
     );

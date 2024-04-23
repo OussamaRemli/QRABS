@@ -93,6 +93,7 @@ const ProfileSection = () => {
   const confirmLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
+    window.location.reload();
   };
   const handleCloseLogoutDialog = () => {
     setOpenLogoutDialog(false); // Fermer la boîte de dialogue de déconnexion
@@ -127,7 +128,10 @@ const ProfileSection = () => {
   }, [open]);
 
 
-if (!localStorage.getItem('token')) return null;
+if (!localStorage.getItem('token')){
+  navigate('/')
+  window.location.reload();
+};
   return (
     <>
       <Chip

@@ -33,8 +33,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -107,7 +107,7 @@ const FirebaseLogin = ({ ...others }) => {
                 if (role === 'ROLE_ADMIN') {
                   navigate('/dashboard/default'); // Redirection vers la route admin
                 } else{
-                  navigate('/'); // Redirection vers la route professeur
+                  throw new Error("You do not have access");
                 }
                 // Rediriger l'utilisateur vers la page Dashboard après la connexion réussie
                 // navigate('/dashboard/default');
@@ -192,8 +192,8 @@ const FirebaseLogin = ({ ...others }) => {
               </Typography>
             </Stack>
             {errors.submit && (
-              <Box sx={{ mt: 3 }}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
+              <Box sx={{ mt: 3,textAlign: 'center'  }}>
+                <FormHelperText error sx={{ fontWeight: 'bold',fontSize:'16px',textAlign:'center' }}>{errors.submit}</FormHelperText>
               </Box>
             )}
 

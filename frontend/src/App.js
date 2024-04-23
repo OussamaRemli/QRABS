@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect  } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ThemeProvider } from '@mui/material/styles';
@@ -19,12 +19,43 @@ import themes from 'themes';
 import NavigationScroll from 'layout/NavigationScroll';
 import adminImage from './assets/images/Admin.png'; // Importez votre image d'administrateur
 import professorImage from './assets/images/Professor.png'; // Importez votre image de professeur
-
+const parseToken = (token) => {
+  if (!token) return null; // Vérifier si le token est présent
+  
+  const tokenParts = token.split('.'); // Diviser le token en parties
+  const tokenPayload = tokenParts[1];
+  
+  try {
+    const decodedPayload = JSON.parse(atob(tokenPayload));
+    return decodedPayload.role;
+  } catch (error) {
+    console.error("Error parsing token payload:", error);
+    return null;
+  }
+};
 
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
   const [selectedRole, setSelectedRole] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const role = parseToken(token);
+      // Rediriger l'utilisateur en fonction de son rôle
+      if (role === 'ROLE_ADMIN') {
+        setSelectedRole('admin');
+      } else if (role === 'ROLE_PROFESSOR') {
+        setSelectedRole('professor');
+      } else {
+        // Rôle non reconnu ou non défini
+        console.error('Unknown or undefined role:', role);
+        // Vous pouvez gérer cette condition comme nécessaire, par exemple, rediriger vers une page d'erreur
+      }
+    }
+  }, []);
+
+
   const handleAdminClick = () => {
     setSelectedRole('admin');
   };

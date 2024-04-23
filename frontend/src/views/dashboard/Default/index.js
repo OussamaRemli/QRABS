@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Grid } from '@mui/material';
 
 // project imports
-import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
-import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
+// import EarningCard from './EarningCard';
+// import PopularCard from './PopularCard';
+// import TotalOrderLineChartCard from './TotalOrderLineChartCard';
+// import TotalIncomeDarkCard from './TotalIncomeDarkCard';
+// import TotalIncomeLightCard from './TotalIncomeLightCard';
+// import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
@@ -42,7 +42,10 @@ const Dashboard = () => {
   }, []);
 
   // Si le token n'existe pas, ne rend pas ce composant
-  if (!localStorage.getItem('token')) navigate('/');
+  if (!localStorage.getItem('token')){
+    navigate('/') 
+    window.location.reload()
+  }
 
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>

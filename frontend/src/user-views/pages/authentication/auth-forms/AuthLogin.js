@@ -68,7 +68,13 @@ const FirebaseLogin = ({ ...others }) => {
       return null;
     }
   };
-  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = parseToken(token);
+    if (token && role === 'ROLE_PROFESSOR') {
+      navigate('/dashboard/default');
+    }
+  }, []);
   
 
   return (

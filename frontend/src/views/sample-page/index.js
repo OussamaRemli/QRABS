@@ -9,7 +9,7 @@ import AbsenceDetails from './AbsenceDetails';
 import {useState} from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Index = ({levelId, moduleId}) => {
+const Index = ({levelId, moduleId,professorId}) => {
 
     const [Apogee, setApogee] = useState(null);
     const [selector ,setSelector] =useState(null);
@@ -23,15 +23,15 @@ const Index = ({levelId, moduleId}) => {
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing} lg={12} md={12} sm={12} xs={12} justifyContent={'center'}>
                     {/* Affiche le graphique si le sélecteur n'est pas activé */}
-                    {!selector && (
+                    {/* {!selector && (
                         <Grid item lg={4} md={6} sm={6} xs={12}>
                             <Chart />
                         </Grid>
-                    )}
+                    )} */}
                     {/* Grille pour la liste des absences */}
                     {!selector && (
                         <Grid item lg={10} md={6} sm={6} xs={12}>
-                            <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
+                            <AbsenceList levelId={levelId} moduleId={moduleId} professorId={professorId} onButtonClick={handleButtonClick} />
                         </Grid>
                     )}
                     {/* Afficher les détails de l'apogée sélectionné s'il y en a un */}

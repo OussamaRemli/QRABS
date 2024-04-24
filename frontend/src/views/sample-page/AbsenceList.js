@@ -6,14 +6,14 @@ import { v4 as uuidv4 } from 'uuid';
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from '@mui/icons-material/Info';
 
-function AbsenceList({ levelId, moduleId, onButtonClick }) {
+function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     const [users, setUsers] = useState([]);
     const [TypeSession, setTypeSession] = useState("Total");
 
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
-        fetch(`http://localhost:8080/api/absence/absence/count?professorId=4&moduleId=${moduleId}&levelId=${levelId}`)
+        fetch(`http://localhost:8080/api/absence/absence/count?professorId=${professorId}&moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 // material-ui
-import { Grid, Typography} from '@mui/material';
+import { Grid, Typography,Divider} from '@mui/material';
 import Loadable from 'ui-component/Loadable';
 import { lazy } from 'react';
 // import { Grid,Box,TextField,Typography,Divider } from '@mui/material';
@@ -30,11 +30,12 @@ const Filieres = ({name,abr}) => {
   const [students, setStudents] = useState([]);
   const [modules, setModules] = useState([]);
   const [selectedModuleId, setSelectedModuleId] = useState(null);
-  const [selectedModulName, setSelectedModuleName] = useState(null);
+  const [selectedModuleName, setSelectedModuleName] = useState(null);
   const [selectedLevelId, setSelectedLevelId] = useState(null);
+  const [selectedProfessorId, setSelectedProdessorId] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-
+  const [activeModuleId, setActiveModuleId] = useState(null);
   
 
   useEffect(() => {
@@ -64,7 +65,8 @@ const Filieres = ({name,abr}) => {
           moduleName: module.moduleName,
           professorName: `${module.professor.firstName} ${module.professor.lastName}`,
           moduleId: module.moduleId,
-          levelId:module.level.levelId
+          levelId:module.level.levelId,
+          professorId:module.professor.professorId
         }));
         setModules(formattedModules);
         setLoading(false);
@@ -77,13 +79,15 @@ const Filieres = ({name,abr}) => {
     fetchStudentsByLevelName();
     fetchModulessByLevelName();
   }, [abr]);
-  const handleModuleClick = (moduleId, levelId,moduleName) => {
+  const handleModuleClick = (moduleId, levelId,moduleName,professorId) => {
     setSelectedModuleId(moduleId);
     setSelectedLevelId(levelId);
     setSelectedModuleName(moduleName);
+    setSelectedProdessorId(professorId);
     // Ouvrir le Snackbar avec le nom du module sélectionné
     setSnackbarMessage(`Module sélectionné : ${moduleName}`);
     setSnackbarOpen(true);
+    setActiveModuleId(moduleId);
   };
   // Fonction pour fermer le Snackbar
   const handleCloseSnackbar = () => {
@@ -109,14 +113,20 @@ const Filieres = ({name,abr}) => {
                   isLoading={isLoading} 
                   name={module.moduleName} 
                   professor={module.professorName}
-                  onClick={() => handleModuleClick(module.moduleId, module.levelId,module.moduleName)}
+                  isActive={activeModuleId === module.moduleId}
+                  onClick={() => handleModuleClick(module.moduleId, module.levelId,module.moduleName,module.professorId)}
                 />
           </Grid>
           ))}
         </Grid>
       </Grid>
       <Grid item xs={12} marginTop={'16px'} lg={12}>
-        <SamplePage moduleId={selectedModuleId} levelId={selectedLevelId} />
+        {selectedModuleId &&
+        <>
+          <Divider sx={{ margin: '16px 0', backgroundColor: 'primary.main', height: '2px'  }} />
+          <SamplePage moduleId={selectedModuleId} levelId={selectedLevelId} professorId={selectedProfessorId} />
+        </>
+        }
       </Grid>
       <Snackbar
         open={snackbarOpen}

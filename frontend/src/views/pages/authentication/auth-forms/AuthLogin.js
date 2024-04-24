@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 // material-ui
@@ -66,7 +66,15 @@ const FirebaseLogin = ({ ...others }) => {
       return null;
     }
   };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = parseToken(token);
+    if (token && role === 'ROLE_ADMIN') {
+      navigate('/dashboard/default');
+    }
+  }, []);
   
+
   
 
   return (

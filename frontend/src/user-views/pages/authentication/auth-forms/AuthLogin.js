@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
+import { useNavigate } from "react-router-dom";
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -17,6 +16,7 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
+  Divider,
   Typography,
   useMediaQuery
 } from '@mui/material';
@@ -32,8 +32,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -43,10 +43,7 @@ const FirebaseLogin = ({ ...others }) => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
-
-  const googleHandler = async () => {
-    console.error('Login');
-  };
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -56,72 +53,30 @@ const FirebaseLogin = ({ ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const parseToken = (token) => {
+    if (!token) return null; // Vérifier si le token est présent
+  
+    const tokenParts = token.split('.'); // Diviser le token en parties
+    const tokenPayload = tokenParts[1];
+    
+    try {
+      const decodedPayload = JSON.parse(atob(tokenPayload));
+      // console.log(decodedPayload.role);
+      return decodedPayload.role;
+    } catch (error) {
+      console.error("Error parsing token payload:", error);
+      return null;
+    }
+  };
+  
+  
 
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign in with Google
-            </Button>
-          </AnimateButton>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex'
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: 'unset',
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
-
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
-        </Grid>
-        <Grid item xs={12} container alignItems="center" justifyContent="center">
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Sign in with Email address</Typography>
-          </Box>
-        </Grid>
-      </Grid>
-
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: 'example@example.com',
+          password: '12345',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -133,6 +88,34 @@ const FirebaseLogin = ({ ...others }) => {
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
+
+              // Récupérer le token JWT depuis la réponse de votre API (assumant que le token est dans la réponse user)
+              const response = await fetch('http://localhost:8080/api/professors/authenticate', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values), // Envoyer les données de connexion au format JSON
+              });
+              if (response.ok) {
+                const token = await response.text();
+                localStorage.setItem('token', token);
+                // Récupérer le rôle à partir du token JWT
+                const role = parseToken(token);
+                // Rediriger l'utilisateur en fonction de son rôle
+                if (role === 'ROLE_PROFESSOR') {
+                  navigate('/dashboard/default'); // Redirection vers la route admin
+                } else{
+                  throw new Error("You do not have access");
+                }
+                // Rediriger l'utilisateur vers la page Dashboard après la connexion réussie
+                // navigate('/dashboard/default');
+              } else {
+                console.log("error auth!!")
+                // Si la réponse n'est pas réussie, afficher une erreur
+                const errorData = await response.text();
+                throw new Error("Email or Password doesn't matched!");
+              }
             }
           } catch (err) {
             console.error(err);
@@ -147,7 +130,7 @@ const FirebaseLogin = ({ ...others }) => {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
@@ -208,8 +191,8 @@ const FirebaseLogin = ({ ...others }) => {
               </Typography>
             </Stack>
             {errors.submit && (
-              <Box sx={{ mt: 3 }}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
+              <Box sx={{ mt: 3,textAlign: 'center'  }}>
+                <FormHelperText error sx={{ fontWeight: 'bold',fontSize:'16px',textAlign:'center' }}>{errors.submit}</FormHelperText>
               </Box>
             )}
 

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -11,13 +10,11 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  Divider,
   Typography,
   useMediaQuery
 } from '@mui/material';

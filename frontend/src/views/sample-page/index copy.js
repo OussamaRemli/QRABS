@@ -21,7 +21,7 @@ const Index = ({levelId, moduleId}) => {
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
-                <Grid container spacing={gridSpacing} lg={12} md={12} sm={12} xs={12} justifyContent={'center'}>
+                <Grid container spacing={gridSpacing}>
                     {/* Affiche le graphique si le sélecteur n'est pas activé */}
                     {!selector && (
                         <Grid item lg={4} md={6} sm={6} xs={12}>
@@ -43,12 +43,12 @@ const Index = ({levelId, moduleId}) => {
                                 </IconButton>
                             </Grid>
                             {/* Grille pour la carte de l'étudiant */}
-                            <Grid item lg={4} md={6} sm={6} xs={12} >
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
                                 <StudentCard Apogee={Apogee} />
                             </Grid>
                             <br />
                             {/* Grille pour les détails de l'absence */}
-                            <Grid item lg={6} md={6} sm={6} xs={12}>
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
                                 <AbsenceDetails moduleId={moduleId} studentApogee={Apogee} />
                             </Grid>
                         </>

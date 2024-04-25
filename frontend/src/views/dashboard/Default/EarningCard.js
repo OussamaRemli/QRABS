@@ -106,9 +106,16 @@ const EarningCard = ({ isLoading,name,abr }) => {
           handleClose();
         })
         .catch((error) => {
-          console.error('Error uploading students:', error);
+          if (error.response) {
+            // Error response from the server
+            const errorMessage = error.response.data.message;
+            console.error('Server error message:', errorMessage);
+            setSnackbarMessage(errorMessage); 
+          } else {
+            // Error not from the server
+            setSnackbarMessage('Error uploading students'); 
+          }
           setSnackbarSeverity('error');
-          setSnackbarMessage('Error uploading students');
           setOpenSnackbar(true);
         });
     }

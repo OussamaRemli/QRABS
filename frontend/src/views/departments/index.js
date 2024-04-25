@@ -21,38 +21,6 @@ import { gridSpacing } from 'store/constant';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
-// const columns = [
-//   { field: 'id', headerName: 'ID', width: 70 },
-//   { field: 'firstName', headerName: 'First name', width: 130 },
-//   { field: 'lastName', headerName: 'Last name', width: 130 },
-//   {
-//     field: 'age',
-//     headerName: 'Age',
-//     type: 'number',
-//     width: 90,
-//   },
-//   {
-//     field: 'fullName',
-//     headerName: 'Full name',
-//     description: 'This column has a value getter and is not sortable.',
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-//   },
-// ];
-
-// const rows = [
-//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-// ];
-//---------------------------
 const modulesColumns = [
   { field: 'moduleId', headerName: 'ID', width: 100 },
   { field: 'moduleName', headerName: 'Module Name', width: 200 },
@@ -227,16 +195,17 @@ const Departement = ({name,abr}) => {
       };
       await axios.post('http://localhost:8080/api/modules', moduleData);
       // Refresh modules list after adding
-      fetchModulesByDepartment();
-      setSnackbarSeverity('success');
-      setSnackbarMessage('Module added successfully');
-      setOpenSnackbar(true);
-      setTimeout(()=>{
         setNewModuleName('');
         setNewIntituleModule('');
-        setNewNameByDepartment('');
-    },1000)
-      
+        setNewNameByDepartment('');   
+        setDepartmentId('');
+        setProfessorId('');
+        setLevelId('');
+
+        fetchModulesByDepartment();
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Module added successfully');
+        setOpenSnackbar(true);
     } catch (error) {
       console.error('Error adding module:', error);
       setSnackbarSeverity('error');
@@ -261,24 +230,22 @@ const Departement = ({name,abr}) => {
   
       // Envoyer les données au backend avec Axios
       await axios.post('http://localhost:8080/api/professors', professorData);
-  
+      
+      // Réinitialiser les champs du formulaire après l'ajout
+      setNewProfessorFirstName('');
+      setNewProfessorLastName('');
+      setNewProfessorEmail('');
+      setPassword('');
+      setDepartmentId('');
       // Actualiser la liste des professeurs après l'ajout
       fetchProfessorsByDepartment();
       setSnackbarSeverity('success');
       setSnackbarMessage('Professor added successfully');
       setOpenSnackbar(true);
-  
-      // Réinitialiser les champs du formulaire après l'ajout
-      setTimeout(()=>{
-        setNewProfessorFirstName('');
-        setNewProfessorLastName('');
-        setNewProfessorEmail('');
-        setPassword('');
-    },1000)
     } catch (error) {
       console.error('Error adding professor:', error);
       setSnackbarSeverity('error');
-      setSnackbarMessage('Error adding professor');
+      setSnackbarMessage('Professor already exists');
       setOpenSnackbar(true);
     }
   };
@@ -417,9 +384,6 @@ const Departement = ({name,abr}) => {
               </div>
             )}
           </Grid>
-          {/* <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
-          </Grid> */}
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing} justifyContent={'center'}>
                       {showAddModuleForm  && (
@@ -492,9 +456,9 @@ const Departement = ({name,abr}) => {
                             </Grid>
                           </Grid>
                             <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter module</Typography>
-                            <TextField id="standard-basic" label="Nom De Module" variant="standard" onChange={(e) => setNewModuleName(e.target.value)}/>
-                            <TextField id="standard-basic" label="Intitulé De Module" variant="standard" onChange={(e) => setNewIntituleModule(e.target.value)}/>
-                            <TextField id="standard-basic" label="Nom By Département" variant="standard" onChange={(e) => setNewNameByDepartment(e.target.value)}/>
+                            <TextField id="standard-basic" label="Nom De Module" variant="standard" value={newModuleName} onChange={(e) => setNewModuleName(e.target.value)}/>
+                            <TextField id="standard-basic" label="Intitulé De Module" variant="standard" value={newIntituleModule} onChange={(e) => setNewIntituleModule(e.target.value)}/>
+                            <TextField id="standard-basic" label="Nom By Département" variant="standard" value={newNameByDepartment} onChange={(e) => setNewNameByDepartment(e.target.value)}/>
                             <Select
                               id="department-id"
                               value={departmentId}
@@ -608,10 +572,10 @@ const Departement = ({name,abr}) => {
                               </Grid>
                             </Grid>
                             <Typography variant="h4" color="primary" textAlign={'center'}>Ajouter Professeur</Typography>
-                            <TextField id="standard-basic" label="Nom " variant="standard" onChange={(e) => setNewProfessorLastName(e.target.value)} />
-                            <TextField id="standardstandard-basic" label="Prénom" variant="standard" onChange={(e) => setNewProfessorFirstName(e.target.value)}/>
-                            <TextField id="standardstandard-basic" label="Email"standard variant="standard" onChange={(e) => setNewProfessorEmail(e.target.value)}/>
-                            <TextField id="standard-password-input" label="Password" type="password" autoComplete="current-password" variant="standard" onChange={(e) => setPassword(e.target.value)}/>
+                            <TextField id="standard-basic" label="Nom " variant="standard" value={newProfessorLastName} onChange={(e) => setNewProfessorLastName(e.target.value)} />
+                            <TextField id="standardstandard-basic" label="Prénom" variant="standard" value={newProfessorFirstName} onChange={(e) => setNewProfessorFirstName(e.target.value)}/>
+                            <TextField id="standardstandard-basic" label="Email"standard variant="standard" value={newProfessorEmail} onChange={(e) => setNewProfessorEmail(e.target.value)}/>
+                            <TextField id="standard-password-input" label="Password" type="password" autoComplete="current-password" variant="standard" value={password} onChange={(e) => setPassword(e.target.value)}/>
                             {/* <TextField id="standardstandard-basic" label="ID De Departement" variant="standard" /> */}
                             <Select
                               id="professor-department-id"

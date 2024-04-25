@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.controller;
 
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Add more exception handling methods for other exceptions if needed
+    @ExceptionHandler(RessourceNotFoundException.class)
+    public ResponseEntity<Object> handleRessourceNotFoundException(RessourceNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
 }
 

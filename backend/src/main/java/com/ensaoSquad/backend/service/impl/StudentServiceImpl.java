@@ -58,7 +58,8 @@ public class StudentServiceImpl implements StudentService {
                 throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
             }
 
-            //
+            //if the students already exists in database they shoudln't be inserted
+            // that's will cause some errors like uniq contstraint for emails duplicated
             if (studentRepository.existsStudentByLevel(level)) {
                 throw new UploadExcelException("Des étudiants existent déjà pour ce niveau. Impossible de charger de nouveaux étudiants.");
             }
@@ -69,9 +70,19 @@ public class StudentServiceImpl implements StudentService {
                 rowIterator.next();
             }
 
+            int rowNum = 6; // Starting row number
+
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 if(row.getCell(2).getNumericCellValue() == 0) break;
+                if (row.getCell(4).getCellType() == CellType.BLANK ||
+                        row.getCell(3).getCellType() == CellType.BLANK ||
+                        row.getCell(5).getCellType() == CellType.BLANK ||
+                        row.getCell(6).getCellType() == CellType.BLANK) {
+                    throw new UploadExcelException("Une cellule obligatoire est manquante dans la ligne " + rowNum + "." +
+                            " Veuillez vérifier que toutes les cellules requises sont remplies.");
+                }
+
                 StudentDTO studentDTO = new StudentDTO();
                 studentDTO.setApogee((long) row.getCell(2).getNumericCellValue());
                 studentDTO.setFirstName(row.getCell(4).getStringCellValue());
@@ -85,7 +96,9 @@ public class StudentServiceImpl implements StudentService {
 
                 student = studentRepository.save(student);
 
-                uploadedStudents.add(StudentMapper.toDTO(student));            }
+                uploadedStudents.add(StudentMapper.toDTO(student));
+                rowNum++;
+            }
             workbook.close();
         } catch (IOException e) {
             e.printStackTrace();

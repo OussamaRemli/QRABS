@@ -2,6 +2,7 @@ package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Student;
@@ -35,7 +36,11 @@ public class StudentController {
         }catch (UploadExcelException ex) {
             // Exception will be caught by the exception handler defined in the controller advice
             throw ex;
-        } catch (Exception e) {
+        }catch (RessourceNotFoundException ex){
+            // Exception will be caught by the exception handler defined in the controller advice
+            throw ex;
+        }
+        catch (Exception e) {
             // Other exceptions handling if needed
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

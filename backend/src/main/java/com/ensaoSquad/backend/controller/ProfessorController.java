@@ -2,9 +2,12 @@ package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
+import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.service.ProfessorService;
 import com.ensaoSquad.backend.service.impl.JwtService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,8 +49,16 @@ public class ProfessorController {
             return ResponseEntity.badRequest().body("Uploaded file is empty");
         }
 
-        List<ProfessorDTO> uploadedprofs = professorService.saveByExcel(file);
-        return ResponseEntity.ok(uploadedprofs);
+        try {
+            List<ProfessorDTO> uploadedprofs = professorService.saveByExcel(file);
+            return ResponseEntity.ok(uploadedprofs);
+        }catch (UploadExcelException ex){
+            throw ex;
+        }catch (RessourceNotFoundException ex){
+            throw ex;
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
     @GetMapping("/all")
 //    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")

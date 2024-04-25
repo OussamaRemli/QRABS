@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Session;
@@ -54,9 +55,12 @@ public class StudentServiceImpl implements StudentService {
             // Find the level based on the level name in the Excel
             Level level = levelRepository.findByLevelName(levelName);
             if (level == null) {
-                // If level does not exist, you can handle this scenario
-                // e.g., throw an exception or log a warning
                 throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
+            }
+
+            //
+            if (studentRepository.existsStudentByLevel(level)) {
+                throw new UploadExcelException("Des étudiants existent déjà pour ce niveau. Impossible de charger de nouveaux étudiants.");
             }
 
             Iterator<Row> rowIterator = sheet.iterator();
@@ -64,9 +68,6 @@ public class StudentServiceImpl implements StudentService {
             for (int i = 0; i < 2; i++) {
                 rowIterator.next();
             }
-            //delete all students of the level from database before inserting the new ones
-            deleteAllStudentsByLevel(levelName);
-
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();

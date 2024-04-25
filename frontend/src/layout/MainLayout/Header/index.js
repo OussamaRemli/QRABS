@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // material-ui
@@ -17,8 +18,12 @@ import { IconMenu2 } from '@tabler/icons-react';
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
-  if (!localStorage.getItem('token')) return null;
+  if (!localStorage.getItem('token')){
+      navigate('/');
+      window.location.reload();
+  }
   return (
     <>
       {/* logo & toggler button */}

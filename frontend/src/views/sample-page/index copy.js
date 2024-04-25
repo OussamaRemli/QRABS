@@ -9,7 +9,7 @@ import AbsenceDetails from './AbsenceDetails';
 import {useState} from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Index = ({levelId, moduleId,professorId}) => {
+const Index = ({levelId, moduleId}) => {
 
     const [Apogee, setApogee] = useState(null);
     const [selector ,setSelector] =useState(null);
@@ -21,17 +21,17 @@ const Index = ({levelId, moduleId,professorId}) => {
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
-                <Grid container spacing={gridSpacing} lg={12} md={12} sm={12} xs={12} justifyContent={'center'}>
+                <Grid container spacing={gridSpacing}>
                     {/* Affiche le graphique si le sélecteur n'est pas activé */}
-                    {/* {!selector && (
+                    {!selector && (
                         <Grid item lg={4} md={6} sm={6} xs={12}>
                             <Chart />
                         </Grid>
-                    )} */}
+                    )}
                     {/* Grille pour la liste des absences */}
                     {!selector && (
                         <Grid item lg={10} md={6} sm={6} xs={12}>
-                            <AbsenceList levelId={levelId} moduleId={moduleId} professorId={professorId} onButtonClick={handleButtonClick} />
+                            <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
                         </Grid>
                     )}
                     {/* Afficher les détails de l'apogée sélectionné s'il y en a un */}
@@ -43,12 +43,12 @@ const Index = ({levelId, moduleId,professorId}) => {
                                 </IconButton>
                             </Grid>
                             {/* Grille pour la carte de l'étudiant */}
-                            <Grid item lg={4} md={6} sm={6} xs={12} >
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
                                 <StudentCard Apogee={Apogee} />
                             </Grid>
                             <br />
                             {/* Grille pour les détails de l'absence */}
-                            <Grid item lg={6} md={6} sm={6} xs={12}>
+                            <Grid item lg={4} md={6} sm={6} xs={12}>
                                 <AbsenceDetails moduleId={moduleId} studentApogee={Apogee} />
                             </Grid>
                         </>

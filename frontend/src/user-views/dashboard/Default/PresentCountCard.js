@@ -7,6 +7,7 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 // import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
 // assets
 // import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
@@ -49,6 +50,7 @@ const PresentCountCard = ({count}) => {
                 <Box sx={{p: 2}}>
                     <List sx={{py: 0}}>
                         <ListItem alignItems="center" disableGutters sx={{py: 0}}>
+                            <PeopleAltIcon/>
                             <ListItemText
                                 sx={{
                                     py: 0,
@@ -57,7 +59,7 @@ const PresentCountCard = ({count}) => {
                                 }}
                                 primary={
                                     <Typography variant="h4" sx={{color: '#fff'}}>
-                                        Etudiant présent :{count}
+                                            {count}
                                     </Typography>
                                 }
                                 secondary={

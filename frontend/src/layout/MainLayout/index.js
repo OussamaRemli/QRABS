@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
@@ -55,6 +56,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
 
 const MainLayout = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
   // Handle left drawer
   const leftDrawerOpened = useSelector((state) => state.customization.opened);
@@ -63,6 +65,10 @@ const MainLayout = () => {
     dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
   };
 
+  if (!localStorage.getItem('token')){
+    navigate('/');
+    window.location.reload();
+}
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

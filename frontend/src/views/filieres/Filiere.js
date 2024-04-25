@@ -37,7 +37,7 @@ const CardWrapper = styled(MainCard)(({ theme, clicked  }) => ({
   }
 }));
 
-const Module = ({ name, professor, isLoading, onClick, isActive }) => {
+const Filiere = ({ levelId, levelName,sectorName, isLoading, onClick }) => {
     const [clicked, setClicked] = useState(false);
     const theme = useTheme();
 
@@ -51,7 +51,7 @@ const Module = ({ name, professor, isLoading, onClick, isActive }) => {
       {isLoading ? (
         <TotalIncomeCard />
       ) : (
-        <CardWrapper border={false} content={false} clicked={isActive}>
+        <CardWrapper border={false} content={false}>
           <Box sx={{ p: 2 }}>
             <List sx={{ py: 0 }}>
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
@@ -71,23 +71,23 @@ const Module = ({ name, professor, isLoading, onClick, isActive }) => {
                 <ListItemText
                   sx={{
                     py: 0,
-                    mt: 0.45,
-                    mb: 0.45
+                    mt: 0.25,
+                    mb: 0.25
                   }}
                   primary={
-                    <Typography variant="h4" sx={{ color: '#fff' }}>
-                      {name}
-                    </Typography>
-                  }
-                  secondary={
                     <>
-                      <Typography variant="h6" sx={{ color: 'primary.light', mt: 0.25 }}>
-                        Pr.<span style={{ fontWeight: 'bold' }}>{professor}</span>
+                      <Typography variant="h4" sx={{ color: '#fff' }}>
+                      Filière:<span style={{ fontWeight: 'bold' }}> {sectorName}</span> 
                       </Typography>
-                      <Typography variant="h6" sx={{ color: 'primary.light', mt: 0.25 }}>
-                        Nombre d'absence:<span style={{ fontWeight: 'bold' }}> X</span>
+                      <Typography variant="h4" sx={{ color: '#fff' }}>
+                      Niveau:<span style={{ fontWeight: 'bold' }}> {levelName}</span> 
                       </Typography>
                     </>
+                  }
+                  secondary={
+                    <Typography variant="h5" sx={{ color: 'primary.light', mt: 0.25 }}>
+                      Nombre D'absence: <span style={{ fontWeight: 'bold' }}> X</span>
+                    </Typography>
                   }
                 />
               </ListItem>
@@ -99,9 +99,9 @@ const Module = ({ name, professor, isLoading, onClick, isActive }) => {
   );
 };
 
-Module.propTypes = {
+Filiere.propTypes = {
   isLoading: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 };
 
-export default Module;
+export default Filiere;

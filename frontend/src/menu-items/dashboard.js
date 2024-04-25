@@ -15,7 +15,7 @@ const dashboard = {
       id: 'default',
       title: 'Dashboard',
       type: 'item',
-      url: '/admin/dashboard/default',
+      url: '/dashboard/default',
       icon: icons.IconDashboard,
       breadcrumbs: false
     }

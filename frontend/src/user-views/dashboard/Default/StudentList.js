@@ -163,7 +163,7 @@ function Users({ sessionId, levelId, level, apogee }) {
     return (
         <Box
             sx={{
-                height: 500,
+                height: 800,
                 width: '100%',
             }}
         >

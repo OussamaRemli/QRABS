@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -11,13 +10,11 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  Divider,
   Typography,
   useMediaQuery
 } from '@mui/material';
@@ -33,8 +30,8 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -69,7 +66,15 @@ const FirebaseLogin = ({ ...others }) => {
       return null;
     }
   };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = parseToken(token);
+    if (token && role === 'ROLE_ADMIN') {
+      navigate('/dashboard/default');
+    }
+  }, []);
   
+
   
 
   return (
@@ -107,7 +112,7 @@ const FirebaseLogin = ({ ...others }) => {
                 if (role === 'ROLE_ADMIN') {
                   navigate('/dashboard/default'); // Redirection vers la route admin
                 } else{
-                  navigate('/'); // Redirection vers la route professeur
+                  throw new Error("You do not have access");
                 }
                 // Rediriger l'utilisateur vers la page Dashboard après la connexion réussie
                 // navigate('/dashboard/default');
@@ -192,8 +197,8 @@ const FirebaseLogin = ({ ...others }) => {
               </Typography>
             </Stack>
             {errors.submit && (
-              <Box sx={{ mt: 3 }}>
-                <FormHelperText error>{errors.submit}</FormHelperText>
+              <Box sx={{ mt: 3,textAlign: 'center'  }}>
+                <FormHelperText error sx={{ fontWeight: 'bold',fontSize:'16px',textAlign:'center' }}>{errors.submit}</FormHelperText>
               </Box>
             )}
 

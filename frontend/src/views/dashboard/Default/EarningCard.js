@@ -69,6 +69,8 @@ const EarningCard = ({ isLoading,name,abr }) => {
   
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedStudentFile, setSelectedStudentFile] = useState(null);
+  const [selectedSessionFile, setSelectedSessionFile] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -81,13 +83,19 @@ const EarningCard = ({ isLoading,name,abr }) => {
 
   // Function to handle file selection
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    setSelectedFile(event.target.files);
+  };
+  const handleStudentFileChange = (event) => {
+    setSelectedStudentFile(event.target.files[0]);
+  };
+  const handleSessionFileChange = (event) => {
+    setSelectedSessionFile(event.target.files[0]);
   };
   // Function to handle importing students from the selected file
   const handleImportStudents = () => {
-    if (selectedFile) {
+    if (selectedStudentFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append('file', selectedStudentFile);
 
       axios.post('http://localhost:8080/api/students/upload', formData)
         .then((response) => {
@@ -107,9 +115,9 @@ const EarningCard = ({ isLoading,name,abr }) => {
   };
   // Function to handle importing sessions from the selected file
   const handleImportSessions = () => {
-    if (selectedFile) {
+    if (selectedSessionFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append('file', selectedSessionFile);
 
       axios.post('http://localhost:8080/api/session/upload', formData)
         .then((response) => {
@@ -124,6 +132,31 @@ const EarningCard = ({ isLoading,name,abr }) => {
           setSnackbarSeverity('error');
           setSnackbarMessage('Error uploading sessions');
           setOpenSnackbar(true);
+        });
+    }
+  };
+  const handleImportPictures = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+  
+      for (const file of selectedFile) {
+        formData.append('files', file);
+      }
+  
+      axios.post('http://localhost:8080/api/import-files/upload', formData)
+        .then((response) => {
+          console.log('Images uploaded:', response.data);
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Images uploaded successfully');
+          setOpenSnackbar(true);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error('Error uploading images:', error);
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Images uploaded successfully');
+          setOpenSnackbar(true);
+          handleClose();
         });
     }
   };
@@ -203,11 +236,11 @@ const EarningCard = ({ isLoading,name,abr }) => {
                         <input
                           type="file"
                           accept=".xls,.xlsx"
-                          onChange={handleFileChange}
+                          onChange={handleStudentFileChange}
                           style={{ display: 'none' }}
-                          id="file-upload"
+                          id="Student-upload"
                         />
-                        <label htmlFor="file-upload">
+                        <label htmlFor="Student-upload">
                           <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
                             Import Liste Etudiants
                           </Button>
@@ -221,13 +254,28 @@ const EarningCard = ({ isLoading,name,abr }) => {
                         <input
                           type="file"
                           accept=".xls,.xlsx"
-                          onChange={handleFileChange}
+                          onChange={handleSessionFileChange}
                           style={{ display: 'none' }}
-                          id="file-upload"
+                          id="Session-upload"
                         />
-                        <label htmlFor="file-upload">
+                        <label htmlFor="Session-upload">
                           <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
                             Import Emploi Du Temps
+                          </Button>
+                        </label>
+                      </MenuItem>
+                      <MenuItem onClick={handleImportPictures}>
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/jpeg, image/png, image/gif, image/bmp" // Accepter uniquement les fichiers d'image
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                          id="Picture-upload"
+                        />
+                        <label htmlFor="Picture-upload">
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
+                            Import Pictures des Etudiants
                           </Button>
                         </label>
                       </MenuItem>

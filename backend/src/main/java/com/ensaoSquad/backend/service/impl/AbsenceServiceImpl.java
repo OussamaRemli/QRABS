@@ -79,6 +79,7 @@ public class AbsenceServiceImpl implements AbsenceService {
             }
         }
         presentStudents.remove(levelId);
+        scannedIps.remove(sessionId);
     }
 
     @Override

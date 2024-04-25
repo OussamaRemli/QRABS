@@ -1,6 +1,8 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
+import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.mapper.DepartmentMapper;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.Department;
@@ -53,6 +55,12 @@ public class ProfessorServiceImpl implements ProfessorService {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0); // Only one sheet
 
+            //if the professors already exists in database they shoudln't be inserted
+            // that's will cause some errors like uniq contstraint for emails duplicated
+            if(professorRepository.count() > 0){
+                throw new UploadExcelException("Des professeurs existent déjà");
+            }
+
             Iterator<Row> rowIterator = sheet.iterator();
             rowIterator.next();
 
@@ -62,26 +70,24 @@ public class ProfessorServiceImpl implements ProfessorService {
 
                 // Extracting values from columns F, G, H, and I
                 String departmentName = getMergedCellValue(sheet, row.getRowNum(), 5); // Column F (0-indexed)
+                // Check if the department exists
+                Department department;
+                Optional<Department> optionalDepartment = departmentRepository.findByDepartmentName(departmentName);
+                if (optionalDepartment.isPresent()) {
+                    department = optionalDepartment.get();
+                } else {
+                    throw new RessourceNotFoundException("Department not found: " + departmentName);
+                }
+
+
                 professorDTO.setLastName(row.getCell(6).getStringCellValue()); // Column G (0-indexed)
                 professorDTO.setFirstName(row.getCell(7).getStringCellValue()); // Column H (0-indexed)
                 professorDTO.setEmail(row.getCell(8).getStringCellValue()); // Column I (0-indexed)
                 professorDTO.setPassword(passwordEncoder.encode("12345")); // Assuming a default password
-
-
-
-                // Find or create department
-                Department department = departmentRepository
-                        .findByDepartmentName(departmentName)
-                        .orElseGet(() -> {
-                            Department newDepartment = new Department();
-                            newDepartment.setDepartmentName(departmentName);
-                            return departmentRepository.save(newDepartment);
-                        });
                 professorDTO.setDepartment(DepartmentMapper.toDTO(department));
 
                 // Map DTO to entity
                 Professor prof = ProfessorMapper.toEntity(professorDTO);
-
                 // Save professor entity
                 prof = professorRepository.save(prof);
 

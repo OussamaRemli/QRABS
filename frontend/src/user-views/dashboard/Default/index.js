@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import {Button, ButtonGroup, Grid} from '@mui/material';
 import ResponsiveDialog from "./ResponsiveDialog";
 import AlertProvider from './AlertContext';
-// project imports
 import PresentCountCard from './PresentCountCard';
 import Qrcode from './Qrcode';
 import ModuleCard from './ModuleCard';
@@ -12,13 +11,12 @@ import {gridSpacing} from 'store/constant';
 import Users from './StudentList';
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-
-
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 const Dashboard = () => {
     const [dataSession, setDataSession] = useState([]);
-    const [selectedSector, setSelectedSector] = useState(null);
     const [apogee, setApogee] = useState([]);
     const [count, setCount] = useState([]);
+    const [selectedSector, setSelectedSector] = useState(null);
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/ws');
         const stompClient = Stomp.over(socket);
@@ -78,7 +76,7 @@ const Dashboard = () => {
                         <SectorCard levelNames={levelNames}/>
                     </Grid>
 
-                    <Grid item sx={{flexBasis: '250px', flexGrow: 0, flexShrink: 0}}>
+                    <Grid item sx={{flexBasis: '150px', flexGrow: 0, flexShrink: 0}}>
                         <PresentCountCard count={count}/>
                     </Grid>
 
@@ -99,20 +97,10 @@ const Dashboard = () => {
                         {selectedSector !== null && <Users sessionId={sessions[selectedSector].sessionId} levelId={sessions[selectedSector].level.levelId} level={levelNames[selectedSector]} apogee={apogee}/>}
                     </Grid>
                     <Grid item xs={6} md={4} sx={{display:'flex' ,flexDirection:'column', alignItems:'center'}}>
-                        <Grid>
-                            {selectedSector !== null &&
-                                <AlertProvider>
-                                    <ResponsiveDialog dialogContent={"etes vous sur de marquer l'absence"}
-                                                      button={'marquer absence'}
-                                                      levelid={sessions[selectedSector].level.levelId}
-                                                      sessionid={sessions[selectedSector].sessionId}/>
-                                </AlertProvider>
-                            }
-                        </Grid>
                         <br/>
                         {selectedSector !== null && <Qrcode
-                            url={`http://192.168.116.101:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`}/>}
-
+                            url={`http://192.168.116.101:8080/Qr/scan/${sessions[selectedSector].sessionId}/${sessions[selectedSector].level.levelId}`} sessionId={sessions[selectedSector].sessionId} levelId={sessions[selectedSector].level.levelId}/>
+                        }
                     </Grid>
                 </Grid>
             </Grid>

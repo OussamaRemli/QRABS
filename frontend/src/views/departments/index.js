@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 // material-ui
-import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,InputLabel,Snackbar,Alert } from '@mui/material';
+import { Grid,Box,TextField,Typography,Divider,Select,MenuItem,Snackbar,Alert } from '@mui/material';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
@@ -14,12 +14,10 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 // project imports
 
 import TotalIncomeLightCard from '../dashboard/Default/TotalIncomeLightCard';
-import TotalGrowthBarChart from '../dashboard/Default/TotalGrowthBarChart';
-import TotalIncomeDarkCard from '../dashboard/Default/TotalIncomeDarkCard';
-import PopularCard from '../dashboard/Default/PopularCard';
+// import TotalGrowthBarChart from '../dashboard/Default/TotalGrowthBarChart';
+// import TotalIncomeDarkCard from '../dashboard/Default/TotalIncomeDarkCard';
+// import PopularCard from '../dashboard/Default/PopularCard';
 import { gridSpacing } from 'store/constant';
-import { flexbox } from '@mui/system';
-import { red } from '@mui/material/colors';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -58,11 +56,11 @@ import { red } from '@mui/material/colors';
 const modulesColumns = [
   { field: 'moduleId', headerName: 'ID', width: 100 },
   { field: 'moduleName', headerName: 'Module Name', width: 200 },
-  { field: 'departmentName', headerName: 'Department', width: 200 },
-  { field: 'intituleModule', headerName: 'Intitule Module', width: 200 },
+  // { field: 'departmentName', headerName: 'Department', width: 200 },
+  // { field: 'intituleModule', headerName: 'Intitule Module', width: 200 },
   { field: 'NameByDepartment', headerName: 'Name By Department', width: 200 },
-  { field: 'professorFirstName', headerName: 'Professor First Name', width: 200 },
-  { field: 'professorLastName', headerName: 'Professor Last Name', width: 200 },
+  // { field: 'professorFirstName', headerName: 'Professor First Name', width: 200 },
+  // { field: 'professorLastName', headerName: 'Professor Last Name', width: 200 },
   { field: 'level', headerName: 'Level', width: 200 },
 ];
 
@@ -133,11 +131,11 @@ const Departement = ({name,abr}) => {
       const formattedModules = response.data.map(module => ({
         moduleId: module.moduleId,
         moduleName: module.moduleName,
-        departmentName: module.department.departmentName,
-        intituleModule: module.intituleModule,
+        // departmentName: module.department.departmentName,
+        // intituleModule: module.intituleModule,
         NameByDepartment: module.nameByDepartment,
-        professorFirstName: module.professor.firstName,
-        professorLastName: module.professor.lastName,
+        // professorFirstName: module.professor.firstName,
+        // professorLastName: module.professor.lastName,
         level: module.level.levelName,
       }));
       setModules(formattedModules);
@@ -393,7 +391,7 @@ const Departement = ({name,abr}) => {
                 />
             </div> */}
             {activeTab === 'modules' && (
-              <div style={{ height: 400, width: '100%' }}>
+              <div style={{ height: 400, width: '80%' }}>
                 <DataGrid
                   loading={isLoading}
                   rows={modules} // Utilisez la variable d'état des modules
@@ -406,7 +404,7 @@ const Departement = ({name,abr}) => {
               </div>
                 )}
             {activeTab === 'professors' && (
-              <div style={{ height: '100%', width: '100%' }}>
+              <div style={{ height: '100%', width: '80%' }}>
                 <DataGrid
                   loading={isLoading}
                   rows={professors} // Utilisez la variable d'état des professeurs

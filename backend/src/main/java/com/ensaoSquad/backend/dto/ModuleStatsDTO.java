@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class ModuleStatsDTO {
     private int totalSessions;
     private int totalAbsences;
+    private int totalEleves;
 }

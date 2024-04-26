@@ -123,7 +123,7 @@ public class AbsenceController {
             @RequestParam("moduleId") Long moduleId) {
 
         Module module = moduleService.findById(moduleId);
-
+        System.out.println(module);
         Map<Student, List<StudentAbsenceDTO>> absenceDetails = absenceService.getStudentAbsenceDetail(studentApogee,module);
 
         return ResponseEntity.ok(absenceDetails);

@@ -34,6 +34,7 @@ public class ModuleServiceImp implements ModuleService {
     private final ProfessorRepository professorRepository;
     private final SessionRepository sessionRepository;
     private final AbsenceRepository absenceRepository;
+    private final StudentRepository studentRepository;
 
 
     @Override
@@ -321,17 +322,13 @@ public class ModuleServiceImp implements ModuleService {
     public Module findById(Long moduleId) {
         return moduleRepository.findById(moduleId).orElse(null);
     }
-
         @Override
         public int getNombreDeSeancesPourModule(Module module) {
 
+            Long absences=sessionRepository.countSessionsByModule(module.getModuleId());
 
-            List<Session> sessions=sessionRepository.findByModule(module);
 
-            if(sessions.isEmpty()){
-                throw new RessourceNotFoundException("module not found"+module.getModuleName());
-            }
-            return sessions.size();
+            return Math.toIntExact(absences);
         }
 
         @Override
@@ -343,4 +340,11 @@ public class ModuleServiceImp implements ModuleService {
             }
             return totalAbsences;
         }
+
+    @Override
+    public int countStudentsInLevel(Module module) {
+        Level level=module.getLevel();
+        Long i=studentRepository.countStudentsByLevel(level);
+        return Math.toIntExact(i);
+    }
 }

@@ -33,4 +33,6 @@ public interface ModuleService {
     int getNombreDeSeancesPourModule(Module module);
     int getNombreTotalAbsencesPourModule(Module module);
 
+    int countStudentsInLevel(Module module);
+
     }

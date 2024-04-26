@@ -17,7 +17,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 function Users({ sessionId, levelId, level, apogee }) {
     const [dataStudent, setDataStudent] = useState([]);
     const [users, setUsers] = useState([]);
-    const [ip,setIp] =useState(9483090989544);
+    const [ip,setIp] =useState(94894);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -79,7 +79,7 @@ function Users({ sessionId, levelId, level, apogee }) {
     };
 
     const isPresent = (sessionId, levelId, Apogee) => {
-        fetch(`http://192.168.116.101:8080/api/absence/scan/${sessionId}/${levelId}?Apogee=${Apogee}&ip=${ip}`, {
+        fetch(`http://localhost:8080/api/absence/scan/${sessionId}/${levelId}?Apogee=${Apogee}&ip=${ip}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ function Users({ sessionId, levelId, level, apogee }) {
             width: 100,
             renderCell: (params) => (
                 <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                    <Avatar src={params.row.photoURL} />
+                    <Avatar sx={{ width: 60, height: 60}} src={params.row.photoURL} />
                 </div>
             ),
             sortable: false,
@@ -163,7 +163,7 @@ function Users({ sessionId, levelId, level, apogee }) {
     return (
         <Box
             sx={{
-                height: 700,
+                height: 800,
                 width: '100%',
             }}
         >
@@ -173,6 +173,7 @@ function Users({ sessionId, levelId, level, apogee }) {
                 getRowId={(row) => row._id}
                 rowsPerPageOptions={[5, 10, 20]}
                 pageSize={20}
+                rowHeight={70}
                 getRowSpacing={(params) => ({
                     top: params.isFirstVisible ? 0 : 5,
                     bottom: params.isLastVisible ? 0 : 5,
@@ -184,6 +185,7 @@ function Users({ sessionId, levelId, level, apogee }) {
                     },
                 }}
             />
+
         </Box>
     );
 }

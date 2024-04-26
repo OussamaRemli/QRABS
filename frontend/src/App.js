@@ -37,20 +37,25 @@ const parseToken = (token) => {
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
+  // const [selectedRole, setSelectedRole] = useState(null);
+  // const handleAdminClick = () => {
+  //   setSelectedRole('admin');
+  // };
+  //
+  // const handleProfessorClick = () => {
+  //   setSelectedRole('professor');
+  // };
   const [selectedRole, setSelectedRole] = useState(null);
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       const role = parseToken(token);
-      // Rediriger l'utilisateur en fonction de son rôle
       if (role === 'ROLE_ADMIN') {
         setSelectedRole('admin');
       } else if (role === 'ROLE_PROFESSOR') {
         setSelectedRole('professor');
       } else {
-        // Rôle non reconnu ou non défini
         console.error('Unknown or undefined role:', role);
-        // Vous pouvez gérer cette condition comme nécessaire, par exemple, rediriger vers une page d'erreur
       }
     }
   }, []);
@@ -69,6 +74,19 @@ const App = () => {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <NavigationScroll>
+          <Routes/>
+          {/* {selectedRole === 'admin' ? <ThemeRoutes /> : null}*/}
+          {/*{selectedRole === 'professor' ? <Routes /> : null}*/}
+          {/*<div style={{ display: 'flex', justifyContent:'space-evenly',alignItems:'center',width:'100vw',height:'100vh' }}>*/}
+          {/*  <div style={{display:'flex',flexDirection:'column'}}>*/}
+          {/*    <img src={adminImage} alt="Admin" style={{ width: '200px', height: '200px' }} />*/}
+          {/*    <Button onClick={handleAdminClick} color="secondary" variant="contained" sx={{borderRadius: '8px', textTransform: 'none' }}>Admin</Button>*/}
+          {/*  </div>*/}
+          {/*  <div style={{display:'flex',flexDirection:'column'}}>*/}
+          {/*    <img src={professorImage} alt="Professor" style={{ width: '200px', height: '200px' }} />*/}
+          {/*    <Button onClick={handleProfessorClick} color="secondary" variant="contained" sx={{borderRadius: '8px', textTransform: 'none' }}>Professor</Button>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
           {selectedRole === 'admin' ? <ThemeRoutes /> : null}
           {selectedRole === 'professor' ? <Routes /> : null}
           {selectedRole === null && ( // Afficher les images et les boutons uniquement si aucun rôle n'est sélectionné
@@ -83,6 +101,21 @@ const App = () => {
               </div>
             </div>
           )}
+
+          {/*{selectedRole === 'admin' ? <ThemeRoutes /> : null}*/}
+          {/*{selectedRole === 'professor' ? <Routes /> : null}*/}
+          {/*{selectedRole === null && ( // Afficher les images et les boutons uniquement si aucun rôle n'est sélectionné*/}
+          {/*  <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', width: '100vw', height: '100vh' }}>*/}
+          {/*    <div style={{ display: 'flex', flexDirection: 'column' }}>*/}
+          {/*      <img src={adminImage} alt="Admin" style={{ width: '200px', height: '200px' }} />*/}
+          {/*      <Button onClick={handleAdminClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Admin</Button>*/}
+          {/*    </div>*/}
+          {/*    <div style={{ display: 'flex', flexDirection: 'column' }}>*/}
+          {/*      <img src={professorImage} alt="Professor" style={{ width: '200px', height: '200px' }} />*/}
+          {/*      <Button onClick={handleProfessorClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Professor</Button>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>

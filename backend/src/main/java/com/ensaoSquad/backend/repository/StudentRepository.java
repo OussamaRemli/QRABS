@@ -29,5 +29,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("DELETE FROM Student s WHERE s.level = :level")
     void deleteByLevel(@Param("level") Level level);
 
+    boolean existsStudentByLevel(Level level);
+
     Long countStudentsByLevel(Level level);
+
+
 }

@@ -12,7 +12,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { useAlert } from './AlertContext';
 
 
-export default function ResponsiveDialog({button,dialogContent,levelid,sessionid}) {
+export default function ResponsiveDialog({button,dialogContent,levelid,sessionid,onClick}) {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -38,7 +38,7 @@ export default function ResponsiveDialog({button,dialogContent,levelid,sessionid
                     if (!response.ok) {
                         throw new Error('La requête a échoué');
                     }
-                    // Si aucune réponse n'est attendue, passez directement à l'affichage de l'alerte de succès
+                    onClick(levelid);
                     showAlert('Ceci est une alerte de succès — regardez!', 'success');
                 })
                 .catch(error => {

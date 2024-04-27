@@ -39,6 +39,8 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     private int count;
 
+
+
     @Override
     public void markPresnt(long seanceId, long studentId, long levelId , String ip ,Long Apogee) {
         Set<String> sessionIps = scannedIps.computeIfAbsent(seanceId, k -> new HashSet<>());
@@ -69,8 +71,10 @@ public class AbsenceServiceImpl implements AbsenceService {
 
         Set<Long> presentStudentIds = presentStudents.getOrDefault(levelId, Collections.emptySet());
 
+        //boolean releazed=false;
         for (Student student : studentsInLevel) {
             if (!presentStudentIds.contains(student.getStudentId())) {
+                //releazed=true;
                 Absence absence = new Absence();
                 absence.setSession(session);
                 absence.setStudent(student);
@@ -78,6 +82,7 @@ public class AbsenceServiceImpl implements AbsenceService {
                 absenceRepository.save(absence);
             }
         }
+
         presentStudents.remove(levelId);
         scannedIps.remove(sessionId);
     }

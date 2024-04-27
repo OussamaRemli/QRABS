@@ -132,11 +132,12 @@ public class ModuleController {
         Module module= ModuleMapper.toEntity(moduleDto);
         int totalSessions = moduleService.getNombreDeSeancesPourModule(module);
         int totalAbsences = moduleService.getNombreTotalAbsencesPourModule(module);
-
+        int totalStudents=moduleService.countStudentsInLevel(module);
 
         ModuleStatsDTO moduleStatsDTO = new ModuleStatsDTO();
         moduleStatsDTO.setTotalSessions(totalSessions);
         moduleStatsDTO.setTotalAbsences(totalAbsences);
+        moduleStatsDTO.setTotalEleves(totalStudents);
 
         return ResponseEntity.ok(moduleStatsDTO);
     }

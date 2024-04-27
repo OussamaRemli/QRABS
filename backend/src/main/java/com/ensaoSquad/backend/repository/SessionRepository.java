@@ -42,6 +42,13 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime AND s.professor.professorId= :professorId")
     List<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);
 
+    @Query("SELECT COUNT(DISTINCT s.sessionId) " +
+            "FROM Session s " +
+            "WHERE s.module.moduleId = :moduleId " +
+            "AND DATE(s.sessionDay) < CURRENT_DATE()")
+    Long countSessionsByModule(@Param("moduleId") Long moduleId);
+
+
     List<Session> findByModule(Module module);
 
 }

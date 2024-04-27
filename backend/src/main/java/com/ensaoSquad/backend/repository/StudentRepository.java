@@ -31,5 +31,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     boolean existsStudentByLevel(Level level);
 
+    Long countStudentsByLevel(Level level);
+
 
 }

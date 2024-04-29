@@ -129,5 +129,11 @@ public class AbsenceController {
         return ResponseEntity.ok(absenceDetails);
     }
 
+    @GetMapping("/level/module")
+    public ResponseEntity<List<Object[]>> countAbsenceByModuleInLevel(@RequestParam("levelId") long levelId) {
+        Level level = levelService.findById(levelId);
+        return ResponseEntity.ok(absenceService.countAbsenceByModuleInLevel(level));
+    }
+
 
 }

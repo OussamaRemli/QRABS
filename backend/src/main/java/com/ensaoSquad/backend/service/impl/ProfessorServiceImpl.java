@@ -55,12 +55,6 @@ public class ProfessorServiceImpl implements ProfessorService {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0); // Only one sheet
 
-            //if the professors already exists in database they shoudln't be inserted
-            // that's will cause some errors like uniq contstraint for emails duplicated
-            if(professorRepository.count() > 0){
-                throw new UploadExcelException("Des professeurs existent déjà");
-            }
-
             Iterator<Row> rowIterator = sheet.iterator();
             rowIterator.next();
 
@@ -79,6 +73,9 @@ public class ProfessorServiceImpl implements ProfessorService {
                     throw new RessourceNotFoundException("Department not found: " + departmentName);
                 }
 
+                //if professor exists do not inserted to database
+                Optional<Professor> professorExist = professorRepository.findByEmail(row.getCell(8).getStringCellValue());
+                if(professorExist.isPresent()) continue;
 
                 professorDTO.setLastName(row.getCell(6).getStringCellValue()); // Column G (0-indexed)
                 professorDTO.setFirstName(row.getCell(7).getStringCellValue()); // Column H (0-indexed)

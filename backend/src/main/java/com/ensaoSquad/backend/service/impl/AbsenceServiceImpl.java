@@ -131,4 +131,10 @@ public class AbsenceServiceImpl implements AbsenceService {
         return studentAbsencesMap;
     }
 
+    @Override
+    public List<Object[]> countAbsenceByModuleInLevel(Level level){
+
+        return absenceRepository.countAbsenceByModuleInLevel(level);
+    }
+
 }

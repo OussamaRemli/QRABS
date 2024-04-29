@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.service;
 import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,5 +22,6 @@ public interface ProfessorService {
     ProfessorDTO update(ProfessorDTO professorDto);
 
     Optional<Professor> findByFirstNameAndLastName(String firstName,String lastName);
+
 
 }

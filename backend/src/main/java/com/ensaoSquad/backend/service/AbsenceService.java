@@ -21,4 +21,6 @@ public interface AbsenceService {
     public Map<Student, List<StudentAbsenceDTO>> getStudentAbsenceDetail(long appoge, Module module);
 
     public List<Object[]> countAbsenceByModuleInLevel(Level level);
+
+    public long countAbsenceInLevel(Level level);
 }

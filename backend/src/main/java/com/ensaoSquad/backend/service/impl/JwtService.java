@@ -60,6 +60,7 @@ public class JwtService {
         claims.put("firstName", professorDTO.getFirstName());
         claims.put("lastName", professorDTO.getLastName());
         claims.put("role", professorDTO.getRole());
+        claims.put("departmentId", professorDTO.getDepartment().getDepartmentId());
         return createToken(claims, professorDTO.getEmail());
     }
 

@@ -316,11 +316,7 @@ const Departement = ({name,abr}) => {
           <Grid item lg={12} md={6} sm={6} xs={12}>
             <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
           </Grid>
-          {/* <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
-          </Grid> */}
           <Grid item lg={12} md={6} sm={6} xs={12} justifyContent={'center'}>
-            {/* <TotalOrderLineChartCard isLoading={isLoading} />*/}
             <Stack direction="row" spacing={3} justifyContent={'center'}>
             <Button color="secondary" size="large" variant={activeTab === 'modules' ? 'contained' : 'outlined'} onClick={() => handleTabChange('modules')} >Voir Modules</Button>
             <Button color="secondary" size="large" variant={showAddModuleForm ? 'contained' : 'outlined'} onClick={toggleAddModuleForm}>Ajouter Module</Button>
@@ -344,19 +340,6 @@ const Departement = ({name,abr}) => {
               </Alert>
             </Snackbar>
           <Grid item lg={showAddModuleForm || showAddProfessorForm ? 8 : 12} xs={12} md={8}>
-              {/* <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                  checkboxSelection
-                />
-            </div> */}
             {activeTab === 'modules' && (
               <div style={{ height: 400, width: '80%' }}>
                 <DataGrid
@@ -504,7 +487,6 @@ const Departement = ({name,abr}) => {
 
                       {showAddProfessorForm  && (
                       <Grid item sm={6} xs={12} md={6} lg={12} >
-                        {/* <TotalIncomeLightCard isLoading={isLoading} /> */}
                         <Box
                             component="form"
                             sx={{
@@ -600,12 +582,6 @@ const Departement = ({name,abr}) => {
 
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          {/* <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
-          </Grid> */}
           <Grid item lg={12} xs={12} md={8}>
             
         </Grid>

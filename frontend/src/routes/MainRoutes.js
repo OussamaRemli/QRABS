@@ -15,6 +15,7 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 // const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
 const Departement = Loadable(lazy(() => import('views/departments')));
 const Filiere = Loadable(lazy(() => import('views/filieres')));
+const Update = Loadable(lazy(() => import('layout/MainLayout/Header/ProfileSection/Update')));
 
 // sample page routing
 // const SamplePage = Loadable(lazy(() => import('views/sample-page')));
@@ -38,55 +39,6 @@ const MainRoutes = {
         }
       ]
     },
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-typography',
-    //       element: <UtilsTypography />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-color',
-    //       element: <UtilsColor />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'utils',
-    //   children: [
-    //     {
-    //       path: 'util-shadow',
-    //       element: <UtilsShadow />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'icons',
-    //   children: [
-    //     {
-    //       path: 'tabler-icons',
-    //       element: <UtilsTablerIcons />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'icons',
-    //   children: [
-    //     {
-    //       path: 'material-icons',
-    //       element: <UtilsMaterialIcons />
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: 'sample-page',
-    //   element: <SamplePage />
-    // }
     {
       path: 'departements',
       children: [
@@ -196,6 +148,10 @@ const MainRoutes = {
           element: <Filiere name='Data Science & Cloud...' abr='DSCC5'/>
         },
       ]
+    },
+    {
+      path: 'update',
+      element: <Update/>
     }
   ]
 };

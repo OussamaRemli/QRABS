@@ -22,5 +22,7 @@ public interface AbsenceService {
 
     public List<Object[]> countAbsenceByModuleInLevel(Level level);
 
+    public Long countAbsenceByLevelAndModuleName(long levelId, String moduleName);
+
     public long countAbsenceInLevel(Level level);
 }

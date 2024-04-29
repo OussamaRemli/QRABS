@@ -112,7 +112,11 @@ const Filieres = ({name,abr}) => {
                   key={module.moduleId} 
                   isLoading={isLoading} 
                   name={module.moduleName} 
-                  professor={module.professorName}
+                  professor={{
+                    id: module.professorId,
+                    name: module.professorName
+                  }}
+                  levelId={module.levelId}
                   isActive={activeModuleId === module.moduleId}
                   onClick={() => handleModuleClick(module.moduleId, module.levelId,module.moduleName,module.professorId)}
                 />
@@ -132,7 +136,7 @@ const Filieres = ({name,abr}) => {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert severity="info" onClose={handleCloseSnackbar}>
           {snackbarMessage}

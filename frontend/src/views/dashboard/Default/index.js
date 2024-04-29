@@ -4,14 +4,6 @@ import axios from 'axios';
 
 // material-ui
 import { Grid } from '@mui/material';
-
-// project imports
-// import EarningCard from './EarningCard';
-// import PopularCard from './PopularCard';
-// import TotalOrderLineChartCard from './TotalOrderLineChartCard';
-// import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-// import TotalIncomeLightCard from './TotalIncomeLightCard';
-// import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 import Filiere from 'views/filieres/Filiere';
 
@@ -82,9 +74,6 @@ const Dashboard = () => {
 
   return (
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
-      {/* <Grid item lg={2} >
-      <h2>Hi {adminInfo && adminInfo.firstName && adminInfo.lastName ? `${adminInfo.firstName} ${adminInfo.lastName}` : 'Admin :)'}!</h2>
-      </Grid> */}
       <Grid item xs={12} lg={12} marginTop={'16px'}>
         <Grid container spacing={gridSpacing}>
         {levels.map((level) => (

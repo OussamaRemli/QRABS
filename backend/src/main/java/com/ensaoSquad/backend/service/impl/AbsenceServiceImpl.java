@@ -138,6 +138,11 @@ public class AbsenceServiceImpl implements AbsenceService {
     }
 
     @Override
+    public Long  countAbsenceByLevelAndModuleName(long levelId, String moduleName) {
+        return absenceRepository.countAbsenceByLevelAndModuleName(levelId, moduleName);
+    }
+
+    @Override
     public long countAbsenceInLevel(Level level){
         List<Object[]> results = absenceRepository.countAbsenceByModuleInLevel(level);
         Long total = 0L;

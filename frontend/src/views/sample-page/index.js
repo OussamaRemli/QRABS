@@ -37,18 +37,18 @@ const Index = ({levelId, moduleId,professorId}) => {
                     {/* Afficher les détails de l'apogée sélectionné s'il y en a un */}
                     {selector && (
                         <>
-                            <Grid>
+                            <Grid style={{marginTop:'16px'}}>
                                 <IconButton onClick={()=>{setSelector(!selector)}}>
                                     <ArrowBackIcon />
                                 </IconButton>
                             </Grid>
                             {/* Grille pour la carte de l'étudiant */}
-                            <Grid item lg={4} md={6} sm={6} xs={12} >
+                            <Grid item lg={4} md={6} sm={6} xs={12} style={{marginTop:'16px'}}>
                                 <StudentCard Apogee={Apogee} />
                             </Grid>
                             <br />
                             {/* Grille pour les détails de l'absence */}
-                            <Grid item lg={6} md={6} sm={6} xs={12}>
+                            <Grid item lg={6} md={6} sm={6} xs={12} style={{marginTop:'16px'}}>
                                 <AbsenceDetails moduleId={moduleId} studentApogee={Apogee} />
                             </Grid>
                         </>

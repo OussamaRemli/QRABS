@@ -20,4 +20,6 @@ public interface ProfessorService {
     void delete(Long id);
     ProfessorDTO update(ProfessorDTO professorDto);
 
+    Optional<Professor> findByFirstNameAndLastName(String firstName,String lastName);
+
 }

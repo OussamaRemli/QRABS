@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.SessionDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,16 @@ public class SessionController {
              return ResponseEntity.badRequest().body("Uploaded file is empty");
          }
 
-         List<SessionDTO> uploadedSessions = sessionService.uploadSessionFromExcel(file);
-         return ResponseEntity.ok(uploadedSessions);
+         try {
+             List<SessionDTO> uploadedSessions = sessionService.uploadSessionFromExcel(file);
+             return ResponseEntity.ok(uploadedSessions);
+         }catch (RessourceNotFoundException ex){
+             throw ex;
+         }
+         catch (Exception e) {
+             // Other exceptions handling if needed
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+         }
      }
 
      @GetMapping("/currentSession/{professorId}")

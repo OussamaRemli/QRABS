@@ -10,6 +10,7 @@ import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.repository.DepartmentRepository;
 import com.ensaoSquad.backend.repository.ProfessorRepository;
 import com.ensaoSquad.backend.service.ProfessorService;
+import jakarta.persistence.NonUniqueResultException;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -167,4 +168,16 @@ public class ProfessorServiceImpl implements ProfessorService {
         existingProfessor= professorRepository.save(existingProfessor);
         return ProfessorMapper.toDTO(existingProfessor);
     }
+
+    @Override
+    public Optional<Professor> findByFirstNameAndLastName(String firstName, String lastName) {
+        try {
+            return professorRepository.findByFirstNameAndLastName(firstName, lastName);
+        } catch (NonUniqueResultException ex) {
+            ex.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
 }

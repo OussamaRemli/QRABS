@@ -92,11 +92,21 @@ public class SessionServiceImpl implements SessionService {
                 if (moduleName.isEmpty()) continue;
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn + i * 3).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn + i * 3).getStringCellValue();
-                String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn + i * 3).getStringCellValue();
+                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn + i * 3)
+                        .getStringCellValue().split(" ");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
                 ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
-                ProfessorDTO professorDTO = professorService.findByName(professorLastName);
+                Professor prof;
+                if (professorData.length == 3) {
+                    long profId = Long.parseLong(professorData[2]);
+                    prof = ProfessorMapper.toEntity(professorService.findById(profId));
+                }else{
+                    prof = professorService
+                            .findByFirstNameAndLastName(professorData[1],professorData[0]).orElse(null);
+                }
+                if (prof == null) throw  new RessourceNotFoundException("le professeur: "+professorData[0]+" "+professorData[1]+" n'existe pas");
+                ProfessorDTO professorDTO = ProfessorMapper.toDTO(prof);
                 Time startTime = Time.valueOf(startTimeString);
                 Time endTime = Time.valueOf(endTimeString);
 
@@ -111,7 +121,7 @@ public class SessionServiceImpl implements SessionService {
             if (!moduleName.isEmpty()) {
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
-                String professorLastName = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue();
+                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue().split(" ");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
 
@@ -119,10 +129,16 @@ public class SessionServiceImpl implements SessionService {
                 if (moduleDTO == null) {
                     throw new RessourceNotFoundException("Le module " + moduleDTO + " n'existe pas");
                 }
-                ProfessorDTO professorDTO = professorService.findByName(professorLastName);
-                if (professorDTO == null) {
-                    throw new RessourceNotFoundException("Le professor " + professorLastName + " n'existe pas");
+                Professor prof;
+                if (professorData.length == 3) {
+                    long profId = Long.parseLong(professorData[2]);
+                    prof = ProfessorMapper.toEntity(professorService.findById(profId));
+                }else{
+                    prof = professorService
+                            .findByFirstNameAndLastName(professorData[1],professorData[0]).orElse(null);
                 }
+                if (prof == null) throw  new RessourceNotFoundException("le professeur: "+professorData[0]+" "+professorData[1]+" n'existe pas");
+                ProfessorDTO professorDTO = ProfessorMapper.toDTO(prof);
                 Time startTime = Time.valueOf(startTimeString);
                 Time endTime = Time.valueOf(endTimeString);
 

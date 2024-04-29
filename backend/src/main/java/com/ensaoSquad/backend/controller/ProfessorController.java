@@ -2,6 +2,7 @@ package com.ensaoSquad.backend.controller;
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
+import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.service.ProfessorService;
 import com.ensaoSquad.backend.service.impl.JwtService;
 import lombok.AllArgsConstructor;

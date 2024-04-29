@@ -33,14 +33,10 @@ public class StudentController {
         try {
             List<StudentDTO> uploadedStudents = studentService.uploadStudentsFromExcel(file);
             return ResponseEntity.ok(uploadedStudents);
-        }catch (UploadExcelException ex) {
+        }catch (UploadExcelException | RessourceNotFoundException ex) {
             // Exception will be caught by the exception handler defined in the controller advice
             throw ex;
-        }catch (RessourceNotFoundException ex){
-            // Exception will be caught by the exception handler defined in the controller advice
-            throw ex;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Other exceptions handling if needed
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

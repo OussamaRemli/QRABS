@@ -87,20 +87,20 @@ const App = () => {
           {/*    <Button onClick={handleProfessorClick} color="secondary" variant="contained" sx={{borderRadius: '8px', textTransform: 'none' }}>Professor</Button>*/}
           {/*  </div>*/}
           {/*</div>*/}
-          {selectedRole === 'admin' ? <ThemeRoutes /> : null}
-          {selectedRole === 'professor' ? <Routes /> : null}
-          {selectedRole === null && ( // Afficher les images et les boutons uniquement si aucun rôle n'est sélectionné
-            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', width: '100vw', height: '100vh' }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <img src={adminImage} alt="Admin" style={{ width: '200px', height: '200px' }} />
-                <Button onClick={handleAdminClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Admin</Button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <img src={professorImage} alt="Professor" style={{ width: '200px', height: '200px' }} />
-                <Button onClick={handleProfessorClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Professor</Button>
-              </div>
-            </div>
-          )}
+          {/*{selectedRole === 'admin' ? <ThemeRoutes /> : null}*/}
+          {/*{selectedRole === 'professor' ? <Routes /> : null}*/}
+          {/*{selectedRole === null && ( // Afficher les images et les boutons uniquement si aucun rôle n'est sélectionné*/}
+          {/*  <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', width: '100vw', height: '100vh' }}>*/}
+          {/*    <div style={{ display: 'flex', flexDirection: 'column' }}>*/}
+          {/*      <img src={adminImage} alt="Admin" style={{ width: '200px', height: '200px' }} />*/}
+          {/*      <Button onClick={handleAdminClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Admin</Button>*/}
+          {/*    </div>*/}
+          {/*    <div style={{ display: 'flex', flexDirection: 'column' }}>*/}
+          {/*      <img src={professorImage} alt="Professor" style={{ width: '200px', height: '200px' }} />*/}
+          {/*      <Button onClick={handleProfessorClick} color="secondary" variant="contained" sx={{ borderRadius: '8px', textTransform: 'none' }}>Professor</Button>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*)}*/}
 
           {/*{selectedRole === 'admin' ? <ThemeRoutes /> : null}*/}
           {/*{selectedRole === 'professor' ? <Routes /> : null}*/}

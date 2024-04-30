@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.service;
 
+import com.beust.jcommander.IStringConverter;
 import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Module;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public interface AbsenceService {
     public void markPresnt(long seanceId , long studentId , long levelId , String ip , Long apogee);
-    public void markAbsent(long idSeance , long levelId);
+    public void markAbsent(long idSeance , long levelId ,String group);
 
     public void isNotPresent(long studentId , long levelId , Long apogee);
 

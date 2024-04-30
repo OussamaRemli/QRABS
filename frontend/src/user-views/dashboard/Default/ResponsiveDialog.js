@@ -12,7 +12,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { useAlert } from './AlertContext';
 
 
-export default function ResponsiveDialog({button,dialogContent,levelid,sessionid,onClick}) {
+export default function ResponsiveDialog({button,dialogContent,levelid,sessionid,group,onClick}) {
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -28,7 +28,7 @@ export default function ResponsiveDialog({button,dialogContent,levelid,sessionid
 
     const onConfirm = () => {
         if (sessionid && levelid) {
-            fetch(`http://localhost:8080/api/absence/${sessionid}/${levelid}`, {
+            fetch(`http://localhost:8080/api/absence/${sessionid}/${levelid}/${group}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

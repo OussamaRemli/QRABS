@@ -38,10 +38,15 @@ public class SessionController {
          }
      }
 
-     @GetMapping("/currentSession/{professorId}")
-    public List<Session> getCurrentSession(@PathVariable Long professorId){
-         return sessionService.getCurrentSession(professorId);
-     }
+    @GetMapping("/currentSession/{professorId}")
+    public List<Session> getCurrentSession(@PathVariable Long professorId) {
+        List<Session> sessions = sessionService.getCurrentSession(professorId);
+        if (sessions.isEmpty()) {
+            return sessionService.getNextSession(professorId);
+        } else {
+            return sessions;
+        }
+    }
 
 
 }

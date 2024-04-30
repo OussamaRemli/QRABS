@@ -41,10 +41,18 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    @GetMapping("/{levelName}")
-    public List<StudentDTO> getStudentsByLevelName(@PathVariable String levelName){
-        return studentService.getStudentsByLevelName(levelName);
+    @GetMapping("/{levelName}/{groupName}")
+    public List<StudentDTO> getStudentsByLevelName(@PathVariable String levelName,@PathVariable String groupName){
+        if(groupName.equals("none")){
+            return studentService.getStudentsByLevelName(levelName);
+        }else{
+            return studentService.getStudentsByLevelNameAndGroupName(levelName,groupName);
+        }
     }
+//    @GetMapping("/{levelName}/{groupName}")
+//    public List<Student> getStudentsByLevelName(@PathVariable String levelName,@PathVariable String groupName){
+//        return studentService.getStudentsByLevelNameAndGroupName(levelName,groupName);
+//    }
 
     @GetMapping("/taughtByProf")
     public List<List<StudentDTO>> getStudentsTaughtByProfessorInTimeframe(

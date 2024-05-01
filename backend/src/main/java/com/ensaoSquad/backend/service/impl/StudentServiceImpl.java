@@ -113,6 +113,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentDTO> getStudentsByLevelNameAndGroupName(String levelName, String groupName) {
+        return studentRepository.findByLevelNameAndGroupName(levelName,groupName)
+                .stream().map(StudentMapper::toDTO).toList();
+
+    }
+
+    @Override
     public void deleteAllStudentsByLevel(String levelName) {
         Level level = levelRepository.findByLevelName(levelName);
         if (level != null) {

@@ -15,7 +15,7 @@ import AlertProvider from "./AlertContext";
 import ResponsiveDialog from "./ResponsiveDialog";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
-const Qrcode = ({url,levelId,sessionId}) => {
+const Qrcode = ({url,levelId,sessionId,group}) => {
 
     const [isExpanded, setQrIsExpanded] = useState(false);
     const [isDone, setIsDone] = useState([]);
@@ -42,6 +42,7 @@ const Qrcode = ({url,levelId,sessionId}) => {
                             button={'Marquer absence'}
                             levelid={levelId}
                             sessionid={sessionId}
+                            group={group}
                             onClick={handleConfirm}
                         />
                     </AlertProvider>

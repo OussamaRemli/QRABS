@@ -38,8 +38,8 @@ public class AbsenceController {
     @Autowired
     LevelService levelService;
 
-    @PostMapping("/scan/{sessionId}/{levelId}")
-    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@RequestParam String ip){
+    @PostMapping("/scan/{sessionId}/{levelId}/{group}")
+    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@PathVariable String group,@RequestParam String ip){
         Student student = studentService.findByApogee(Apogee);
         if (student == null) {
             return new ResponseEntity<>("Étudiant introuvable avec l'apogée : " + Apogee, HttpStatus.NOT_FOUND);
@@ -47,8 +47,14 @@ public class AbsenceController {
             Level level =student.getLevel();
             if(level.getLevelId()!=levelId){
                 return new ResponseEntity<>("Vous etes pas de ce niveau : " , HttpStatus.NOT_FOUND);
+            }else {
+                if(!student.getGroupName().equals(group) && !group.equals("none")){
+                    return new ResponseEntity<>("Vous etes pas de ce group : " , HttpStatus.NOT_FOUND);
+
+                }
             }
         }
+
 
         Long studentId = student.getStudentId();
         absenceService.markPresnt(sessionId,studentId,levelId,ip,Apogee);
@@ -63,9 +69,9 @@ public class AbsenceController {
     }
 
 
-    @PostMapping("/{sessionId}/{levelId}")
-    public  void endSession(@PathVariable long sessionId ,@PathVariable long levelId){
-        absenceService.markAbsent(sessionId,levelId);
+    @PostMapping("/{sessionId}/{levelId}/{group}")
+    public  void endSession(@PathVariable long sessionId ,@PathVariable long levelId,@PathVariable String group){
+        absenceService.markAbsent(sessionId,levelId,group);
 
     }
 

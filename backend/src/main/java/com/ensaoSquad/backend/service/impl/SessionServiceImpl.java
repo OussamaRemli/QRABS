@@ -5,10 +5,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 import com.ensaoSquad.backend.dto.*;
 import com.ensaoSquad.backend.mapper.LevelMapper;
@@ -193,6 +190,19 @@ public class SessionServiceImpl implements SessionService {
 
         // Call the repository method to find the session for the current day and time
         return sessionRepository.findSessionForCurrentDayAndTimeAndProfessor(day, time,professorId);
+    }
+
+    @Override
+    public List<Session> getNextSession(long professorId) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Time time = new Time(currentTimeMillis);
+        LocalDate currentDay =LocalDate.now();
+        String day = currentDay.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        int currentIndex = Arrays.asList(daysOfWeek).indexOf(day.toLowerCase());
+        int nextIndex = (currentIndex + 1) % 6;
+        String nextDay = daysOfWeek[nextIndex];
+        return sessionRepository.findNextSessionForProfessor(professorId,day,nextDay,time);
     }
 
 

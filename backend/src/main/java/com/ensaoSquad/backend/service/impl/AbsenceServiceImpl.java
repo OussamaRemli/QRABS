@@ -60,15 +60,19 @@ public class AbsenceServiceImpl implements AbsenceService {
 
 
     @Override
-    public void markAbsent(long sessionId, long levelId) {
+    public void markAbsent(long sessionId, long levelId,String group) {
         Level level = levelRepository.findByLevelId(levelId);
         Session session = sessionRepository.findBySessionId(sessionId);
         if (level == null || session == null) {
             return;
         }
+        List<Student> studentsInLevel;
+        if(group.equals("none")) {
+             studentsInLevel = studentRepository.findByLevel(level);
+        }else{
+             studentsInLevel = studentRepository.findByLevelNameAndGroupName(level.getLevelName(),group);
 
-        List<Student> studentsInLevel = studentRepository.findByLevel(level);
-
+        }
         Set<Long> presentStudentIds = presentStudents.getOrDefault(levelId, Collections.emptySet());
 
         //boolean releazed=false;

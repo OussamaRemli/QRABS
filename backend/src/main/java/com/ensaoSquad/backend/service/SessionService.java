@@ -32,4 +32,5 @@ public interface SessionService {
 
      public List<Session> getCurrentSession(Long Professor);
 
+    List<Session> getNextSession(long professorId);
 }

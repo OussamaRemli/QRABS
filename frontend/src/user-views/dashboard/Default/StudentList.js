@@ -14,7 +14,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 
 
-function Users({ sessionId, levelId, level, apogee }) {
+function Users({ sessionId, levelId, level, apogee ,group}) {
     const [dataStudent, setDataStudent] = useState([]);
     const [users, setUsers] = useState([]);
     const [ip,setIp] =useState(94894);
@@ -22,7 +22,7 @@ function Users({ sessionId, levelId, level, apogee }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/students/${level}`);
+                const response = await fetch(`http://localhost:8080/api/students/${level}/${group}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch student data');
                 }
@@ -79,7 +79,7 @@ function Users({ sessionId, levelId, level, apogee }) {
     };
 
     const isPresent = (sessionId, levelId, Apogee) => {
-        fetch(`http://localhost:8080/api/absence/scan/${sessionId}/${levelId}?Apogee=${Apogee}&ip=${ip}`, {
+        fetch(`http://localhost:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&ip=${ip}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -13,6 +13,9 @@ public interface StudentService {
     List<StudentDTO> uploadStudentsFromExcel(MultipartFile file);
     List<StudentDTO> getStudentsByLevelName(String levelName);
 
+    List<StudentDTO> getStudentsByLevelNameAndGroupName(String levelName,String groupName);
+
+
     void deleteAllStudentsByLevel(String levelName);
 
     Student findByApogee(long apogee);

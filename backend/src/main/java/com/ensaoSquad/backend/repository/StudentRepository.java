@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.repository;
 
+import com.ensaoSquad.backend.dto.StudentDTO;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Student;
@@ -17,7 +18,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      List<Student> findByLevel(Level level);
      Student findByStudentId(long studentId);
 
-
+    @Query("SELECT s FROM Student s WHERE s.level.levelName = :levelName AND s.groupName = :groupName")
+    List<Student> findByLevelNameAndGroupName(@Param("levelName") String levelName, @Param("groupName") String groupName);
     Student findByApogee(long apogee);
     // Method to count the number of records in the table
     long count();

@@ -38,7 +38,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 }));
 
 
-const SectorCard = ({levelNames}) => {
+const SectorCard = ({levelNames,group}) => {
     return (
         <>
             <Grid item  sx={{flexBasis: '135px',flexGrow : 0, flexShrink : 0 }}>
@@ -52,7 +52,8 @@ const SectorCard = ({levelNames}) => {
                                     mt: 0.45,
                                     mb: 0.45
                                 }}
-                                primary={<Typography variant="h4">Niveau: {levelNames.join(', ')}</Typography>}
+                                primary={<Typography variant="h4">Niveau: {levelNames.join(', ')} {group !== 'none' ? `, ${group}` : ''}
+                                </Typography>}
                             />
                         </ListItem>
                     </List>

@@ -15,5 +15,6 @@ public class StudentAbsenceDTO {
     private Long absenceId;
     private Date absenceDate;
     private String sessionType;
+    private boolean Justified;
 
 }

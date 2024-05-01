@@ -35,7 +35,7 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
                                                             @Param("module") Module module,
                                                             @Param("level") Level level);
 
-    @Query("SELECT ses.sessionType, a.dateAbsence, a.absenceId " +
+    @Query("SELECT ses.sessionType, a.dateAbsence, a.absenceId, a.Justified " +
             "FROM Absence a " +
             "JOIN a.session ses " +
             "WHERE a.student = :student " +

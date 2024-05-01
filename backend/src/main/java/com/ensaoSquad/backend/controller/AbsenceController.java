@@ -2,12 +2,11 @@ package com.ensaoSquad.backend.controller;
 
 
 import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.StudentNotFoundException;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
-import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
-import com.ensaoSquad.backend.model.Professor;
-import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.service.*;
 import com.ensaoSquad.backend.service.impl.ProfessorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -129,7 +131,6 @@ public class AbsenceController {
             @RequestParam("moduleId") Long moduleId) {
 
         Module module = moduleService.findById(moduleId);
-        System.out.println(module);
         Map<Student, List<StudentAbsenceDTO>> absenceDetails = absenceService.getStudentAbsenceDetail(studentApogee,module);
 
         return ResponseEntity.ok(absenceDetails);
@@ -145,5 +146,27 @@ public class AbsenceController {
         return ResponseEntity.ok(absenceService.countAbsenceInLevel(level));
     }
 
+    @PutMapping("/absence/justify")
+    public ResponseEntity<?> justifyAbsence(@RequestParam("absenceId") long absenceId) {
+
+        Absence absence = absenceService.findAbsenceById(absenceId);
+        Date currentDate = new Date();
+        Date absenceDate = absence.getDateAbsence();
+
+        // Calculate the difference in milliseconds between the current date and absence date
+        long differenceInMillis = currentDate.getTime() - absenceDate.getTime();
+
+        // Calculate the difference in days
+        long differenceInDays = TimeUnit.MILLISECONDS.toDays(differenceInMillis);
+
+        // Check if the difference is more than 3 days
+        if (differenceInDays > 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Impossible de justifier l'absence car cela fait plus de 3 jours depuis la date de l'absence.");
+        }
+
+        Absence updatedAbsence = absenceService.toggleJustified(absenceId);
+        return ResponseEntity.ok(updatedAbsence);
+    }
 
 }

@@ -2,10 +2,8 @@ package com.ensaoSquad.backend.service;
 
 import com.beust.jcommander.IStringConverter;
 import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
-import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
-import com.ensaoSquad.backend.model.Professor;
-import com.ensaoSquad.backend.model.Student;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -26,4 +24,8 @@ public interface AbsenceService {
     public Long countAbsenceByLevelAndModuleName(long levelId, String moduleName);
 
     public long countAbsenceInLevel(Level level);
+
+    public Absence findAbsenceById(long absenceId);
+
+    public Absence toggleJustified(long absenceId);
 }

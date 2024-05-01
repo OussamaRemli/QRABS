@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.repository.AbsenceRepository;
@@ -156,5 +157,20 @@ public class AbsenceServiceImpl implements AbsenceService {
         }
         return total;
     }
+
+    @Override
+    public Absence findAbsenceById(long absenceId) {
+        Optional<Absence> absenceOpt = absenceRepository.findById(absenceId);
+
+        return absenceOpt.orElseThrow(() -> new RessourceNotFoundException("Absence not found with ID: " + absenceId));
+    }
+
+    @Override
+    public Absence toggleJustified(long absenceId) {
+        Absence absence = findAbsenceById(absenceId);
+        absence.setJustified(!absence.isJustified());
+        return absenceRepository.save(absence);
+    }
+
 
 }

@@ -19,6 +19,8 @@ public class Absence {
 
     private Date dateAbsence;
 
+    private boolean Justified;
+
     @ManyToOne
     @JoinColumn(name = "session_id")
     private Session session;

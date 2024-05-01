@@ -12,6 +12,7 @@ import java.util.Date;
 public class AbsenceDTO {
     private Long absenceId;
     private Date dateAbsence;
+    private boolean Justified;
     private SessionDTO sessionDTO;
     private StudentDTO studentDTO;
 }

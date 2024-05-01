@@ -64,6 +64,12 @@ const Dashboard = () => {
     setSelectedLevelName(levelName);
     setSelectedSectorName(sectorName);
     setActiveLevelId(levelId);
+
+    // Format the URL path with lowercase sectorName and levelName
+    const path = `/filieres/${sectorName.toLowerCase()}/${levelName.toLowerCase()}`;
+    
+    // Redirect to the formatted URL path
+    navigate(path);
   };
 
   // Si le token n'existe pas, ne rend pas ce composant

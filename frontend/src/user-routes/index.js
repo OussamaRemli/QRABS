@@ -6,10 +6,12 @@ import MainLayout from "../user-layout/MainLayout";
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('user-views/dashboard/Default')));
+const Update = Loadable(lazy(() => import('user-layout/MainLayout/Header/ProfileSection/Update')));
 
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('user-views/sample-page')));
+import AuthenticationRoutes from './AuthenticationRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
@@ -42,6 +44,10 @@ function UserRoutes() {
               }
             ]
           },
+          {
+            path: 'update',
+            element: <Update/>
+          },
           ...data.map(item => ({
             path: item.moduleName,
             children: [
@@ -60,7 +66,7 @@ function UserRoutes() {
     fetchRoutes();
   }, []);
 
-  return useRoutes(routes);
+  return useRoutes([AuthenticationRoutes, ...routes]); // Ajouter AuthenticationRoutes avant les routes spécifiques au professeur
 }
 
 export default UserRoutes;

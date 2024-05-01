@@ -13,6 +13,7 @@ import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('user-views/dashboard/Default')));
+const Update = Loadable(lazy(() => import('user-layout/MainLayout/Header/ProfileSection/Update')));
 
 
 // sample page routing
@@ -40,6 +41,10 @@ const MainRoutes = {
           element: <DashboardDefault />
         }
       ]
+    },
+    {
+      path: 'update',
+      element: <Update/>
     },
     ...data.map(item => ({
       path: item.moduleName,

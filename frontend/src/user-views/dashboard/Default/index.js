@@ -91,6 +91,11 @@ const Dashboard = () => {
         setActiveIndex(index);
     }
 
+    // Si le token n'existe pas, ne rend pas ce composant
+    if (!localStorage.getItem('token')){
+        navigate('/') 
+        window.location.reload()
+    }
     return (
         <>
             {!isNow && (

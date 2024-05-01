@@ -12,6 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentAbsenceDTO {
+    private Long absenceId;
     private Date absenceDate;
     private String sessionType;
 

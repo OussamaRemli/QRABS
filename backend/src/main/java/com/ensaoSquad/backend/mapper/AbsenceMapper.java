@@ -8,6 +8,7 @@ public class AbsenceMapper {
         AbsenceDTO absenceDTO =new AbsenceDTO();
         absenceDTO.setAbsenceId(absence.getAbsenceId());
         absenceDTO.setDateAbsence(absence.getDateAbsence());
+        absenceDTO.setJustified(absence.isJustified());
         absenceDTO.setSessionDTO(SessionMapper.toDTO(absence.getSession()));
         absenceDTO.setStudentDTO(StudentMapper.toDTO(absence.getStudent()));
         return absenceDTO;
@@ -17,6 +18,7 @@ public class AbsenceMapper {
         Absence absence = new Absence();
         absence.setAbsenceId(absenceDTO.getAbsenceId());
         absence.setDateAbsence(absenceDTO.getDateAbsence());
+        absence.setJustified(absenceDTO.isJustified());
         absence.setSession(SessionMapper.toEntity(absenceDTO.getSessionDTO()));
         absence.setStudent(StudentMapper.toEntity(absenceDTO.getStudentDTO()));
         return absence;

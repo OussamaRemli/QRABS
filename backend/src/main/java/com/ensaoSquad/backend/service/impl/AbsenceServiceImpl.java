@@ -127,8 +127,9 @@ public class AbsenceServiceImpl implements AbsenceService {
             String sessionType = (String) result[0];
             Date absenceDate = (Date) result[1];
             long absenceId = (long) result[2];
+            boolean justified = (boolean) result[3];
 
-            studentAbsences.add(new StudentAbsenceDTO(absenceId,absenceDate, sessionType));
+            studentAbsences.add(new StudentAbsenceDTO(absenceId,absenceDate, sessionType,justified));
         }
 
         Map<Student, List<StudentAbsenceDTO>> studentAbsencesMap = new HashMap<>();

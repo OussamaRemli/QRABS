@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -153,20 +154,24 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public ProfessorDTO update(ProfessorDTO professorDTO){
-        Professor existingProfessor=ProfessorMapper.toEntity(professorDTO);
-         existingProfessor = professorRepository.findById(professorDTO.getProfessorId())
-                .orElseThrow(() -> new RuntimeException("Professor not found"));
-        existingProfessor.setFirstName(professorDTO.getFirstName());
-        existingProfessor.setLastName(professorDTO.getLastName());
-        existingProfessor.setEmail(professorDTO.getEmail());
-        existingProfessor.setDepartment(DepartmentMapper.toEntity(professorDTO.getDepartment()));
+        try {
+            Professor existingProfessor = ProfessorMapper.toEntity(professorDTO);
+            existingProfessor = professorRepository.findById(professorDTO.getProfessorId())
+                    .orElseThrow(() -> new RuntimeException("Professor not found"));
+            existingProfessor.setFirstName(professorDTO.getFirstName());
+            existingProfessor.setLastName(professorDTO.getLastName());
+            existingProfessor.setEmail(professorDTO.getEmail());
+            existingProfessor.setDepartment(DepartmentMapper.toEntity(professorDTO.getDepartment()));
 
-        // Encode the new password if it's not empty
-        if (!professorDTO.getPassword().isEmpty()) {
-            existingProfessor.setPassword(passwordEncoder.encode(professorDTO.getPassword()));
+            // Encode the new password if it's not empty
+            if (!professorDTO.getPassword().isEmpty()) {
+                existingProfessor.setPassword(passwordEncoder.encode(professorDTO.getPassword()));
+            }
+            existingProfessor = professorRepository.save(existingProfessor);
+            return ProfessorMapper.toDTO(existingProfessor);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Cet email est déjà associé à un autre professeur.");
         }
-        existingProfessor= professorRepository.save(existingProfessor);
-        return ProfessorMapper.toDTO(existingProfessor);
     }
 
     @Override

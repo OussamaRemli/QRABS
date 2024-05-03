@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.controller;
 import com.ensaoSquad.backend.dto.ProfessorDTO;
+import com.ensaoSquad.backend.exception.DuplicateException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.model.Professor;
@@ -50,11 +51,9 @@ public class ProfessorController {
         try {
             List<ProfessorDTO> uploadedprofs = professorService.saveByExcel(file);
             return ResponseEntity.ok(uploadedprofs);
-        }catch (UploadExcelException ex){
+        }catch (UploadExcelException | RessourceNotFoundException | DuplicateException ex){
             throw ex;
-        }catch (RessourceNotFoundException ex){
-            throw ex;
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

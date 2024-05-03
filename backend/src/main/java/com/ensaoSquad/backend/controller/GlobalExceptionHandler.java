@@ -1,5 +1,6 @@
 package com.ensaoSquad.backend.controller;
 
+import com.ensaoSquad.backend.exception.DuplicateException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RessourceNotFoundException.class)
     public ResponseEntity<Object> handleRessourceNotFoundException(RessourceNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<Object> handleDuplicateEmailException(DuplicateException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("message", ex.getMessage());
 

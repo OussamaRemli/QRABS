@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.SessionDTO;
+import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.service.SessionService;
@@ -29,7 +30,7 @@ public class SessionController {
          try {
              List<SessionDTO> uploadedSessions = sessionService.uploadSessionFromExcel(file);
              return ResponseEntity.ok(uploadedSessions);
-         }catch (RessourceNotFoundException ex){
+         }catch (RessourceNotFoundException | MultipleFoundException ex){
              throw ex;
          }
          catch (Exception e) {

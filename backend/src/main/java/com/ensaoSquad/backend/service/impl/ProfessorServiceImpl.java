@@ -177,14 +177,9 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Optional<Professor> findByFirstNameAndLastName(String firstName, String lastName) {
-        try {
+    public List<Professor> findByFirstNameAndLastName(String firstName, String lastName) {
             return professorRepository.findByFirstNameAndLastName(firstName, lastName);
-        } catch (NonUniqueResultException ex) {
-            ex.printStackTrace();
-            return Optional.empty();
-        }
-    }
 
+    }
 
 }

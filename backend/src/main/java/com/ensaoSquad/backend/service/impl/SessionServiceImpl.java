@@ -8,6 +8,7 @@ import java.time.format.TextStyle;
 import java.util.*;
 
 import com.ensaoSquad.backend.dto.*;
+import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.mapper.LevelMapper;
 import com.ensaoSquad.backend.mapper.ModuleMapper;
 import com.ensaoSquad.backend.mapper.ProfessorMapper;
@@ -99,8 +100,12 @@ public class SessionServiceImpl implements SessionService {
                     long profId = Long.parseLong(professorData[2]);
                     prof = ProfessorMapper.toEntity(professorService.findById(profId));
                 }else{
-                    prof = professorService
-                            .findByFirstNameAndLastName(professorData[1],professorData[0]).orElse(null);
+                    List<Professor> professors = professorService.findByFirstNameAndLastName(professorData[1], professorData[0]);
+                    if (professors.size() > 1) {
+                        throw new MultipleFoundException("More than one professor found with first name: " +
+                                professorData[1] + " and last name: " + professorData[0]);
+                    }
+                    prof = professors.isEmpty() ? null : professors.get(0);
                 }
                 if (prof == null) throw  new RessourceNotFoundException("le professeur: "+professorData[0]+" "+professorData[1]+" n'existe pas");
                 ProfessorDTO professorDTO = ProfessorMapper.toDTO(prof);
@@ -131,8 +136,12 @@ public class SessionServiceImpl implements SessionService {
                     long profId = Long.parseLong(professorData[2]);
                     prof = ProfessorMapper.toEntity(professorService.findById(profId));
                 }else{
-                    prof = professorService
-                            .findByFirstNameAndLastName(professorData[1],professorData[0]).orElse(null);
+                    List<Professor> professors = professorService.findByFirstNameAndLastName(professorData[1], professorData[0]);
+                    if (professors.size() > 1) {
+                        throw new MultipleFoundException("More than one professor found with first name: " +
+                                professorData[1] + " and last name: " + professorData[0]);
+                    }
+                    prof = professors.isEmpty() ? null : professors.get(0);
                 }
                 if (prof == null) throw  new RessourceNotFoundException("le professeur: "+professorData[0]+" "+professorData[1]+" n'existe pas");
                 ProfessorDTO professorDTO = ProfessorMapper.toDTO(prof);

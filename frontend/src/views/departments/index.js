@@ -14,9 +14,6 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 // project imports
 
 import TotalIncomeLightCard from '../dashboard/Default/TotalIncomeLightCard';
-// import TotalGrowthBarChart from '../dashboard/Default/TotalGrowthBarChart';
-// import TotalIncomeDarkCard from '../dashboard/Default/TotalIncomeDarkCard';
-// import PopularCard from '../dashboard/Default/PopularCard';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //

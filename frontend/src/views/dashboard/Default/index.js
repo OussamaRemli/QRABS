@@ -30,8 +30,6 @@ const Dashboard = () => {
       const tokenParts = token.split('.');
       const tokenPayload = JSON.parse(atob(tokenParts[1]));
 
-      // Afficher les informations dans la console
-      // console.log('Informations de l\'admin :', tokenPayload);
       setAdminInfo({
         firstName: tokenPayload.firstName,
         lastName: tokenPayload.lastName

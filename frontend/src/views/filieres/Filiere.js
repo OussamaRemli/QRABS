@@ -13,8 +13,10 @@ const CardWrapper = styled(MainCard)(({ theme, clicked,total  }) => ({
     overflow: 'hidden',
     position: 'relative',
     cursor: 'pointer',
+    transition: 'transform 0.4s ease-in-out',
     '&:hover': {
         backgroundColor: total >= 3 ? '#800000' : theme.palette.primary[800],
+        transform: 'scale(1.05)',
     },
     '&:after': {
     content: '""',
@@ -90,17 +92,17 @@ const Filiere = ({ levelId, levelName,sectorName, isLoading, onClick }) => {
                   }}
                   primary={
                     <>
-                      <Typography variant="h4" sx={{ color: '#fff' }}>
-                      Filière:<span style={{ fontWeight: 'bold' }}> {sectorName}</span> 
+                      <Typography variant="h4" sx={{ color: 'primary.light' }}>
+                      Filière:<span style={{ fontWeight: 'bold',color: '#FFF' }}> {sectorName}</span> 
                       </Typography>
-                      <Typography variant="h4" sx={{ color: '#fff' }}>
-                      Niveau:<span style={{ fontWeight: 'bold' }}> {levelName}</span> 
+                      <Typography variant="h4" sx={{ color: 'primary.light' }}>
+                      Niveau:<span style={{ fontWeight: 'bold',color: '#FFF' }}> {levelName}</span> 
                       </Typography>
                     </>
                   }
                   secondary={
                     <Typography variant="h5" sx={{ color: 'primary.light', mt: 0.25 }}>
-                      Nombre D'absence: <span style={{ fontWeight: 'bold',borderBottom: '2px solid' }}> {total}</span>
+                      Nombre D'absence: <span style={{ fontWeight: 'bold',borderBottom: '2px solid',color: '#FFF' }}> {total}</span>
                     </Typography>
                   }
                 />

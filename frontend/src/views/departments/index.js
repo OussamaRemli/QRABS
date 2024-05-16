@@ -58,6 +58,7 @@ const Departement = ({name,abr}) => {
 
   const [showAddModuleForm, setShowAddModuleForm] = useState(false);
   const [showAddProfessorForm, setShowAddProfessorForm] = useState(false);
+  const [showAffectationForm, setShowAffectationForm] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -71,6 +72,11 @@ const Departement = ({name,abr}) => {
   // Fonction pour afficher ou masquer le formulaire d'ajout de professeur
   const toggleAddProfessorForm = () => {
     setShowAddProfessorForm(!showAddProfessorForm);
+  };
+
+  // Fonction pour afficher ou masquer le formulaire d'affectation
+  const toggleAffectationForm = () => {
+    setShowAffectationForm(!showAffectationForm);
   };
 
   // Fonction pour récupérer les professeurs par le nom du département
@@ -154,9 +160,11 @@ const Departement = ({name,abr}) => {
     if (tab === 'modules') {
       setShowAddModuleForm(false);
       setShowAddProfessorForm(false);
+      setShowAffectationForm(false);
     } else if (tab === 'professors') {
       setShowAddProfessorForm(false);
       setShowAddModuleForm(false);
+      setShowAffectationForm(false);
     }
   };
   const getModuleRowId = (module) => {
@@ -292,6 +300,27 @@ const Departement = ({name,abr}) => {
         });
     }
   };
+  // Function to handle importing affectation from the selected file
+  const handleImportAffectation = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+
+      axios.post('http://localhost:8080/api/modules/uploadRespo', formData)
+        .then((response) => {
+          console.log('professors uploaded!');
+          setSnackbarSeverity('success');
+          setSnackbarMessage('affectation uploaded successfully');
+          setOpenSnackbar(true);
+        })
+        .catch((error) => {
+          console.error('Error uploading Affectation:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error uploading Affectation');
+          setOpenSnackbar(true);
+        });
+    }
+  };
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setOpenSnackbar(true);
@@ -319,6 +348,7 @@ const Departement = ({name,abr}) => {
             <Button color="secondary" size="large" variant={showAddModuleForm ? 'contained' : 'outlined'} onClick={toggleAddModuleForm}>Ajouter Module</Button>
             <Button color="secondary" size="large" variant={activeTab === 'professors' ? 'contained' : 'outlined'} onClick={() => handleTabChange('professors')} >Voir Professeurs</Button>
             <Button color="secondary" size="large" variant={showAddProfessorForm ? 'contained' : 'outlined'} onClick={toggleAddProfessorForm}>Ajouter Professeur</Button>
+            <Button color="secondary" size="large" variant={showAffectationForm ? 'contained' : 'outlined'} onClick={toggleAffectationForm}>Affecter Modules au Professeur</Button>
             </Stack>
           </Grid>
           <Snackbar
@@ -336,7 +366,7 @@ const Departement = ({name,abr}) => {
               {snackbarMessage}
               </Alert>
             </Snackbar>
-          <Grid item lg={showAddModuleForm || showAddProfessorForm ? 8 : 12} xs={12} md={8}>
+          <Grid item lg={showAddModuleForm || showAddProfessorForm || showAffectationForm ? 8 : 12} xs={12} md={8}>
             {activeTab === 'modules' && (
               <div style={{ height: 400, width: '80%' }}>
                 <DataGrid
@@ -448,9 +478,9 @@ const Departement = ({name,abr}) => {
                               displayEmpty
                             >
                               <MenuItem value="" disabled>Sélectionner le département</MenuItem>
-                              <MenuItem value={1}>MMA</MenuItem>
                               <MenuItem value={2}>EIT</MenuItem>
-                              <MenuItem value={3}>LC</MenuItem>
+                              <MenuItem value={3}>MMA</MenuItem>
+                              <MenuItem value={4}>LC</MenuItem>
                             </Select>
                             <Select
                               id="professor-id"
@@ -565,25 +595,57 @@ const Departement = ({name,abr}) => {
                               displayEmpty
                             >
                               <MenuItem value="" disabled>Sélectionner le département</MenuItem>
-                              <MenuItem value={1}>MMA</MenuItem>
                               <MenuItem value={2}>EIT</MenuItem>
-                              <MenuItem value={3}>LC</MenuItem>
+                              <MenuItem value={3}>MMA</MenuItem>
+                              <MenuItem value={4}>LC</MenuItem>
                             </Select>
                             <Button variant="outlined" color="primary" style={{marginTop:'30px'}} onClick={handleProfessorAdd}>Ajouter</Button>
                         </Box>
                       </Grid>)}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item lg={12} xs={12} md={8}>
-            
-        </Grid>
-      </Grid>
-      </Grid>
+                      {showAffectationForm  && (
+                      <Grid item sm={6} xs={12} md={6} lg={12} >
+                        <Box
+                            component="form"
+                            sx={{
+                              '& > :not(style)': { m: 1 },
+                              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                              padding: '20px 10px',
+                              width: '100%',
+                              autoComplete: 'off',
+                              bgcolor: '#fff',
+                              borderRadius: '20px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              border: `1px solid ${theme.palette.primary.main}`
+                            }}
+                            noValidate
+                          > 
+                            <Typography variant="h4" color="primary" textAlign={'center'}>Affecter modules au professeurs via Excel</Typography>
+                            <Grid container direction="column" justifyContent="center" spacing={0}>
+                              <Grid item lg={12} textAlign={'center'} style={{ marginLeft: '-20px' }}>
+                                <input
+                                  type="file"
+                                  accept=".xls,.xlsx"
+                                  onChange={(e) => {
+                                    handleImportAffectation(); // Appeler la fonction handleImportProfessors lorsqu'un fichier est sélectionné
+                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
+                                  }}
+                                  style={{ display: 'none' }}
+                                  id="file-upload"
+                                />
+                                <label htmlFor="file-upload" >
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
+                                    Import Affectation
+                                  </Button>
+                                </label>
+                              </Grid>
+                            </Grid>
+                            </Box>
+                      </Grid>)}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
     </Grid>
   );
 };

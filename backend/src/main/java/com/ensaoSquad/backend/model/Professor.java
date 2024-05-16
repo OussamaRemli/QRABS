@@ -22,7 +22,7 @@ public class Professor {
     @Column(nullable = false ,unique = true)
     private String email;
     @Column(nullable = false)
-    private String password;
+    private String password ;
     @Column(nullable = false)
     private String role = "ROLE_PROFESSOR"; // Valeur par défaut "ROLE_PROFESSOR"
 

@@ -61,13 +61,11 @@ public class LevelServiceImpl implements LevelService {
 
     @Override
     public List<LevelDTO> saveSectorData(String sectorAbbreviation) {
-        // Extracting sector abbreviation from the request body
-        String abbreviation = sectorAbbreviation.split("=")[1];
         List<LevelDTO> levelDTOS = new ArrayList<>();
         for (int i = 3; i <= 5; i++) {
             Level entity = new Level();
-            entity.setLevelName(abbreviation + i);
-            entity.setSectorName(abbreviation);
+            entity.setLevelName(sectorAbbreviation + i);
+            entity.setSectorName(sectorAbbreviation);
             LevelDTO levelDTO = LevelMapper.toDTO(levelRepository.save(entity));
             levelDTOS.add(levelDTO);
         }

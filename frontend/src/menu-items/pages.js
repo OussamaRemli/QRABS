@@ -1,9 +1,10 @@
 // assets
-import { IconKey } from '@tabler/icons-react';
+import { IconKey, IconBuildingWarehouse } from '@tabler/icons-react';
 
 // constant
 const icons = {
-  IconKey
+  IconKey,
+  IconBuildingWarehouse
 };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
@@ -17,7 +18,7 @@ const pages = {
       id: 'Départements',
       title: 'Départements',
       type: 'collapse',
-      icon: icons.IconKey,
+      icon: icons.IconBuildingWarehouse,
 
       children: [
         {

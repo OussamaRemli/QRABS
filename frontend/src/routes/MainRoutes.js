@@ -45,7 +45,7 @@ const MainRoutes = {
         {
           path: 'EIT',
           // element: <UtilsTypography />
-          element: <Departement abr='EIT' name="Département d'Electronique Informatique & Télécommunications"/>
+          element: <Departement abr='EIT' name="Département d'Electronique Informatique et Télécommunications"/>
         }
       ]
     },
@@ -55,7 +55,7 @@ const MainRoutes = {
         {
           path: 'LC',
           // element: <UtilsTypography />
-          element: <Departement abr='LC' name="Département des Humanités & Management"/>
+          element: <Departement abr='LC' name="Département des Humanités et Management"/>
         }
       ]
     },

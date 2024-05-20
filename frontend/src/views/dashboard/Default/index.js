@@ -84,7 +84,7 @@ const Dashboard = () => {
 
   const handleAddFiliere = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/levels/createFiliere', `sectorAbbreviation=${sectorAbbreviation}`, {
+      const response = await axios.post('http://localhost:8080/api/levels/createFiliere', sectorAbbreviation, {
         headers: {
           'Content-Type': 'text/plain'
         }
@@ -93,13 +93,13 @@ const Dashboard = () => {
       setSectorAbbreviation('');
       setShowForm(false);
       setSnackbarSeverity('success');
-      setSnackbarMessage('Filière ajoutée avec success');
+      setSnackbarMessage('Filière ajoutée avec succès');
       setOpenSnackbar(true);
     } catch (error) {
       console.error('Error adding filiere:', error);
       setSnackbarSeverity('error');
       setSnackbarMessage('Erreur d\'ajout de filière');
-      setOpenSnackbar(true)
+      setOpenSnackbar(true);
     }
   };
   const handleSnackbarOpen = (message) => {

@@ -1,9 +1,7 @@
 package com.ensaoSquad.backend.service;
 
-import com.ensaoSquad.backend.dto.LevelDTO;
-import com.ensaoSquad.backend.dto.ModuleDTO;
-import com.ensaoSquad.backend.dto.ProfessorDTO;
-import com.ensaoSquad.backend.dto.SessionDTO;
+import com.ensaoSquad.backend.dto.*;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Session;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,4 +31,6 @@ public interface SessionService {
      public List<Session> getCurrentSession(Long Professor);
 
     List<Session> getNextSession(long professorId);
+
+    List<Module> getProfessorsAndModules(Long id);
 }

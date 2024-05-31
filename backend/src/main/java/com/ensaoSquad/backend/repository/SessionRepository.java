@@ -56,4 +56,6 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
 
     List<Session> findByModule(Module module);
 
+    List<Session> findByProfessorProfessorId(Long professorId);
+
 }

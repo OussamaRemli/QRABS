@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.ensaoSquad.backend.dto.*;
 import com.ensaoSquad.backend.exception.MultipleFoundException;
@@ -40,6 +41,7 @@ public class SessionServiceImpl implements SessionService {
     private SessionRepository sessionRepository;
     @Autowired
     private LevelRepository levelRepository;
+
 
     private final LevelService levelService;
     private ModuleService moduleService;
@@ -212,6 +214,17 @@ public class SessionServiceImpl implements SessionService {
         int nextIndex = (currentIndex + 1) % 6;
         String nextDay = daysOfWeek[nextIndex];
         return sessionRepository.findNextSessionForProfessor(professorId,day,nextDay,time);
+    }
+
+    @Override
+    public List<Module> getProfessorsAndModules(Long id) {
+        //List<Session> sessions = sessionRepository.findAll();
+        List<Session> sessions = sessionRepository.findByProfessorProfessorId(id);
+        // Extract modules from sessions and remove duplicates
+        return sessions.stream()
+                .map(Session::getModule)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 

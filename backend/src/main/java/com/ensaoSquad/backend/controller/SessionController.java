@@ -1,8 +1,10 @@
 package com.ensaoSquad.backend.controller;
 
+import com.ensaoSquad.backend.dto.ProfessorModulesDTO;
 import com.ensaoSquad.backend.dto.SessionDTO;
 import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
+import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,11 @@ public class SessionController {
         } else {
             return sessions;
         }
+    }
+    @GetMapping("/professor/{professorId}/modules")
+    public ResponseEntity<List<Module>> getModulesByProfessorId(@PathVariable Long professorId) {
+        List<Module> modules = sessionService.getProfessorsAndModules(professorId);
+        return ResponseEntity.ok(modules);
     }
 
 

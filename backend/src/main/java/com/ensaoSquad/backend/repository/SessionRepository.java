@@ -44,6 +44,7 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
             "(s.sessionDay = :nextDay)) " +
             "ORDER BY s.sessionDay ASC, s.startTime ASC")
     List<Session> findNextSessionForProfessor(long professorId, String currentDay, String nextDay, Time currentTime);
+
     @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime AND s.professor.professorId= :professorId")
     List<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);
 
@@ -57,5 +58,7 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     List<Session> findByModule(Module module);
 
     List<Session> findByProfessorProfessorId(Long professorId);
+    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId ")
+    List<Session> findAllSessionForProfessor(long professorId);
 
 }

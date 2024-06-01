@@ -22,6 +22,9 @@ public interface ProfessorService {
     ProfessorDTO update(ProfessorDTO professorDto);
 
     List<Professor> findByFirstNameAndLastName(String firstName,String lastName);
+//    Optional<Professor> findByFirstNameAndLastName(String firstName,String lastName);
+    public void updateEmail(Long professorId, String newEmail);
+    public void updatePassword(Long professorId, String newPassword);
 
 
 }

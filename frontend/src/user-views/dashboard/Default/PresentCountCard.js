@@ -8,6 +8,10 @@ import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 // import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import {useEffect, useState} from "react";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
+import {gridPaginationRowCountSelector} from "@mui/x-data-grid";
 
 // assets
 // import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
@@ -42,7 +46,29 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const PresentCountCard = ({count}) => {
+const PresentCountCard = ({levelId}) => {
+    const [count, setCount] = useState({});
+
+    useEffect(() => {
+        const socket = new SockJS('http://localhost:8080/ws');
+        const stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            const countSubscription = stompClient.subscribe(`/topic/count/${levelId}`, function (message) {
+                const parsedMessage = JSON.parse(message.body);
+                console.log("Parsed message:", parsedMessage);
+                setCount(prevCount => ({
+                    ...prevCount,
+                    [levelId]: parsedMessage // Stocker le compteur sous levelId
+                }));
+            });
+        });
+        return () => {
+            if (stompClient && stompClient.connected) {
+                stompClient.disconnect();
+            }
+        };
+    }, [levelId]);// Include presentCardcount here if it's used inside this component
+
 
     return (
         <>
@@ -59,8 +85,7 @@ const PresentCountCard = ({count}) => {
                                 }}
                                 primary={
                                     <Typography variant="h4" sx={{color: '#fff'}}>
-                                            {count}
-                                    </Typography>
+                                        {count[levelId]}                                    </Typography>
                                 }
                                 secondary={
                                     <Typography variant="subtitle2" sx={{color: 'primary.light', mt: 0.25}}>
@@ -75,10 +100,5 @@ const PresentCountCard = ({count}) => {
     );
 };
 
-PresentCountCard.propTypes = {
-    moduleName: PropTypes.string,
-    startTime: PropTypes.string,
-    endTime: PropTypes.string
-};
 
 export default PresentCountCard;

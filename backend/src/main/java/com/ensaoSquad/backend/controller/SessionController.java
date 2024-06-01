@@ -56,5 +56,17 @@ public class SessionController {
         return ResponseEntity.ok(modules);
     }
 
+    @GetMapping("/sessions/{professorId}")
+    public List<Session> getAllSession(@PathVariable Long professorId) {
+        List<Session> sessions = sessionService.findAllSessionForProfessor(professorId);
+        if (sessions.isEmpty()) {
+            return sessionService.getNextSession(professorId);
+        } else {
+            return sessions;
+        }
+    }
+
+
+
 
 }

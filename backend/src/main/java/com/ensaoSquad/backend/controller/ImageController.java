@@ -2,13 +2,18 @@ package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.repository.StudentRepository;
+import org.python.core.PyException;
+import org.python.util.PythonInterpreter;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,38 +34,46 @@ public class ImageController {
     @Autowired
     private StudentRepository studentRepository;
 
-    @PostMapping("/upload")
-    public String uploadFiles(@RequestParam("files") List<MultipartFile> files,
-                              RedirectAttributes redirectAttributes) {
-        System.out.println("Upload endpoint reached.");
 
-        // Check if files were provided
-        if (files == null || files.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please select files to upload.");
+    @PostMapping("/upload")
+    public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
+        if (files == null || files.length == 0) {
+            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner des fichiers à télécharger.");
             return "redirect:/uploadStatus";
         }
 
         try {
-            // Create the directory if it doesn't exist
-            Path directoryPath = Paths.get(UPLOADED_FOLDER);
-            if (!Files.exists(directoryPath)) {
-                Files.createDirectories(directoryPath);
+            RestTemplate restTemplate = new RestTemplate();
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            for (MultipartFile file : files) {
+                // Ici, nous traitons le fichier et stockons le contenu nécessaire
+                // au lieu de tenter de sérialiser l'objet MultipartFile directement
+                Path filePath = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+                Files.write(filePath, file.getBytes());
+                body.add("files", new FileSystemResource(filePath.toFile()));
             }
 
-            // Iterate over each uploaded file and save it
-            for (MultipartFile file : files) {
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-                Files.write(path, bytes);
-            }
-            redirectAttributes.addFlashAttribute("message", "Files uploaded successfully!");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+            String pythonScriptUrl = "http://localhost:5000/process";
+            ResponseEntity<String> response = restTemplate.exchange(pythonScriptUrl, HttpMethod.POST, requestEntity, String.class);
+
+            System.out.println(response.getBody());
+
+            redirectAttributes.addFlashAttribute("message", "Fichiers téléchargés et traités avec succès !");
         } catch (IOException e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("message", "Failed to upload files.");
+            redirectAttributes.addFlashAttribute("message", "Échec du téléchargement des fichiers.");
         }
 
         return "redirect:/uploadStatus";
     }
+
+
 
     @GetMapping("/image/{apogee}")
     public ResponseEntity<Resource> getImage(@PathVariable long apogee) {

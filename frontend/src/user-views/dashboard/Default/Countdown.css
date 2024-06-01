@@ -1,0 +1,48 @@
+.countdown-holder,
+#countdown {
+    display: inline-block;
+    vertical-align: middle;
+    width: 500px;
+}
+
+.countdown-row {
+    text-align: justify;
+    font-size: 18px;
+    color: rgba(28, 27, 27, 0.95);
+}
+
+.countdown-row:after {
+    display: inline-block;
+    width: 100%;
+    height: 0;
+    content: '';
+}
+
+.countdown__item {
+    display: inline-block;
+    width: 23%;
+    text-align: center;
+    user-select: none;
+}
+
+.countdown__item_time {
+    position: relative;
+    height: 70px;
+    color: rgba(28, 27, 27, 0.95);
+    font-size: 52px;
+}
+
+.countdown__item_time:after {
+    position: absolute;
+    font-size: 32px;
+    line-height: 55px;
+    content: ":";
+    right: -3px;
+    top: 0;
+    bottom: 0;
+    color: rgba(255, 255, 255, .5);
+}
+
+.countdown__item_time:last-child:after {
+    display: none;
+}

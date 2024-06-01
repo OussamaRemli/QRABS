@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'user-layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import SettingsPage from "../user-layout/MainLayout/Header/ProfileSection/Setting";
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('user-views/utilities/Typography')));
 // const UtilsColor = Loadable(lazy(() => import('user-views/utilities/Color')));
@@ -13,6 +14,8 @@ import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('user-views/dashboard/Default')));
+const ReportedSession = Loadable(lazy(() => import('user-views/dashboard/Default/ReportedSession')));
+
 const Update = Loadable(lazy(() => import('user-layout/MainLayout/Header/ProfileSection/Update')));
 
 
@@ -43,8 +46,12 @@ const MainRoutes = {
       ]
     },
     {
-      path: 'update',
-      element: <Update/>
+      path: 'setting',
+      element: <SettingsPage/>
+    },
+    {
+      path: 'reportedsession',
+      element: <ReportedSession/>
     },
     ...data.map(item => ({
       path: item.moduleName,

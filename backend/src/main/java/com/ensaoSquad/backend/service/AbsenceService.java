@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface AbsenceService {
-    public void markPresnt(long seanceId , long studentId , long levelId , String ip , Long apogee);
+    public void markPresnt(long seanceId , long studentId , long levelId , Long apogee);
     public void markAbsent(long idSeance , long levelId ,String group);
 
     public void isNotPresent(long studentId , long levelId , Long apogee);

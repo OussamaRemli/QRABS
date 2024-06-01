@@ -1,11 +1,13 @@
 package com.ensaoSquad.backend.controller;
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.exception.DuplicateException;
+import com.ensaoSquad.backend.exception.ProfessorNotFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
-import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.service.ProfessorService;
 import com.ensaoSquad.backend.service.impl.JwtService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,6 +102,39 @@ public class ProfessorController {
             }
         } else {
             throw new UsernameNotFoundException("Invalid user request !");
+        }
+    }
+    @PutMapping("/{professorId}/email")
+    public ResponseEntity<String> updateEmail(@PathVariable Long professorId, @RequestBody String newEmail) {
+        try {
+            // Parsing the request body as JSON to extract the email
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode emailNode = mapper.readTree(newEmail);
+            String email = emailNode.get("email").asText();
+
+            professorService.updateEmail(professorId, email);
+            return ResponseEntity.ok("E-mail updated successfully.");
+        } catch (IOException e) {
+            // Handle JSON parsing exception
+            return ResponseEntity.badRequest().body("Invalid request body.");
+        } catch (ProfessorNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{professorId}/password")
+    public ResponseEntity<String> updatePassword(@PathVariable Long professorId, @RequestBody String newPassword) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode passwordNode = mapper.readTree(newPassword);
+            String password = passwordNode.get("password").asText();
+            professorService.updatePassword(professorId, password);
+            return ResponseEntity.ok("Password updated successfully.");
+        } catch (IOException e) {
+            // Handle JSON parsing exception
+            return ResponseEntity.badRequest().body("Invalid request body.");
+        } catch (ProfessorNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

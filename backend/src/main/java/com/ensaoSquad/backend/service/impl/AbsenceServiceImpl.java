@@ -35,29 +35,25 @@ public class AbsenceServiceImpl implements AbsenceService {
     private SimpMessagingTemplate template;
 
     private Map<Long, Set<Long>> presentStudents = new HashMap<>();
-    private Map<Long, Set<String>> scannedIps = new HashMap<>(); // Nouveau
+
+    private Map<Long, Integer> levelCounts = new HashMap<>();
 
 
-    private int count;
+
 
 
 
     @Override
-    public void markPresnt(long seanceId, long studentId, long levelId , String ip ,Long Apogee) {
-        Set<String> sessionIps = scannedIps.computeIfAbsent(seanceId, k -> new HashSet<>());
-        if (!sessionIps.contains(ip)) {
+    public void markPresnt(long seanceId, long studentId, long levelId ,Long Apogee) {
+
             Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
             if (!students.contains(studentId)) {
                 students.add(studentId);
-                sessionIps.add(ip);
-                count = students.size();
                 this.template.convertAndSend("/topic/presence", Apogee);
-                System.out.println(count);
-                this.template.convertAndSend("/topic/count", count);
-            }
-        } else {
-            System.out.println("L'adresse IP a déjà été utilisée pour scanner lors de cette séance.");
-        }}
+                levelCounts.put(levelId,  students.size());
+                this.template.convertAndSend("/topic/count/"+levelId, levelCounts.get(levelId));
+         }
+        }
 
 
     @Override
@@ -89,19 +85,26 @@ public class AbsenceServiceImpl implements AbsenceService {
         }
 
         presentStudents.remove(levelId);
-        scannedIps.remove(sessionId);
     }
 
     @Override
     public void isNotPresent(long studentId, long levelId, Long apogee) {
         Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
         if (students.contains(studentId)) {
-        students.remove(studentId);
-        this.template.convertAndSend("/topic/count", students.size());
-        this.template.convertAndSend("/topic/absence", apogee);
+            students.remove(studentId);
 
+            int levelCount = levelCounts.computeIfAbsent(levelId, k -> 0);
+            if (levelCount > 0) {
+                levelCounts.put(levelId, students.size());
+            }
+
+            this.template.convertAndSend("/topic/count/" + levelId, levelCounts.get(levelId));
+            this.template.convertAndSend("/topic/absence", apogee); // Corrected the topic name
         }
     }
+
+    
+
 
     @Override
     public Map<Student, Map<String, Long>> getAbsenceCountsByProfessorModuleAndLevel(Professor professor, Module module, Level level) {

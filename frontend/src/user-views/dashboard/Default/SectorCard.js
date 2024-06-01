@@ -52,8 +52,11 @@ const SectorCard = ({levelNames,group}) => {
                                     mt: 0.45,
                                     mb: 0.45
                                 }}
-                                primary={<Typography variant="h4">Niveau: {levelNames.join(', ')} {group !== 'none' ? `, ${group}` : ''}
-                                </Typography>}
+                                primary={<Typography variant="h4">
+                                    Niveau: {Array.isArray(levelNames) ? levelNames.join(', ') : levelNames
+                                }{group !== 'none' ? `, ${group}` : ''}
+                                </Typography>
+                                }
                             />
                         </ListItem>
                     </List>

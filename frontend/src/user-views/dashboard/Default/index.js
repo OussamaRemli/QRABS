@@ -8,8 +8,12 @@ import {gridSpacing} from 'store/constant';
 import Users from './StudentList';
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import Countdown from "./Countdown";
 
 const Dashboard = () => {
+
+    const [day,setDay]=useState();
+    const [time,setTime]=useState();
 
     const [dataSession, setDataSession] = useState([]);
     const [apogee, setApogee] = useState([]);
@@ -72,6 +76,9 @@ const Dashboard = () => {
 
         if (sessionDay[0] === formattedDay && startTime[0] < formattedTime && formattedTime < endTime[0]) {
             setIsNow(true);
+        }else{
+            setDay(sessionDay[0]);
+            setTime(startTime[0]);
         }
         if(Bygroups[0]){
             setGroup(groups[0]);
@@ -103,7 +110,7 @@ const Dashboard = () => {
                     <Grid item xs={12}>
                         <Grid container spacing={gridSpacing} justifyContent="center" alignItems="flex-start">
                             <Grid item>
-                                {!isNow &&<h1>Next cours</h1>
+                                {!isNow && <Countdown day={day} time={time}/>
                                 }
                             </Grid>
                         </Grid>

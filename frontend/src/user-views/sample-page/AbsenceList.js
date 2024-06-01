@@ -11,9 +11,14 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
     const [users, setUsers] = useState([]);
     const [TypeSession, setTypeSession] = useState("Total");
 
+    const buttonStyle = (sessionType) => ({
+        backgroundColor: TypeSession === sessionType ? '#1976d2' : '',
+        color: TypeSession === sessionType ? 'white' : '',
+    });
+
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
-        fetch(`http://localhost:8080/api/absence/absence/count?professorId=1&moduleId=${moduleId}&levelId=${levelId}`)
+        fetch(`http://localhost:8080/api/absence/absence/count?professorId=17&moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {
@@ -110,10 +115,30 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         <Grid container spacing={2}>
             <Grid item>
                 <ButtonGroup variant="outlined" aria-label="Basic button group">
-                    <Button onClick={() => setTypeSession("Total")}>Total</Button>
-                    <Button onClick={() => setTypeSession("Cours")}>Cours</Button>
-                    <Button onClick={() => setTypeSession("TD")}>TD</Button>
-                    <Button onClick={() => setTypeSession("TP")}>TP</Button>
+                    <Button
+                        style={buttonStyle('Total')}
+                        onClick={() => setTypeSession('Total')}
+                    >
+                        Total
+                    </Button>
+                    <Button
+                        style={buttonStyle('Cours')}
+                        onClick={() => setTypeSession('Cours')}
+                    >
+                        Cours
+                    </Button>
+                    <Button
+                        style={buttonStyle('TD')}
+                        onClick={() => setTypeSession('TD')}
+                    >
+                        TD
+                    </Button>
+                    <Button
+                        style={buttonStyle('TP')}
+                        onClick={() => setTypeSession('TP')}
+                    >
+                        TP
+                    </Button>
                 </ButtonGroup>
             </Grid>
             <Grid item>

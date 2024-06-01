@@ -26,7 +26,7 @@ const MenuList = () => {
     const fetchData = async () => {
       try {
         // Appel API pour obtenir les modules
-        const response = await fetch('http://localhost:8080/api/modules/professor/1');
+        const response = await fetch('http://localhost:8080/api/modules/professor/17');
         const data = await response.json();
 
         // Création de l'objet utilities avec les données reçues
@@ -67,7 +67,6 @@ const MenuList = () => {
     }
   });
 
-  // Rendu des éléments de navigation
   return <>{navItems}</>;
 };
 

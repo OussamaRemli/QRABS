@@ -33,4 +33,6 @@ public interface SessionService {
     List<Session> getNextSession(long professorId);
 
     List<Module> getProfessorsAndModules(Long id);
+    List<Session> findAllSessionForProfessor(long professorId);
+
 }

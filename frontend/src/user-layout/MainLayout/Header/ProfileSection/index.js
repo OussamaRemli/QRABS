@@ -33,17 +33,11 @@ import {
   Button
 } from '@mui/material';
 
-// third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
-// import UpgradePlanCard from './UpgradePlanCard';
-// import User1 from 'assets/images/users/user-round.svg';
 
-// assets
-// import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
 import { IconLogout, IconSettings } from '@tabler/icons-react';
 
 
@@ -118,7 +112,7 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
   const handleAccountSettingsClick = () => {
-    navigate('/update');
+    navigate('/setting');
   };
 
 
@@ -126,7 +120,7 @@ const ProfileSection = () => {
   if (!localStorage.getItem('token')){
     navigate('/')
     window.location.reload();
-  };
+  }
   return (
     <>
       <Chip

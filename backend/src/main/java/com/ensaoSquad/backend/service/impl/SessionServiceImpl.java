@@ -206,14 +206,24 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<Session> getNextSession(long professorId) {
         long currentTimeMillis = System.currentTimeMillis();
-        Time time = new Time(currentTimeMillis);
-        LocalDate currentDay =LocalDate.now();
-        String day = currentDay.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        Time currentTime = new Time(currentTimeMillis);
+        LocalDate currentDate = LocalDate.now();
+        String currentDay = currentDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
         String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        int currentIndex = Arrays.asList(daysOfWeek).indexOf(day.toLowerCase());
-        int nextIndex = (currentIndex + 1) % 6;
+
+        int currentIndex = Arrays.asList(daysOfWeek).indexOf(currentDay);
+
+        int nextIndex = (currentIndex + 1) % daysOfWeek.length;
         String nextDay = daysOfWeek[nextIndex];
-        return sessionRepository.findNextSessionForProfessor(professorId,day,nextDay,time);
+
+        return sessionRepository.findNextSessionForProfessor(professorId, currentDay, nextDay, currentTime);
+    }
+
+
+    @Override
+    public List<Session> findAllSessionForProfessor(long professorId) {
+        return sessionRepository.findAllSessionForProfessor(professorId);
     }
 
     @Override

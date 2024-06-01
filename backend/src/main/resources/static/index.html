@@ -24,7 +24,7 @@
         }
 
         .form__field {
-            width: 80%;
+            width: 100%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
@@ -49,7 +49,6 @@
             color: #4CAF50; /* Change this to #F44336 for error messages */
             margin-top: 20px;
         }
-
     </style>
 </head>
 <body>
@@ -57,92 +56,48 @@
     <h2>Enter Your Apogee</h2>
     <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form">
         <div class="form-group">
-        <label for="Apogee"></label>
             <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">
         </div>
         <button type="submit" class="form-submit-btn">Submit</button>
     </form>
     <div id="message" class="message"></div>
 </div>
-</body>
-</html>
 
 <script>
-    /**
-     * Get the user IP through the webkitRTCPeerConnection
-     * @param onNewIP {Function} listener function to expose the IP locally
-     * @return undefined
-     */
-    function getUserIP(onNewIP) {
-        var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
-        var pc = new myPeerConnection({
-                iceServers: []
-            }),
-            noop = function() {},
-            localIPs = {},
-            ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
-            key;
-
-        function iterateIP(ip) {
-            if (!localIPs[ip]) onNewIP(ip);
-            localIPs[ip] = true;
-        }
-
-        //create a bogus data channel
-        pc.createDataChannel("");
-
-        // create offer and set local description
-        pc.createOffer().then(function(sdp) {
-            sdp.sdp.split('\n').forEach(function(line) {
-                if (line.indexOf('candidate') < 0) return;
-                line.match(ipRegex).forEach(iterateIP);
-            });
-
-            pc.setLocalDescription(sdp, noop, noop);
-        }).catch(function(reason) {
-            // An error occurred, so handle the failure to connect
-        });
-
-        //listen for candidate events
-        pc.onicecandidate = function(ice) {
-            if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
-            ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
-        };
-    }
-
     function submitForm() {
         var Apogee = encodeURIComponent(document.getElementById('Apogee').value);
         var urlParams = new URLSearchParams(window.location.search);
         var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
         var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
         var group = urlParams.has('group') ? urlParams.get('group') : '';
+
         var form = document.getElementById('studentForm');
 
-        // Récupération de l'adresse IP et envoi avec la requête
-        getUserIP(function(ip){
-            form.action = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
+        var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici
 
-            fetch(form.action, {
-                method: 'POST'
+        form.action = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
+
+        fetch(form.action, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        throw new Error(errorText);
+                    });
+                }
+                return response.text();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(errorText => {
-                            throw new Error(errorText);
-                        });
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // Afficher le message de succès ou effectuer d'autres actions si nécessaire
-                    console.log(data);
-                })
-                .catch(error => {
-                    // Afficher le message d'erreur à l'utilisateur
-                    document.getElementById('message').innerText = error.message;
-                });
-        });
+            .then(data => {
+                // Afficher le message de succès ou effectuer d'autres actions si nécessaire
+                console.log(data);
+            })
+            .catch(error => {
+                // Afficher le message d'erreur à l'utilisateur
+                document.getElementById('message').innerText = error.message;
+            });
     }
 </script>
-    </body>
-    </html>
+
+</body>
+</html>

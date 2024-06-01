@@ -2,6 +2,7 @@ package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.ProfessorDTO;
 import com.ensaoSquad.backend.exception.DuplicateException;
+import com.ensaoSquad.backend.exception.ProfessorNotFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.mapper.DepartmentMapper;
@@ -191,4 +192,31 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     }
 
+
+    public void updateEmail(Long professorId, String newEmail) {
+        Professor professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor not found"));
+
+        professor.setEmail(newEmail);
+        professorRepository.save(professor);
+    }
+
+    public void updatePassword(Long professorId, String newPassword) {
+        Professor professor = professorRepository.findById(professorId)
+                .orElseThrow(() -> new ProfessorNotFoundException("Professor not found"));
+
+        // Validate the new password (you can add more complex validation logic)
+        if (newPassword == null || newPassword.isEmpty()) {
+            throw new IllegalArgumentException("New password cannot be null or empty");
+        }
+
+        // Hash the new password
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        // Set the new hashed password
+        professor.setPassword(encodedPassword);
+
+        // Save the professor with the updated password
+        professorRepository.save(professor);
+    }
 }

@@ -17,7 +17,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 function Users({ sessionId, levelId, level, apogee ,group}) {
     const [dataStudent, setDataStudent] = useState([]);
     const [users, setUsers] = useState([]);
-    const [ip,setIp] =useState(94894);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,17 +69,17 @@ function Users({ sessionId, levelId, level, apogee ,group}) {
             .then(response => {
                 if (!response.ok) {
                     throw new Error('La requête a échoué');
+
                 }
-                showAlert('Ceci est une alerte de succès — regardez!', 'success');
             })
             .catch(error => {
                 console.error('Erreur lors de l\'envoi de la requête:', error);
-                showAlert('Ceci est une alerte d\'erreur — attention!', 'error');
             });
     };
 
+
     const isPresent = (sessionId, levelId, Apogee) => {
-        fetch(`http://localhost:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&ip=${ip}`, {
+        fetch(`http://localhost:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -89,19 +89,14 @@ function Users({ sessionId, levelId, level, apogee ,group}) {
                 if (!response.ok) {
                     throw new Error('La requête a échoué');
                 }
-                showAlert('Ceci est une alerte de succès — regardez!', 'success');
-                setIp(ip + 1);
             })
             .catch(error => {
                 console.error('Erreur lors de l\'envoi de la requête:', error);
-                showAlert('Ceci est une alerte d\'erreur — attention!', 'error');
             });
     };
 
 
-    const showAlert = (message, type) => {
-        // Implement your logic to display an alert
-    };
+
 
     const columns = [
         {

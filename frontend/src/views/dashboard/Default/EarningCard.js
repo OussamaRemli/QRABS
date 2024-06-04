@@ -296,30 +296,12 @@ const EarningCard = ({ isLoading,name,abr }) => {
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500}}>{abr}</Typography>
                   </Grid>
                   <Grid item>
-                    {/* <Avatar
-                      sx={{
-                        cursor: 'pointer',
-                        ...theme.typography.smallAvatar,
-                        backgroundColor: theme.palette.secondary[200],
-                        color: theme.palette.secondary.dark
-                      }}
-                    >
-                      <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                    </Avatar> */}
+                    
                   </Grid>
                 </Grid>
               </Grid>
               <Grid container alignItems="center" justifyContent='center'>
                 <Grid item sx={{ mb: 1 }}>
-                  <Typography
-                    sx={{
-                      fontSize: '1rem',
-                      fontWeight: 500,
-                      color: 'primary.light'
-                    }}
-                  >
-                    {name}
-                  </Typography>
                 </Grid>
                 </Grid>
             </Grid>

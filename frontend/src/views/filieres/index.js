@@ -25,7 +25,7 @@ const studentsColumns = [
 ];
 
 
-const Filieres = ({name,abr}) => {
+const Filieres = ({abr}) => {
   const [isLoading, setLoading] = useState(true);
   const [students, setStudents] = useState([]);
   const [modules, setModules] = useState([]);
@@ -100,7 +100,7 @@ const Filieres = ({name,abr}) => {
       <Grid item xs={12} marginTop={'16px'}>
         <Grid container spacing={gridSpacing} justifyContent={'center'}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} name={name} abr={abr}/>
+            <EarningCard isLoading={isLoading} abr={abr}/>
           </Grid>
         </Grid>
       </Grid>

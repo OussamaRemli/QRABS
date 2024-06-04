@@ -1,14 +1,45 @@
 import { lazy } from 'react';
-
-// project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
-// dashboard routing
+// Dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const Departement = Loadable(lazy(() => import('views/departments')));
 const Filiere = Loadable(lazy(() => import('views/filieres')));
 const Update = Loadable(lazy(() => import('layout/MainLayout/Header/ProfileSection/Update')));
+
+// Fetch data from the API
+async function fetchLevels() {
+  const response = await fetch('http://localhost:8080/api/levels');
+  const data = await response.json();
+  return data;
+}
+
+const data = await fetchLevels();
+
+// Generate dynamic routes for filieres
+const filiereRoutes = data.reduce((acc, item) => {
+  const sectorPath = `/filieres/${item.sectorName.toLowerCase()}`;
+  const filiereRoute = {
+    path: sectorPath,
+    children: [
+      {
+        path: item.levelName.toLowerCase(),
+        element: <Filiere abr={item.levelName} />
+      }
+    ]
+  };
+
+  // Check if sector route already exists
+  const existingSectorRoute = acc.find(route => route.path === sectorPath);
+  if (existingSectorRoute) {
+    existingSectorRoute.children.push(filiereRoute.children[0]);
+  } else {
+    acc.push(filiereRoute);
+  }
+
+  return acc;
+}, []);
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -34,114 +65,22 @@ const MainRoutes = {
       children: [
         {
           path: 'MMA',
-          // element: <UtilsTypography />
-          element: <Departement abr='MMA' name='Département de Mécanique et Mathématiques appliquées'/>
-        }
-      ]
-    },
-    {
-      path: 'departements',
-      children: [
+          element: <Departement abr='MMA' name='Département de Mécanique et Mathématiques appliquées' />
+        },
         {
           path: 'EIT',
-          // element: <UtilsTypography />
-          element: <Departement abr='EIT' name="Département d'Electronique Informatique et Télécommunications"/>
-        }
-      ]
-    },
-    {
-      path: 'departements',
-      children: [
+          element: <Departement abr='EIT' name="Département d'Electronique Informatique et Télécommunications" />
+        },
         {
           path: 'LC',
-          // element: <UtilsTypography />
-          element: <Departement abr='LC' name="Département des Humanités et Management"/>
+          element: <Departement abr='LC' name="Département des Humanités et Management" />
         }
       ]
     },
-    {
-      path: '/filieres/gi',
-      children: [
-        {
-          path: 'gi3',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Informatique' abr='GI3'/>
-        },
-        {
-          path: 'gi4',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Informatique' abr='GI4'/>
-        },
-        {
-          path: 'gi5',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Informatique' abr='GI5'/>
-        },
-      ]
-    },
-    {
-      path: '/filieres/gc',
-      children: [
-        {
-          path: 'gc3',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Civil' abr='GC3'/>
-        },
-        {
-          path: 'gc4',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Civil' abr='GC4'/>
-        },
-        {
-          path: 'gc5',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Civil' abr='GC5'/>
-        },
-      ]
-    },
-    {
-      path: '/filieres/gseir',
-      children: [
-        {
-          path: 'gseir3',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Des Systemes Elec...' abr='GSEIR3'/>
-        },
-        {
-          path: 'gseir4',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Des Systemes Elec...' abr='GSEIR4'/>
-        },
-        {
-          path: 'gseir5',
-          // element: <UtilsTypography />
-          element: <Filiere name='Génie Des Systemes Elec...' abr='GSEIR5'/>
-        },
-      ]
-    },
-    {
-      path: '/filieres/dscc',
-      children: [
-        {
-          path: 'dscc3',
-          // element: <UtilsTypography />
-          element: <Filiere name='Data Science & Cloud...' abr='DSCC3'/>
-        },
-        {
-          path: 'dscc4',
-          // element: <UtilsTypography />
-          element: <Filiere name='Data Science & Cloud...' abr='DSCC4'/>
-        },
-        {
-          path: 'dscc5',
-          // element: <UtilsTypography />
-          element: <Filiere name='Data Science & Cloud...' abr='DSCC5'/>
-        },
-      ]
-    },
+    ...filiereRoutes,
     {
       path: 'update',
-      element: <Update/>
+      element: <Update />
     }
   ]
 };

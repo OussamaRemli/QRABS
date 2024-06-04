@@ -65,7 +65,7 @@ const Module = ({ name, professor, levelId, isLoading, onClick, isActive }) => {
         <TotalIncomeCard />
       ) : (
         <CardWrapper border={false} content={false} clicked={isActive} total={total}>
-          <Box sx={{ p: 2 }}>
+          <Box sx={{ p: 2,minHeight:'125px' }}>
             <List sx={{ py: 0 }}>
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
                 <ListItemAvatar>

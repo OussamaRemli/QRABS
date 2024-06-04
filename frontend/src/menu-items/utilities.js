@@ -1,145 +1,78 @@
-// assets
-import { IconTypography, IconPalette, IconShadow, IconWindmill,IconPencil,IconSchool } from '@tabler/icons-react';
+import { IconSchool } from '@tabler/icons-react';
 
 // constant
 const icons = {
-  IconTypography,
-  IconPalette,
-  IconShadow,
-  IconWindmill,
-  IconPencil,
   IconSchool
 };
+
+// Utility function to wrap icons with a background style
+const withBackground = (IconComponent, bgColor) => (props) => (
+  <div style={{ 
+    backgroundColor: bgColor, 
+    padding: '5px', 
+    borderRadius: '50%',
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  }}>
+    <IconComponent {...props} style={{ color: 'white' }} />
+  </div>
+);
+
+// Function to generate a random color
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
+// Fetch data from the API
+async function fetchLevels() {
+  const response = await fetch('http://localhost:8080/api/levels');
+  const data = await response.json();
+  return data;
+}
+
+const data = await fetchLevels();
+
+// Generate dynamic menu items for filieres
+const filiereMenuItems = data.reduce((acc, item) => {
+  const sectorPath = item.sectorName.toLowerCase();
+  const filiereItem = {
+    id: item.levelName.toLowerCase(),
+    title: item.levelName,
+    type: 'item',
+    url: `/filieres/${sectorPath}/${item.levelName.toLowerCase()}`,
+    breadcrumbs: false
+  };
+
+  // Check if sector item already exists
+  const existingSectorItem = acc.find(menuItem => menuItem.id === sectorPath);
+  if (existingSectorItem) {
+    existingSectorItem.children.push(filiereItem);
+  } else {
+    acc.push({
+      id: sectorPath,
+      title: item.sectorName,
+      type: 'collapse',
+      icon: withBackground(icons.IconSchool, getRandomColor()),
+      children: [filiereItem]
+    });
+  }
+
+  return acc;
+}, []);
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
   id: 'filieres',
-  title: 'filieres',
+  title: 'Filières',
   type: 'group',
-  children: [
-    {
-      id: 'gi',
-      title: 'GI',
-      type: 'collapse',
-      icon: icons.IconSchool,
-      children: [
-        {
-          id: 'gi3',
-          title: 'GI3',
-          type: 'item',
-          url: '/filieres/gi/gi3',
-          breadcrumbs: false
-        },
-        {
-          id: 'gi4',
-          title: 'GI4',
-          type: 'item',
-          url: '/filieres/gi/gi4',
-          breadcrumbs: false
-        },
-        {
-          id: 'gi5',
-          title: 'GI5',
-          type: 'item',
-          url: '/filieres/gi/gi5',
-          breadcrumbs: false
-        }
-        
-      ]
-    },
-    {
-      id: 'gseir',
-      title: 'GSEIR',
-      type: 'collapse',
-      icon: icons.IconSchool,
-      children: [
-        {
-          id: 'gseir3',
-          title: 'GSEIR3',
-          type: 'item',
-          url: '/filieres/gseir/gseir3',
-          breadcrumbs: false
-        },
-        {
-          id: 'gseir4',
-          title: 'GSEIR4',
-          type: 'item',
-          url: '/filieres/gseir/gseir4',
-          breadcrumbs: false
-        },
-        {
-          id: 'gseir5',
-          title: 'GSEIR5',
-          type: 'item',
-          url: '/filieres/gseir/gseir5',
-          breadcrumbs: false
-        }
-        
-      ]
-    },
-    {
-      id: 'gc',
-      title: 'GC',
-      type: 'collapse',
-      icon: icons.IconSchool,
-      children: [
-        {
-          id: 'gc3',
-          title: 'GC3',
-          type: 'item',
-          url: '/filieres/gc/gc3',
-          breadcrumbs: false
-        },
-        {
-          id: 'gc4',
-          title: 'GC4',
-          type: 'item',
-          url: '/filieres/gc/gc4',
-          breadcrumbs: false
-        },
-        {
-          id: 'gc5',
-          title: 'GC5',
-          type: 'item',
-          url: '/filieres/gc/gc5',
-          breadcrumbs: false
-        }
-        
-      ]
-    },
-    {
-      id: 'dscc',
-      title: 'DSCC',
-      type: 'collapse',
-      icon: icons.IconSchool,
-      children: [
-        {
-          id: 'dscc3',
-          title: 'DSCC3',
-          type: 'item',
-          url: '/filieres/dscc/dscc3',
-          breadcrumbs: false
-        },
-        {
-          id: 'dscc4',
-          title: 'DSCC4',
-          type: 'item',
-          url: '/filieres/dscc/dscc4',
-          breadcrumbs: false
-        },
-        {
-          id: 'dscc5',
-          title: 'DSCC5',
-          type: 'item',
-          url: '/filieres/dscc/dscc5',
-          breadcrumbs: false
-        }
-        
-      ]
-    }
-    
-  ]
+  children: filiereMenuItems
 };
 
 export default utilities;

@@ -76,54 +76,67 @@ public class AbsenceController {
         absenceService.markAbsent(sessionId,levelId,group);
 
     }
+    //avec professor
 
+//    @GetMapping("/absence/count")
+//    public ResponseEntity<Map<Student, Map<String, Long>>> getAbsenceCounts(
+//            @RequestParam("professorId") long professorId,
+//            @RequestParam("moduleId") long moduleId,
+//            @RequestParam("levelId") long levelId) {
+//
+//        // Assuming you have services to retrieve Professor, Module, and Level by their IDs
+//        Professor professor = ProfessorMapper.toEntity( professorService.findById(professorId));
+//        Module module = moduleService.findById(moduleId);
+//        Level level = levelService.findById(levelId);
+//
+//        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
+//
+//        return ResponseEntity.ok(absenceCounts);
+//    }
     @GetMapping("/absence/count")
     public ResponseEntity<Map<Student, Map<String, Long>>> getAbsenceCounts(
-            @RequestParam("professorId") long professorId,
             @RequestParam("moduleId") long moduleId,
             @RequestParam("levelId") long levelId) {
 
-        // Assuming you have services to retrieve Professor, Module, and Level by their IDs
-        Professor professor = ProfessorMapper.toEntity( professorService.findById(professorId));
         Module module = moduleService.findById(moduleId);
         Level level = levelService.findById(levelId);
 
-        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
+        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByModuleAndLevel(module, level);
 
         return ResponseEntity.ok(absenceCounts);
     }
 
-    @GetMapping("/absence/count/total")
-    public ResponseEntity<List<Long>> getAbsenceCountsTotal(
-            @RequestParam("professorId") long professorId,
-            @RequestParam("moduleId") long moduleId,
-            @RequestParam("levelId") long levelId) {
-
-        // Assuming you have services to retrieve Professor, Module, and Level by their IDs
-        Professor professor = ProfessorMapper.toEntity( professorService.findById(professorId));
-        Module module = moduleService.findById(moduleId);
-        Level level = levelService.findById(levelId);
-
-        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
-
-        long totalCours = 0;
-        long totalTp = 0;
-        long totalTd = 0;
-
-        for (Map<String, Long> studentAbsence : absenceCounts.values()) {
-            // Accumulate counts for each session type
-            totalCours += studentAbsence.getOrDefault("cours", 0L);
-            totalTp += studentAbsence.getOrDefault("tp", 0L);
-            totalTd += studentAbsence.getOrDefault("td", 0L);
-        }
-        List<Long> totalCounts = new ArrayList<>();
-
-        totalCounts.add(totalCours);
-        totalCounts.add(totalTp);
-        totalCounts.add(totalTd);
-
-        return ResponseEntity.ok(totalCounts);
-    }
+//    @GetMapping("/absence/count/total")
+//    public ResponseEntity<List<Long>> getAbsenceCountsTotal(
+//            @RequestParam("professorId") long professorId,
+//            @RequestParam("moduleId") long moduleId,
+//            @RequestParam("levelId") long levelId) {
+//
+//        // Assuming you have services to retrieve Professor, Module, and Level by their IDs
+//        Professor professor = ProfessorMapper.toEntity( professorService.findById(professorId));
+//        Module module = moduleService.findById(moduleId);
+//        Level level = levelService.findById(levelId);
+//
+//        Map<Student, Map<String, Long>> absenceCounts = absenceService.getAbsenceCountsByProfessorModuleAndLevel(professor, module, level);
+//
+//        long totalCours = 0;
+//        long totalTp = 0;
+//        long totalTd = 0;
+//
+//        for (Map<String, Long> studentAbsence : absenceCounts.values()) {
+//            // Accumulate counts for each session type
+//            totalCours += studentAbsence.getOrDefault("cours", 0L);
+//            totalTp += studentAbsence.getOrDefault("tp", 0L);
+//            totalTd += studentAbsence.getOrDefault("td", 0L);
+//        }
+//        List<Long> totalCounts = new ArrayList<>();
+//
+//        totalCounts.add(totalCours);
+//        totalCounts.add(totalTp);
+//        totalCounts.add(totalTd);
+//
+//        return ResponseEntity.ok(totalCounts);
+//    }
 
     @GetMapping("/absence/details")
     public ResponseEntity<Map<Student, List<StudentAbsenceDTO>>> getAbsenceDetailsOfStudent(

@@ -35,6 +35,17 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
                                                             @Param("module") Module module,
                                                             @Param("level") Level level);
 
+    @Query("SELECT s, ses.sessionType, COUNT(a) " +
+            "FROM Student s " +
+            "JOIN s.level l " +
+            "JOIN Session ses ON ses.level = l " +
+            "JOIN Absence a ON a.student = s AND a.session = ses " +
+            "AND ses.module = :module " +
+            "AND l = :level " +
+            "GROUP BY s, ses.sessionType")
+    List<Object[]> getAbsenceCountByModuleAndLevel(@Param("module") Module module,
+                                                            @Param("level") Level level);
+
     @Query("SELECT ses.sessionType, a.dateAbsence, a.absenceId, a.Justified " +
             "FROM Absence a " +
             "JOIN a.session ses " +

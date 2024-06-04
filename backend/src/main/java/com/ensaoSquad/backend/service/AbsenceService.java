@@ -28,4 +28,6 @@ public interface AbsenceService {
     public Absence findAbsenceById(long absenceId);
 
     public Absence toggleJustified(long absenceId);
+
+    public Map<Student, Map<String, Long>> getAbsenceCountsByModuleAndLevel(Module module, Level level);
 }

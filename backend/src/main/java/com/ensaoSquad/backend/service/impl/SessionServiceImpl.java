@@ -93,7 +93,7 @@ public class SessionServiceImpl implements SessionService {
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn + i * 3).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn + i * 3).getStringCellValue();
                 String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn + i * 3)
-                        .getStringCellValue().split(" ");
+                        .getStringCellValue().split("\\|");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
                 ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
@@ -125,7 +125,7 @@ public class SessionServiceImpl implements SessionService {
             if (!moduleName.isEmpty()) {
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
-                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue().split(" ");
+                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue().split("\\|");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
 

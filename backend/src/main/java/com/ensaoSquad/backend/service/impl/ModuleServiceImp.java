@@ -172,6 +172,9 @@ public class ModuleServiceImp implements ModuleService {
                 //get merged cells
                 String departmentName = getMergedCellValue(sheet, row.getRowNum(), 3);
                 String filiere = getMergedCellValue(sheet, row.getRowNum(), 4);
+                if (filiere.isEmpty()){
+                    continue;
+                }
                 String semestre = getMergedCellValue(sheet, row.getRowNum(), 5);
 
                 //get ordinary cells

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="68137a48-9722-4f69-b7b8-802ae32a4442" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/ensaoSquad/backend/repository/SessionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/ensaoSquad/backend/repository/SessionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/ensaoSquad/backend/service/impl/SessionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/ensaoSquad/backend/service/impl/SessionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/12345.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/123455.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/123457.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/12346.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/23456.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/3466.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/4532.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/4533.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/4534.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/4535.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/students-images/9058.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/encoding_storing.py" beforeDir="false" afterPath="$PROJECT_DIR$/encoding_storing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face_encodings.db" beforeDir="false" afterPath="$PROJECT_DIR$/face_encodings.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/user-views/dashboard/Default/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/user-views/dashboard/Default/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/user-views/sample-page/AbsenceList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/user-views/sample-page/AbsenceList.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2hQP8Lx5JvcLvumhp4dWshKy9w4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Flask server.Flask (checking_faces.py).executor&quot;: &quot;Run&quot;,
+    &quot;Flask server.Flask (encoding_storing.py).executor&quot;: &quot;Run&quot;,
+    &quot;Python.encoding_storing.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.facial_recognition.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/LLLNNN/OneDrive/Desktop/GestAbs/facial_recognition&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="facial_recognition" type="PythonConfigurationType" factoryName="Python">
+      <module name="facial_recognition" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/checking_faces.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
+        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="68137a48-9722-4f69-b7b8-802ae32a4442" name="Changes" comment="" />
+      <created>1717523168329</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717523168329</updated>
+      <workItem from="1717523169378" duration="2495000" />
+      <workItem from="1717541501841" duration="176000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/facial_recognition$facial_recognition.coverage" NAME="facial_recognition Coverage Results" MODIFIED="1717534098274" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/facial_recognition$Flask__encoding_storing_py_.coverage" NAME="Flask (encoding_storing.py) Coverage Results" MODIFIED="1717541632402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/facial_recognition$Flask__checking_faces_py_.coverage" NAME="Flask (checking_faces.py) Coverage Results" MODIFIED="1717533740547" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/facial_recognition$encoding_storing.coverage" NAME="encoding_storing Coverage Results" MODIFIED="1717523312955" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

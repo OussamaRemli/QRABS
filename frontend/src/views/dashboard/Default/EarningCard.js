@@ -238,53 +238,47 @@ const EarningCard = ({ isLoading,name,abr }) => {
                         horizontal: 'right'
                       }}
                     >
-                      <MenuItem onClick={handleImportStudents}>
+                      <MenuItem>
                         {/* <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants */}
                         <input
                           type="file"
                           accept=".xls,.xlsx"
                           onChange={handleStudentFileChange}
-                          style={{ display: 'none' }}
-                          id="Student-upload"
+                          // style={{ display: 'none' }}
+                          style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
-                        <label htmlFor="Student-upload">
-                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
-                            Import Liste Etudiants
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportStudents}>
+                            Importer
                           </Button>
-                        </label>
                       </MenuItem>
                       {/* <MenuItem onClick={handleClose}>
                         <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Emploi Du Temps
                       </MenuItem> */}
-                      <MenuItem onClick={handleImportSessions}>
+                      <MenuItem >
                         {/* <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Liste Etudiants */}
                         <input
                           type="file"
                           accept=".xls,.xlsx"
                           onChange={handleSessionFileChange}
-                          style={{ display: 'none' }}
-                          id="Session-upload"
+                          // style={{ display: 'none' }}
+                          style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
-                        <label htmlFor="Session-upload">
-                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
-                            Import Emploi Du Temps
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportSessions}>
+                            Importer
                           </Button>
-                        </label>
                       </MenuItem>
-                      <MenuItem onClick={handleImportPictures}>
+                      <MenuItem>
                         <input
                           type="file"
                           multiple
                           accept="image/jpeg, image/png, image/gif, image/bmp" // Accepter uniquement les fichiers d'image
                           onChange={handleFileChange}
-                          style={{ display: 'none' }}
-                          id="Picture-upload"
+                          // style={{ display: 'none' }}
+                          style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
-                        <label htmlFor="Picture-upload">
-                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />}>
-                            Import Pictures des Etudiants
+                          <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportPictures}>
+                            Importer
                           </Button>
-                        </label>
                       </MenuItem>
                     </Menu>
                   </Grid>

@@ -10,6 +10,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     List<Professor> findByFirstNameAndLastName(String firstName,String lastName);
     Optional<Professor> findByLastName(String lastName);
     Optional<Professor> findByEmail(String email);
+    Optional<Professor> findByRole(String role);
     List<Professor> findByDepartmentDepartmentName(String departmentName);
     long count();
 

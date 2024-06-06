@@ -19,7 +19,7 @@ import { gridSpacing } from 'store/constant';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const modulesColumns = [
-  { field: 'moduleId', headerName: 'ID', width: 100 },
+  // { field: 'moduleId', headerName: 'ID', width: 100 },
   { field: 'moduleName', headerName: 'Module Name', width: 200 },
   // { field: 'departmentName', headerName: 'Department', width: 200 },
   // { field: 'intituleModule', headerName: 'Intitule Module', width: 200 },
@@ -30,7 +30,7 @@ const modulesColumns = [
 ];
 
 const professorsColumns = [
-  { field: 'professorId', headerName: 'ID', width: 100 },
+  // { field: 'professorId', headerName: 'ID', width: 100 },
   { field: 'firstName', headerName: 'First Name', width: 160 },
   { field: 'lastName', headerName: 'Last Name', width: 160 },
   { field: 'fullName', headerName: 'Full name', width: 200, valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`},

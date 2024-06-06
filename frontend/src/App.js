@@ -1,5 +1,6 @@
 import React, { useState,useEffect  } from 'react';
 import { useSelector } from 'react-redux';
+import './App.css'
 
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider, Button } from '@mui/material';

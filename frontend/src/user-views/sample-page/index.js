@@ -2,13 +2,11 @@ import {Button, ButtonGroup, Grid, IconButton} from '@mui/material';
 import {gridSpacing} from 'store/constant';
 
 import AbsenceList from './AbsenceList';
-import Chart from './PieChart';
 
 import StudentCard from './StudentCard';
 import AbsenceDetails from './AbsenceDetails';
 import {useState} from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MeanAbsence from "./MeanAbsence";
 
 const Index = ({levelId, moduleId}) => {
 
@@ -28,15 +26,7 @@ const Index = ({levelId, moduleId}) => {
                             <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
                         </Grid>
 
-                        <Grid item lg={3} md={6} sm={6} xs={12} style={{marginLeft : '50px' , marginTop : '50px'}}>
-                            <Grid>
-                            <MeanAbsence moduleId={moduleId}/>
-                            </Grid>
-                            <br/>
-                            <Grid>
-                            <Chart />
-                            </Grid>
-                        </Grid>
+                
 
                 </Grid> )}
                 {selector && (  <Grid container spacing={gridSpacing}>

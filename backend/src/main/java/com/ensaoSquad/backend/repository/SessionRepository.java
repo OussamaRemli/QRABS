@@ -39,11 +39,26 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
             "AND :currentTime BETWEEN s.startTime AND s.endTime")
     List<Long> findLevelIdsByProfessorIdAndCurrentTimeAndDay(long professorId, String currentDay, Time currentTime);
 
-    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId " +
-            "AND ((s.sessionDay = :currentDay AND s.startTime > :currentTime) OR " +
-            "(s.sessionDay = :nextDay)) " +
-            "ORDER BY s.sessionDay ASC, s.startTime ASC")
-    List<Session> findNextSessionForProfessor(long professorId, String currentDay, String nextDay, Time currentTime);
+    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId AND s.sessionDay = :currentDay ORDER BY s.startTime ASC")
+    List<Session> findSessionsForToday(long professorId, String currentDay);
+    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId AND s.sessionDay = :currentDay AND s.startTime > :currentTime ORDER BY s.startTime ASC")
+    List<Session> findFutureSessionsForToday(long professorId, String currentDay, LocalTime currentTime);
+    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId AND (s.sessionDay != :currentDay OR (s.sessionDay = :currentDay AND s.startTime > :currentTime)) ORDER BY CASE WHEN s.sessionDay = :#{#daysOrder[0]} THEN 0 WHEN s.sessionDay = :#{#daysOrder[1]} THEN 1 WHEN s.sessionDay = :#{#daysOrder[2]} THEN 2 WHEN s.sessionDay = :#{#daysOrder[3]} THEN 3 WHEN s.sessionDay = :#{#daysOrder[4]} THEN 4 WHEN s.sessionDay = :#{#daysOrder[5]} THEN 5 ELSE 6 END, s.startTime ASC")
+    List<Session> findNextSessionForProfessor(long professorId, List<String> daysOrder, String currentDay, LocalTime currentTime);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Query("SELECT s FROM Session s WHERE s.sessionDay = :currentDay AND :currentTime BETWEEN s.startTime AND s.endTime AND s.professor.professorId= :professorId")
     List<Session> findSessionForCurrentDayAndTimeAndProfessor(String currentDay, Time currentTime,Long professorId);

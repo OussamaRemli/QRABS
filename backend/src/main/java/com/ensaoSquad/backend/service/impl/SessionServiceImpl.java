@@ -2,11 +2,13 @@ package com.ensaoSquad.backend.service.impl;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.ensaoSquad.backend.dto.*;
 import com.ensaoSquad.backend.exception.MultipleFoundException;
@@ -205,20 +207,50 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<Session> getNextSession(long professorId) {
-        long currentTimeMillis = System.currentTimeMillis();
-        Time currentTime = new Time(currentTimeMillis);
+        LocalTime currentTime = LocalTime.now();
         LocalDate currentDate = LocalDate.now();
         String currentDay = currentDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
+        String[] daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         int currentIndex = Arrays.asList(daysOfWeek).indexOf(currentDay);
 
-        int nextIndex = (currentIndex + 1) % daysOfWeek.length;
-        String nextDay = daysOfWeek[nextIndex];
+        // Adjusting days of the week to consider wrap-around at week end
+        List<String> daysOrder = new ArrayList<>(Arrays.asList(daysOfWeek));
+        Collections.rotate(daysOrder, -currentIndex);
 
-        return sessionRepository.findNextSessionForProfessor(professorId, currentDay, nextDay, currentTime);
+        // Find all sessions for the current day
+        List<Session> sessionsToday = sessionRepository.findSessionsForToday(professorId, currentDay);
+        // Filter out the sessions that have already ended
+        List<Session> futureSessionsToday = sessionsToday.stream()
+                .filter(session -> session.getEndTime().toLocalTime().isAfter(currentTime))
+                .collect(Collectors.toList());
+
+        if (!futureSessionsToday.isEmpty()) {
+            // Return future sessions for the current day
+            return futureSessionsToday;
+        } else {
+            // If no future sessions today, find the next session in the upcoming days
+            List<Session> nextSessions = sessionRepository.findNextSessionForProfessor(professorId, daysOrder, currentDay, currentTime);
+            if (nextSessions.isEmpty() && sessionsToday.size() == 1) {
+                // If only one session today and no future sessions, return it
+                return sessionsToday;
+            }
+            return nextSessions;
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override

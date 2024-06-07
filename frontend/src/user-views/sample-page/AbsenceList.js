@@ -18,10 +18,11 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
 
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
-        fetch(`http://localhost:8080/api/absence/absence/count?professorId=17&moduleId=${moduleId}&levelId=${levelId}`)
+        fetch(`http://localhost:8080/api/absence/absence/count?moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {
+                    // Extraction des informations de l'étudiant
                     const studentString = key.match(/\(([^)]+)\)/)[1];
                     const studentFields = studentString.split(', ').reduce((acc, current) => {
                         const [key, value] = current.split('=').map(val => val.trim());
@@ -31,6 +32,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
 
                     const absenceData = data[key];
 
+                    // Fonction pour obtenir le nombre d'absences par type de session
                     const getAbsenceCount = (typeSession) => {
                         if (typeSession === "Total") {
                             return (absenceData.TP || 0) + (absenceData.Cours || 0) + (absenceData.TD || 0);
@@ -50,6 +52,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
                     };
                 });
                 setUsers(updatedUsers);
+
                 // Boucle pour récupérer les images des étudiants
                 updatedUsers.forEach(user => {
                     fetch(`http://localhost:8080/api/import-files/image/${user.Apogee}`)
@@ -90,7 +93,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         },
         {
             field: 'name',
-                headerName: 'Nom',
+            headerName: 'Nom',
             width: 150
         },
         {
@@ -103,7 +106,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
             headerName: '',
             width: 60,
             renderCell: (params) =>
-                <IconButton onClick={() => onButtonClick(params.row.Apogee)}> {/* Modifié */}
+                <IconButton onClick={() => onButtonClick(params.row.Apogee)}>
                     <InfoIcon />
                 </IconButton>,
             sortable: false,

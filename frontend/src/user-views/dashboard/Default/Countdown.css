@@ -1,48 +1,33 @@
-.countdown-holder,
-#countdown {
-    display: inline-block;
-    vertical-align: middle;
-    width: 500px;
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;700&display=swap');
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Raleway', sans-serif;
+    color: #333;
 }
 
-.countdown-row {
-    text-align: justify;
-    font-size: 18px;
-    color: rgba(28, 27, 27, 0.95);
-}
-
-.countdown-row:after {
-    display: inline-block;
-    width: 100%;
-    height: 0;
-    content: '';
-}
-
-.countdown__item {
-    display: inline-block;
-    width: 23%;
+.countdown {
     text-align: center;
-    user-select: none;
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 0.05rem;
+    padding: 10px 20px;
+    border: 2px solid rgba(51, 51, 51, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
 }
 
-.countdown__item_time {
-    position: relative;
-    height: 70px;
-    color: rgba(28, 27, 27, 0.95);
-    font-size: 52px;
-}
-
-.countdown__item_time:after {
-    position: absolute;
-    font-size: 32px;
-    line-height: 55px;
-    content: ":";
-    right: -3px;
-    top: 0;
-    bottom: 0;
-    color: rgba(255, 255, 255, .5);
-}
-
-.countdown__item_time:last-child:after {
-    display: none;
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

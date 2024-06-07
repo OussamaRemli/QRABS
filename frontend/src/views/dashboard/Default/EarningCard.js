@@ -248,7 +248,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
                           style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
                           <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportStudents}>
-                            Importer
+                            Importer Etudiants
                           </Button>
                       </MenuItem>
                       {/* <MenuItem onClick={handleClose}>
@@ -264,7 +264,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
                           style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
                           <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportSessions}>
-                            Importer
+                            Importer Emploi
                           </Button>
                       </MenuItem>
                       <MenuItem>
@@ -277,7 +277,7 @@ const EarningCard = ({ isLoading,name,abr }) => {
                           style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                         />
                           <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} onClick={handleImportPictures}>
-                            Importer
+                            Importer Pictures
                           </Button>
                       </MenuItem>
                     </Menu>

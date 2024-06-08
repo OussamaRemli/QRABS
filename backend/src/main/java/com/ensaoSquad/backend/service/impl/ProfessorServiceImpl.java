@@ -67,17 +67,12 @@ public class ProfessorServiceImpl implements ProfessorService {
                 // Extracting values from columns F, G, H, and I
                 String departmentName = getMergedCellValue(sheet, row.getRowNum(), 5); // Column F (0-indexed)
                 // Check if the department exists
-                // Check if the department exists
                 Optional<Department> departmentOptional = departmentRepository.findByDepartmentName(departmentName);
                 Department department;
                 if (departmentOptional.isPresent()) {
                     department = departmentOptional.get();
                 } else {
-                    // If department doesn't exist, create a new one
-                    department = new Department();
-                    department.setDepartmentName(departmentName);
-                    // You may want to set other properties of the department here if necessary
-                    department = departmentRepository.save(department);
+                    throw new RessourceNotFoundException("Departement: " + departmentName + " n'existe pas.");
                 }
                 String email = row.getCell(8).getStringCellValue(); // Column I (0-indexed)
 

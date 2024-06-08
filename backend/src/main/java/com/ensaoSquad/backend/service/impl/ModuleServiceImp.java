@@ -188,35 +188,35 @@ public class ModuleServiceImp implements ModuleService {
                 // Find or create department
                 Department department = departmentRepository
                         .findByDepartmentName(departmentName)
-                        .orElseGet(() -> {
-                            Department newDepartment = new Department();
-                            newDepartment.setDepartmentName(departmentName);
-                            return departmentRepository.save(newDepartment);
-                        });
+                        .orElseThrow(() -> new RessourceNotFoundException("Le departement " + departmentName + " n'existe pas."));
+
                 module.setDepartment(department);
 
                 //find level
                 List<Level> levels = levelRepository.findBySectorName(filiere);
-                List<String> levelsName = levels.stream().map(level -> level.getLevelName()).toList();
-                String levelName = "";
-                if(semestre.equalsIgnoreCase("s1") ||
-                        semestre.equalsIgnoreCase("s2")){
-                    for(String l:levelsName){
-                        if(l.charAt(l.length()-1) == '3') levelName = l;
-                    }
+
+                String targetLevelSuffix = "";
+
+                if (semestre.equalsIgnoreCase("s1") || semestre.equalsIgnoreCase("s2")) {
+                    targetLevelSuffix = "3";
+                } else if (semestre.equalsIgnoreCase("s3") || semestre.equalsIgnoreCase("s4")) {
+                    targetLevelSuffix = "4";
+                } else if (semestre.equalsIgnoreCase("s5")) {
+                    targetLevelSuffix = "5";
                 }
-                if(semestre.equalsIgnoreCase("s3") ||
-                        semestre.equalsIgnoreCase("s4")){
-                    for(String l:levelsName){
-                        if(l.charAt(l.length()-1) == '4') levelName = l;
-                    }
-                }
-                if(semestre.equalsIgnoreCase("s5")){
-                    for(String l:levelsName){
-                        if(l.charAt(l.length()-1) == '5') levelName = l;
-                    }
-                }
+
+                String finalTargetLevelSuffix = targetLevelSuffix;
+
+                String levelName = levels.stream()
+                        .map(Level::getLevelName)
+                        .filter(name -> name.endsWith(finalTargetLevelSuffix))
+                        .findFirst()
+                        .orElseThrow(() -> new RessourceNotFoundException("No level found for sector " + filiere + " and semester " + semestre));
+
                 Level level = levelRepository.findByLevelName(levelName);
+                if (level == null) {
+                    throw new RessourceNotFoundException("Level with name " + levelName + " does not exist.");
+                }
 
                 module.setLevel(level);
                 // Save module entity

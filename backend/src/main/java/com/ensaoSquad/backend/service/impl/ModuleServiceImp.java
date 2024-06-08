@@ -268,25 +268,16 @@ public class ModuleServiceImp implements ModuleService {
                     String cellValueJ = getCellValueAsString(cellJ);
 
                     Level level = levelRepository.findByLevelName(cellValueJ);
-                    if(level == null){
-                        throw new RessourceNotFoundException("level: " + cellValueJ + "n'existe pas");
-                    }
 
                     Module module = moduleRepository.findByModuleNameAndLevel(cellValueB,level);
-                    if(module == null){
-                        throw new RessourceNotFoundException("module: " + cellValueB + "n'existe pas");
-                    }
-                    else {
+                    if(module != null){
                         System.out.println(module.getModuleName());
                         Optional<Professor> professorOptional = professorRepository.findByEmail(cellValueD);
                         if(professorOptional.isPresent()){
                             Professor professor = professorOptional.get();
                             module.setProfessor(professor);
                             moduleRepository.save(module);
-                        }else {
-                            throw new RessourceNotFoundException("Prof: " + cellValueD + "n'existe pas");
                         }
-
                     }
 
                 }

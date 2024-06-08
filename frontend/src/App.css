@@ -1,0 +1,17 @@
+input[type=file] {
+    color: #222245;
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #222245;
+    max-width: 250px;
+}
+input[type=file]::file-selector-button {
+    margin-right: 8px;
+    border: none;
+    background: #2196f3;
+    padding: 8px 12px;
+    color: #fff;
+    cursor: pointer;
+    border-radius:12px;
+}
+

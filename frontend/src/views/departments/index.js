@@ -267,6 +267,7 @@ const Departement = ({name,abr}) => {
       axios.post('http://localhost:8080/api/modules/upload', formData)
         .then((response) => {
           console.log('modules uploaded:');
+          setSelectedFile(null);
           setSnackbarSeverity('success');
           setSnackbarMessage('Modules uploaded successfully');
           setOpenSnackbar(true);
@@ -288,6 +289,7 @@ const Departement = ({name,abr}) => {
       axios.post('http://localhost:8080/api/professors/upload', formData)
         .then((response) => {
           console.log('professors uploaded!');
+          setSelectedFile(null);
           setSnackbarSeverity('success');
           setSnackbarMessage('Professors uploaded successfully');
           setOpenSnackbar(true);
@@ -309,6 +311,7 @@ const Departement = ({name,abr}) => {
       axios.post('http://localhost:8080/api/modules/uploadRespo', formData)
         .then((response) => {
           console.log('professors uploaded!');
+          setSelectedFile(null);
           setSnackbarSeverity('success');
           setSnackbarMessage('affectation uploaded successfully');
           setOpenSnackbar(true);
@@ -421,18 +424,13 @@ const Departement = ({name,abr}) => {
                                 <input
                                   type="file"
                                   accept=".xls,.xlsx"
-                                  onChange={(e) => {
-                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
-                                    handleImportModules(); // Appeler la fonction handleImportModuless lorsqu'un fichier est sélectionné
-                                  }}
-                                  style={{ display: 'none' }}
-                                  id="file-upload"
+                                  onChange={handleFileChange}
+                                  // style={{ display: 'none' }}
+                                  style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                                 />
-                                <label htmlFor="file-upload" >
-                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
-                                    Import Liste Des Modules
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} onClick={handleImportModules}>
+                                    Importer
                                   </Button>
-                                </label>
                             </Grid>
                             <Grid item xs={12} lg={12}>
                               <Box
@@ -536,18 +534,13 @@ const Departement = ({name,abr}) => {
                                 <input
                                   type="file"
                                   accept=".xls,.xlsx"
-                                  onChange={(e) => {
-                                    handleImportProfessors(); // Appeler la fonction handleImportProfessors lorsqu'un fichier est sélectionné
-                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
-                                  }}
-                                  style={{ display: 'none' }}
-                                  id="file-upload"
+                                  onChange={handleFileChange}
+                                  // style={{ display: 'none' }}
+                                  style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px', borderRadius:'12px'}}
                                 />
-                                <label htmlFor="file-upload" >
-                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
-                                    Import Liste Des Professeurs
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} onClick={handleImportProfessors}>
+                                    Importer
                                   </Button>
-                                </label>
                               </Grid>
                               <Grid item xs={12} lg={12}>
                                 <Box
@@ -626,18 +619,14 @@ const Departement = ({name,abr}) => {
                                 <input
                                   type="file"
                                   accept=".xls,.xlsx"
-                                  onChange={(e) => {
-                                    handleImportAffectation(); // Appeler la fonction handleImportProfessors lorsqu'un fichier est sélectionné
-                                    handleFileChange(e); // Appeler la fonction handleFileChange existante si nécessaire
-                                  }}
-                                  style={{ display: 'none' }}
-                                  id="file-upload"
+                                  onChange={handleFileChange}
+                                  class="custom-file-input"
+                                  // style={{ display: 'none' }}
+                                  style={{border:`1px solid ${theme.palette.primary.main}`, padding:'8px 12px', borderRadius:'12px'}}
                                 />
-                                <label htmlFor="file-upload" >
-                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} >
-                                    Import Affectation
+                                  <Button component="span" startIcon={<GetAppTwoToneIcon sx={{ mr: 1.75 }} />} sx={{ color: theme.palette.grey[500] }} onClick={handleImportAffectation} >
+                                    Importer
                                   </Button>
-                                </label>
                               </Grid>
                             </Grid>
                             </Box>

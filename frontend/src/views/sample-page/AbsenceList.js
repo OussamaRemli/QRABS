@@ -13,7 +13,7 @@ function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
-        fetch(`http://localhost:8080/api/absence/absence/count?professorId=${professorId}&moduleId=${moduleId}&levelId=${levelId}`)
+        fetch(`http://localhost:8080/api/absence/absence/count?moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {

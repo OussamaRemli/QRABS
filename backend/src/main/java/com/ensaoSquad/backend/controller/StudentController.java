@@ -69,4 +69,16 @@ public class StudentController {
     public Student getStudentByApogee(@PathVariable Long apogee){
         return studentService.findByApogee(apogee);
     }
+    /*
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
+        moduleService.deleteModule(id);
+        return ResponseEntity.noContent().build();
+    }
+     */
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<Void> deleteAllStudents(){
+        studentService.deleteAllStudent();
+        return ResponseEntity.noContent().build();
+    }
 }

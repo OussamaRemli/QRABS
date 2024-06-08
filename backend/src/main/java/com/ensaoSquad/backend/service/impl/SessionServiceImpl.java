@@ -18,6 +18,7 @@ import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.model.Professor;
+import com.ensaoSquad.backend.repository.AbsenceRepository;
 import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.service.*;
 import jakarta.transaction.Transactional;
@@ -43,8 +44,8 @@ public class SessionServiceImpl implements SessionService {
     private SessionRepository sessionRepository;
     @Autowired
     private LevelRepository levelRepository;
-
-
+    @Autowired
+    private AbsenceRepository absenceRepository;
     private final LevelService levelService;
     private ModuleService moduleService;
     @Autowired
@@ -256,6 +257,12 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<Session> findAllSessionForProfessor(long professorId) {
         return sessionRepository.findAllSessionForProfessor(professorId);
+    }
+
+    @Override
+    public void deleteAllsession() {
+        absenceRepository.deleteAll();
+        sessionRepository.deleteAll();
     }
 
     @Override

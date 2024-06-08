@@ -24,4 +24,6 @@ public interface StudentService {
     List<List<StudentDTO>> getStudentsTaughtByProfessorInTimeframe(
             String professorEmail, String sessionDay, Time startTime, Time endTime
     );
+    
+    void deleteAllStudent();
 }

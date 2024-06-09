@@ -6,11 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import IconButton from "@mui/material/IconButton";
 import InfoIcon from '@mui/icons-material/Info';
 
-function AbsenceList({ levelId, moduleId, onButtonClick }) {
+function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     const [users, setUsers] = useState([]);
     const [TypeSession, setTypeSession] = useState("Total");
-
     const buttonStyle = (sessionType) => ({
         backgroundColor: TypeSession === sessionType ? '#1976d2' : '',
         color: TypeSession === sessionType ? 'white' : '',
@@ -22,7 +21,6 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {
-                    // Extraction des informations de l'étudiant
                     const studentString = key.match(/\(([^)]+)\)/)[1];
                     const studentFields = studentString.split(', ').reduce((acc, current) => {
                         const [key, value] = current.split('=').map(val => val.trim());
@@ -32,7 +30,6 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
 
                     const absenceData = data[key];
 
-                    // Fonction pour obtenir le nombre d'absences par type de session
                     const getAbsenceCount = (typeSession) => {
                         if (typeSession === "Total") {
                             return (absenceData.TP || 0) + (absenceData.Cours || 0) + (absenceData.TD || 0);
@@ -52,7 +49,6 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
                     };
                 });
                 setUsers(updatedUsers);
-
                 // Boucle pour récupérer les images des étudiants
                 updatedUsers.forEach(user => {
                     fetch(`http://localhost:8080/api/import-files/image/${user.Apogee}`)
@@ -81,7 +77,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
             width: 100,
             renderCell: (params) =>
                 <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                    <Avatar sx={{ width: 60, height: 60}} src={params.row.photoURL} />
+                    <Avatar src={params.row.photoURL} />
                 </div>,
             sortable: false,
             filterable: false,
@@ -89,12 +85,12 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         {
             field: 'Apogee',
             headerName: 'Apogee',
-            width: 80
+            width: 100
         },
         {
             field: 'name',
-            headerName: 'Nom',
-            width: 150
+            headerName: 'Name',
+            width: 170
         },
         {
             field: 'Nombredabsence',
@@ -104,9 +100,9 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
         {
             field: 'ispresent',
             headerName: '',
-            width: 60,
+            width: 80,
             renderCell: (params) =>
-                <IconButton onClick={() => onButtonClick(params.row.Apogee)}>
+                <IconButton onClick={() => onButtonClick(params.row.Apogee)}> {/* Modifié */}
                     <InfoIcon />
                 </IconButton>,
             sortable: false,
@@ -115,8 +111,8 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
     ];
 
     return (
-        <Grid container spacing={2}>
-            <Grid item>
+        <Grid container spacing={2} lg={12} justifyContent={'center'}>
+         <Grid item>
                 <ButtonGroup variant="outlined" aria-label="Basic button group">
                     <Button
                         style={buttonStyle('Total')}
@@ -144,7 +140,7 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
                     </Button>
                 </ButtonGroup>
             </Grid>
-            <Grid item>
+            <Grid item >
                 <Box
                     sx={{
                         height: 700,
@@ -157,7 +153,6 @@ function AbsenceList({ levelId, moduleId, onButtonClick }) {
                         getRowId={(row) => row._id}
                         rowsPerPageOptions={[5, 10, 20]}
                         pageSize={20}
-                        rowHeight={70}
                         getRowSpacing={(params) => ({
                             top: params.isFirstVisible ? 0 : 5,
                             bottom: params.isLastVisible ? 0 : 5,

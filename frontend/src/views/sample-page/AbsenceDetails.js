@@ -31,7 +31,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
                 const studentData = response.data[Object.keys(response.data)[0]];
                 const rowData = studentData.map(item => ({
                     Id: item.absenceId,
-                    Date: item.absenceDate,
+                    Date: new Date(item.absenceDate).toLocaleDateString('en-CA'),
                     Seance: item.sessionType,
                     Justifie: item.justified ? 'Oui' : 'Non',
                 }));

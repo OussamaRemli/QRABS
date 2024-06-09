@@ -10,6 +10,10 @@ function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     const [users, setUsers] = useState([]);
     const [TypeSession, setTypeSession] = useState("Total");
+    const buttonStyle = (sessionType) => ({
+        backgroundColor: TypeSession === sessionType ? '#1976d2' : '',
+        color: TypeSession === sessionType ? 'white' : '',
+    });
 
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
@@ -108,12 +112,32 @@ function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     return (
         <Grid container spacing={2} lg={12} justifyContent={'center'}>
-            <Grid item lg={12} textAlign="center">
+         <Grid item>
                 <ButtonGroup variant="outlined" aria-label="Basic button group">
-                    <Button onClick={() => setTypeSession("Total")}>Total</Button>
-                    <Button onClick={() => setTypeSession("Cours")}>Cours</Button>
-                    <Button onClick={() => setTypeSession("TD")}>TD</Button>
-                    <Button onClick={() => setTypeSession("TP")}>TP</Button>
+                    <Button
+                        style={buttonStyle('Total')}
+                        onClick={() => setTypeSession('Total')}
+                    >
+                        Total
+                    </Button>
+                    <Button
+                        style={buttonStyle('Cours')}
+                        onClick={() => setTypeSession('Cours')}
+                    >
+                        Cours
+                    </Button>
+                    <Button
+                        style={buttonStyle('TD')}
+                        onClick={() => setTypeSession('TD')}
+                    >
+                        TD
+                    </Button>
+                    <Button
+                        style={buttonStyle('TP')}
+                        onClick={() => setTypeSession('TP')}
+                    >
+                        TP
+                    </Button>
                 </ButtonGroup>
             </Grid>
             <Grid item >

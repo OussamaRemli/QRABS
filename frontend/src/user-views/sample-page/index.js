@@ -18,17 +18,17 @@ const Index = ({levelId, moduleId}) => {
     };
 
     return (
-        <Grid container spacing={gridSpacing}>
+
+    
+        <Grid container spacing={gridSpacing} style={{ marginTop: '5px', marginBottom: '20px' }}>
             <Grid item xs={12}>
-                {!selector && ( <Grid container spacing={gridSpacing}>
-
-                        <Grid item lg={7} md={10} sm={6} xs={12}>
-                            <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
-                        </Grid>
-
-                
-
-                </Grid> )}
+            {!selector && (
+                <Grid container spacing={gridSpacing} justifyContent="center">
+                    <Grid item lg={7} md={10} sm={6} xs={12}>
+                        <AbsenceList levelId={levelId} moduleId={moduleId} onButtonClick={handleButtonClick} />
+                    </Grid>
+                </Grid>
+            )}
                 {selector && (  <Grid container spacing={gridSpacing}>
 
                         <>

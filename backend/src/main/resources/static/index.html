@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Your Apogee</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
             display: flex;
@@ -12,58 +13,132 @@
             height: 100vh;
             margin: 0;
             background-color: #f6f6f6;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
-        .form-container {
-            width: 300px;
+        .container {
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
         }
 
+        .logo {
+            margin-bottom: 1px;
+            max-width: 150px;
+            height: auto;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
         .form__field {
-            width: 100%;
-            padding: 10px;
+            padding: 15px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 16px;
         }
 
         .form-submit-btn {
-            width: 100%;
-            padding: 10px;
+            padding: 15px;
             border: none;
             border-radius: 4px;
-            background-color: #5C6BC0;
+            background-color: #4CAF50;
             color: #fff;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
         .form-submit-btn:hover {
-            background-color: #7986CB;
+            background-color: #66BB6A;
         }
 
-        .message {
-            color: #4CAF50; /* Change this to #F44336 for error messages */
-            margin-top: 20px;
+        .alert {
+            padding: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            max-width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(-20px);
+            opacity: 0;
+            position: relative;
         }
+
+        .alert-show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+
     </style>
 </head>
 <body>
-<div class="form-container">
-    <h2>Enter Your Apogee</h2>
-    <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form">
-        <div class="form-group">
-            <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">
-        </div>
+<div class="container">
+    <img src="./GestAbsss.png" alt="Your Logo" class="logo">
+
+    <div id="alert" class="alert"></div>
+
+    <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form" style="display: none;">
+        <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">
         <button type="submit" class="form-submit-btn">Submit</button>
     </form>
-    <div id="message" class="message"></div>
 </div>
 
 <script>
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+
+    function showAlert(message, type) {
+        var alertBox = document.getElementById('alert');
+        alertBox.className = 'alert alert-show alert-' + type;
+        alertBox.innerText = message;
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 3000); // Afficher l'alerte pendant 3 secondes
+    }
+
     function submitForm() {
         var Apogee = encodeURIComponent(document.getElementById('Apogee').value);
         var urlParams = new URLSearchParams(window.location.search);
@@ -71,13 +146,11 @@
         var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
         var group = urlParams.has('group') ? urlParams.get('group') : '';
 
-        var form = document.getElementById('studentForm');
-
         var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici
 
-        form.action = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
+        var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
 
-        fetch(form.action, {
+        fetch(formAction, {
             method: 'POST'
         })
             .then(response => {
@@ -89,15 +162,163 @@
                 return response.text();
             })
             .then(data => {
-                // Afficher le message de succès ou effectuer d'autres actions si nécessaire
-                console.log(data);
+                showAlert("Presence marked successfully", "success");
+                setCookie("Apogee", Apogee, 7); // Stocker l'Apogee dans les cookies pour 7 jours
+                setTimeout(() => {
+                    location.reload(); // Recharger la page après 3 secondes
+                }, 3000);
             })
             .catch(error => {
-                // Afficher le message d'erreur à l'utilisateur
-                document.getElementById('message').innerText = error.message;
+                showAlert("Error: " + error.message, "error");
             });
     }
-</script>
 
+    function submitFormIfApogeeExists() {
+        var Apogee = getCookie("Apogee");
+        if (Apogee) {
+            var urlParams = new URLSearchParams(window.location.search);
+            var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
+            var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
+            var group = urlParams.has('group') ? urlParams.get('group') : '';
+
+            var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici
+
+            var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
+
+            fetch(formAction, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(errorText => {
+                            throw new Error(errorText);
+                        });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    showAlert("Presence marked successfully", "success");
+                    setTimeout(() => {
+                        location.reload(); // Recharger la page après 3 secondes
+                    }, 3000);
+                })
+                .catch(error => {
+                    showAlert("Error: " + error.message, "error");
+                });
+        } else {
+            // Afficher le formulaire si l'Apogee n'existe pas dans les cookies
+            document.getElementById("studentForm").style.display = "flex";
+        }
+    }
+
+    // Soumet automatiquement le formulaire si l'Apogee existe dans les cookies
+    submitFormIfApogeeExists();
+</script>
 </body>
 </html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Enter Your Apogee</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            margin: 0;-->
+<!--            background-color: #f6f6f6;-->
+<!--            font-family: Arial, sans-serif;-->
+<!--        }-->
+
+<!--        .form-container {-->
+<!--            width: 300px;-->
+<!--            padding: 20px;-->
+<!--            background-color: #fff;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);-->
+<!--        }-->
+
+<!--        .form__field {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            margin-bottom: 10px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 4px;-->
+<!--        }-->
+
+<!--        .form-submit-btn {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: none;-->
+<!--            border-radius: 4px;-->
+<!--            background-color: #5C6BC0;-->
+<!--            color: #fff;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .form-submit-btn:hover {-->
+<!--            background-color: #7986CB;-->
+<!--        }-->
+
+<!--        .message {-->
+<!--            color: #4CAF50; /* Change this to #F44336 for error messages */-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="form-container">-->
+<!--    <h2>Enter Your Apogee</h2>-->
+<!--    <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form">-->
+<!--        <div class="form-group">-->
+<!--            <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">-->
+<!--        </div>-->
+<!--        <button type="submit" class="form-submit-btn">Submit</button>-->
+<!--    </form>-->
+<!--    <div id="message" class="message"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function submitForm() {-->
+<!--        var Apogee = encodeURIComponent(document.getElementById('Apogee').value);-->
+<!--        var urlParams = new URLSearchParams(window.location.search);-->
+<!--        var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';-->
+<!--        var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';-->
+<!--        var group = urlParams.has('group') ? urlParams.get('group') : '';-->
+
+<!--        var form = document.getElementById('studentForm');-->
+
+<!--        var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici-->
+
+<!--        form.action = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;-->
+
+<!--        fetch(form.action, {-->
+<!--            method: 'POST'-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    return response.text().then(errorText => {-->
+<!--                        throw new Error(errorText);-->
+<!--                    });-->
+<!--                }-->
+<!--                return response.text();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                // Afficher le message de succès ou effectuer d'autres actions si nécessaire-->
+<!--                console.log(data);-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                // Afficher le message d'erreur à l'utilisateur-->
+<!--                document.getElementById('message').innerText = error.message;-->
+<!--            });-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->

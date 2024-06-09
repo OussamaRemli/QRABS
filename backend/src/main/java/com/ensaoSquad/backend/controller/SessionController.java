@@ -65,6 +65,18 @@ public class SessionController {
             return sessions;
         }
     }
+    /*
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
+        moduleService.deleteModule(id);
+        return ResponseEntity.noContent().build();
+    }
+     */
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<Void> deleteAllSession(){
+        sessionService.deleteAllsession();
+        return ResponseEntity.noContent().build();
+    }
 
 
 

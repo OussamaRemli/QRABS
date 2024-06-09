@@ -8,10 +8,7 @@ import com.ensaoSquad.backend.model.Session;
 import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.StudentMapper;
-import com.ensaoSquad.backend.repository.LevelRepository;
-import com.ensaoSquad.backend.repository.ProfessorRepository;
-import com.ensaoSquad.backend.repository.SessionRepository;
-import com.ensaoSquad.backend.repository.StudentRepository;
+import com.ensaoSquad.backend.repository.*;
 import com.ensaoSquad.backend.service.StudentService;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,8 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private ProfessorRepository professorRepository;
+    @Autowired
+    private AbsenceRepository absenceRepository;
 
     @Override
     @Transactional
@@ -146,6 +145,12 @@ public class StudentServiceImpl implements StudentService {
                         professor, sessionDay, startTime, endTime);
         List<List<StudentDTO>> students = sessions.stream().map(s -> getStudentsByLevelName(s.getLevel().getLevelName())).toList();
         return students;
+    }
+
+    @Override
+    public void deleteAllStudent() {
+        absenceRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
 }

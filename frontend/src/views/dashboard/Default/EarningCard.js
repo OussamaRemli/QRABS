@@ -11,15 +11,8 @@ import { Avatar, Box, Grid, Menu, MenuItem, Typography,Button,Snackbar,Alert  } 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
-
-// assets
-import EarningIcon from 'assets/images/icons/earning.svg';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: '#0B6E4F',
@@ -107,10 +100,10 @@ const EarningCard = ({ isLoading,name,abr }) => {
         })
         .catch((error) => {
           if (error.response) {
-            // Error response from the server
-            const errorMessage = error.response.data.message;
-            console.error('Server error message:', errorMessage);
-            setSnackbarMessage(errorMessage); 
+            const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
+          setSnackbarSeverity('error');
+          setOpenSnackbar(true); 
           } else {
             // Error not from the server
             setSnackbarMessage('Error uploading students'); 
@@ -135,9 +128,9 @@ const EarningCard = ({ isLoading,name,abr }) => {
           handleClose();
         })
         .catch((error) => {
-          console.error('Error uploading sessions:', error);
+          const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
           setSnackbarSeverity('error');
-          setSnackbarMessage('Error uploading sessions');
           setOpenSnackbar(true);
         });
     }
@@ -159,9 +152,9 @@ const EarningCard = ({ isLoading,name,abr }) => {
           handleClose();
         })
         .catch((error) => {
-          console.error('Error uploading images:', error);
-          setSnackbarSeverity('success');
-          setSnackbarMessage('Images uploaded successfully');
+          const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
+          setSnackbarSeverity('error');
           setOpenSnackbar(true);
           handleClose();
         });

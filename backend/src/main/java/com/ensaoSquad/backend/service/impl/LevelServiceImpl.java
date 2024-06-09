@@ -63,8 +63,8 @@ public class LevelServiceImpl implements LevelService {
     public List<LevelDTO> saveSectorData(String sectorAbbreviation) {
         List<LevelDTO> levelDTOS = new ArrayList<>();
 
-        int start = sectorAbbreviation.equals("CP") ? 1 : 3;
-        int end = sectorAbbreviation.equals("CP") ? 2 : 5;
+        int start = sectorAbbreviation.equals("STPI") ? 1 : 3;
+        int end = sectorAbbreviation.equals("STPI") ? 2 : 5;
 
         for (int i = start; i <= end; i++) {
             Level entity = new Level();

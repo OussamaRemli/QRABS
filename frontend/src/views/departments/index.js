@@ -98,7 +98,6 @@ const Departement = ({name,abr}) => {
   const fetchModulesByDepartment = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/api/modules/department/${name}`);
-      console.log(response.data)
       const formattedModules = response.data.map(module => ({
         moduleId: module.moduleId,
         moduleName: module.moduleName,
@@ -273,9 +272,9 @@ const Departement = ({name,abr}) => {
           setOpenSnackbar(true);
         })
         .catch((error) => {
-          console.error('Error uploading modules:', error);
+          const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
           setSnackbarSeverity('error');
-          setSnackbarMessage('Error uploading modules');
           setOpenSnackbar(true);
         });
     }
@@ -295,9 +294,9 @@ const Departement = ({name,abr}) => {
           setOpenSnackbar(true);
         })
         .catch((error) => {
-          console.error('Error uploading professors:', error);
+          const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
           setSnackbarSeverity('error');
-          setSnackbarMessage('Error uploading professors');
           setOpenSnackbar(true);
         });
     }
@@ -317,9 +316,9 @@ const Departement = ({name,abr}) => {
           setOpenSnackbar(true);
         })
         .catch((error) => {
-          console.error('Error uploading Affectation:', error);
+          const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+          setSnackbarMessage(errorMessage);
           setSnackbarSeverity('error');
-          setSnackbarMessage('Error uploading Affectation');
           setOpenSnackbar(true);
         });
     }

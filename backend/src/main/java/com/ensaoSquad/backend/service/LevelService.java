@@ -15,5 +15,8 @@ public interface LevelService {
     List<LevelDTO> getCurrentLevel(Long id);
 
     Level findById(Long levelId);
+    public boolean levelHasStudents(String levelName);
+    public boolean levelHasSchedule(String levelName) ;
+    public Long getLevelIdByName(String levelName);
 
-}
+    }

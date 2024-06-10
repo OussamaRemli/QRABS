@@ -70,6 +70,9 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     Long countSessionsByModule(@Param("moduleId") Long moduleId);
 
 
+    List<Session> findByLevel_LevelId(Long levelId);
+
+
     List<Session> findByModule(Module module);
 
     List<Session> findByProfessorProfessorId(Long professorId);

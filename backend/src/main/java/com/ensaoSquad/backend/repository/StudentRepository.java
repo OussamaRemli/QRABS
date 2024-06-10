@@ -36,5 +36,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Long countStudentsByLevel(Level level);
 
 
+    List<Student> findByLevel_LevelId(Long levelId);
+
 
 }

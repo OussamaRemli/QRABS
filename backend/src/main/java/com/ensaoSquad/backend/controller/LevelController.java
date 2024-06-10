@@ -46,4 +46,16 @@ public class LevelController {
     public List<LevelDTO> getCurrentLevel(@PathVariable Long id) {
         return levelService.getCurrentLevel(id);
     }
+
+    @GetMapping("/has-schedule")
+    public ResponseEntity<Boolean> checkLevelSchedule(@RequestParam String levelName) {
+        boolean hasSchedule = levelService.levelHasSchedule(levelName);
+        return ResponseEntity.ok(hasSchedule);
+    }
+
+    @GetMapping("/has-students")
+    public ResponseEntity<Boolean> checkLevelStudents(@RequestParam String levelName) {
+        boolean hasStudents = levelService.levelHasStudents(levelName);
+        return ResponseEntity.ok(hasStudents);
+    }
 }

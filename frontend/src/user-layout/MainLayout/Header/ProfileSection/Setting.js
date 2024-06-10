@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Select, MenuItem, TextField, Button, Box, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
 const SettingsPage = () => {
     const [selectedSession, setSelectedSession] = useState('');
@@ -242,6 +243,7 @@ const SettingsPage = () => {
                     onChange={handleConfirmPasswordChange}
                     fullWidth margin="normal"
                 />
+                <EarningCard abr={'GINF4'}/>
             </Box>
             <Box mb={3}>
                 <Button variant="contained" color="primary" onClick={handlePasswordUpdate}>

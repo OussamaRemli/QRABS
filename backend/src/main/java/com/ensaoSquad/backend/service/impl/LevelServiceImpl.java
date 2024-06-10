@@ -4,9 +4,13 @@ import com.ensaoSquad.backend.dto.LevelDTO;
 import com.ensaoSquad.backend.mapper.LevelMapper;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Session;
+import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.repository.LevelRepository;
+import com.ensaoSquad.backend.repository.SessionRepository;
+import com.ensaoSquad.backend.repository.StudentRepository;
 import com.ensaoSquad.backend.service.LevelService;
 import com.ensaoSquad.backend.service.SessionService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +31,14 @@ public class LevelServiceImpl implements LevelService {
     private LevelRepository levelRepository;
 
     private SessionService sessionService;
+
+    @Autowired
+    private SessionRepository sessionRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+
 
     @Autowired
     private  void  setSessionService(@Lazy SessionService sessionService) {
@@ -96,5 +109,34 @@ public class LevelServiceImpl implements LevelService {
         return levelRepository.findByLevelId(levelId);
     }
 
+
+    // Obtenez le levelId à partir du levelName
+    public Long getLevelIdByName(String levelName) {
+        Level level = levelRepository.findByLevelName(levelName);
+        if (level != null) {
+            return level.getLevelId();
+        } else {
+            throw new EntityNotFoundException("Niveau non trouvé avec le nom : " + levelName);
+        }
+    }
+
+    // Vérifie si le niveau a une emploi du temps
+    public boolean levelHasSchedule(String levelName) {
+        Level level = levelRepository.findByLevelName(levelName);
+        if (level != null) {
+            List<Session> sessions = sessionRepository.findByLevel_LevelId(level.getLevelId());
+            return !sessions.isEmpty();
+        }
+        return false;
+    }
+
+    public boolean levelHasStudents(String levelName) {
+        Level level = levelRepository.findByLevelName(levelName);
+        if (level != null) {
+            List<Student> students = studentRepository.findByLevel_LevelId(level.getLevelId());
+            return !students.isEmpty();
+        }
+        return false;
+    }
 
 }

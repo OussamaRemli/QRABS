@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter Your Apogee</title>
+    <title>QRabs</title>
+    <link rel="icon" href="./icon.png" />
+    <link rel="icon" type="image/x-icon" href="./icon.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
@@ -27,7 +29,7 @@
         }
 
         .logo {
-            margin-bottom: 1px;
+            margin-bottom: 10px;
             max-width: 150px;
             height: auto;
         }
@@ -92,7 +94,46 @@
             border-color: #f5c6cb;
         }
 
+        .snackbar {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 300px;
+            background-color: #333;
+            color: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+        }
 
+        .snackbar-show {
+            display: block;
+            opacity: 1;
+        }
+
+        .snackbar button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .snackbar-confirm {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .snackbar-cancel {
+            background-color: #f44336;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +146,12 @@
         <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">
         <button type="submit" class="form-submit-btn">Submit</button>
     </form>
+</div>
+
+<div id="snackbar" class="snackbar">
+    <div id="snackbar-content"></div>
+    <button class="snackbar-confirm" onclick="confirmPresence()">Confirm</button>
+    <button class="snackbar-cancel" onclick="cancelSnackbar()">Cancel</button>
 </div>
 
 <script>
@@ -136,7 +183,21 @@
         alertBox.style.display = 'block';
         setTimeout(() => {
             alertBox.style.display = 'none';
-        }, 3000); // Afficher l'alerte pendant 3 secondes
+        }, 10000);
+    }
+
+    function showSnackbar(content) {
+        var snackbar = document.getElementById('snackbar');
+        var snackbarContent = document.getElementById('snackbar-content');
+        snackbarContent.innerHTML = content;
+        snackbar.classList.add('snackbar-show');
+        snackbar.style.transform = 'translate(-50%, -50%)';
+    }
+
+    function hideSnackbar() {
+        var snackbar = document.getElementById('snackbar');
+        snackbar.classList.remove('snackbar-show');
+        snackbar.style.transform = 'translate(-50%, -50%)';
     }
 
     function submitForm() {
@@ -146,9 +207,38 @@
         var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
         var group = urlParams.has('group') ? urlParams.get('group') : '';
 
-        var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici
+        fetch(`http://192.168.1.109:8080/api/absence/student/${Apogee}`)
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        throw new Error(errorText);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                var content = `
+                    <p>Name: ${data.firstName} ${data.lastName}</p>
+                    <p>Email: ${data.email}</p>
+                    <p>Level: ${data.level.levelName}</p>
+                `;
+                showSnackbar(content);
+            })
+            .catch(error => {
+                showAlert("Error: " + error.message, "error");
+            });
+    }
 
-        var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
+    function confirmPresence() {
+        var Apogee = encodeURIComponent(document.getElementById('Apogee').value || getCookie("Apogee"));
+        var urlParams = new URLSearchParams(window.location.search);
+        var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
+        var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
+        var group = urlParams.has('group') ? urlParams.get('group') : '';
+
+        var ip = ''; // Add your logic to get the IP address here
+
+        var formAction = `http://192.168.1.109:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&ip=${ip}`;
 
         fetch(formAction, {
             method: 'POST'
@@ -163,60 +253,250 @@
             })
             .then(data => {
                 showAlert("Presence marked successfully", "success");
-                setCookie("Apogee", Apogee, 7); // Stocker l'Apogee dans les cookies pour 7 jours
-                setTimeout(() => {
-                    location.reload(); // Recharger la page après 3 secondes
-                }, 3000);
+                setCookie("Apogee", Apogee, 7); // Store Apogee in cookies for 7 days
+                hideSnackbar();
+                document.getElementById("studentForm").style.display = "none"; // Hide the form
             })
             .catch(error => {
                 showAlert("Error: " + error.message, "error");
             });
     }
 
+    function cancelSnackbar() {
+        hideSnackbar();
+    }
+
     function submitFormIfApogeeExists() {
         var Apogee = getCookie("Apogee");
         if (Apogee) {
-            var urlParams = new URLSearchParams(window.location.search);
-            var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
-            var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
-            var group = urlParams.has('group') ? urlParams.get('group') : '';
-
-            var ip = ''; // Ajoutez votre logique pour obtenir l'adresse IP ici
-
-            var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;
-
-            fetch(formAction, {
-                method: 'POST'
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(errorText => {
-                            throw new Error(errorText);
-                        });
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    showAlert("Presence marked successfully", "success");
-                    setTimeout(() => {
-                        location.reload(); // Recharger la page après 3 secondes
-                    }, 3000);
-                })
-                .catch(error => {
-                    showAlert("Error: " + error.message, "error");
-                });
+            confirmPresence(); // Automatically mark presence if Apogee exists in cookies
         } else {
-            // Afficher le formulaire si l'Apogee n'existe pas dans les cookies
-            document.getElementById("studentForm").style.display = "flex";
+            document.getElementById("studentForm").style.display = "flex"; // Show the form
         }
     }
 
-    // Soumet automatiquement le formulaire si l'Apogee existe dans les cookies
+    // Automatically submit the form if Apogee exists in cookies
     submitFormIfApogeeExists();
 </script>
 </body>
 </html>
 
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>QRabs</title>-->
+<!--    <link rel="icon" href="./icon.png" />-->
+<!--    <link rel="icon" type="image/x-icon" href="./icon.png">-->
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">-->
+<!--    <style>-->
+<!--        body {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            height: 100vh;-->
+<!--            margin: 0;-->
+<!--            background-color: #f6f6f6;-->
+<!--            font-family: 'Roboto', sans-serif;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            text-align: center;-->
+<!--            width: 80%;-->
+<!--            max-width: 400px;-->
+<!--            padding: 20px;-->
+<!--            background-color: #fff;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);-->
+<!--        }-->
+
+<!--        .logo {-->
+<!--            margin-bottom: 10px; /* Reduced margin */-->
+<!--            max-width: 150px;-->
+<!--            height: auto;-->
+<!--        }-->
+
+<!--        .form {-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            padding: 20px;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        .form__field {-->
+<!--            padding: 15px;-->
+<!--            margin-bottom: 10px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 4px;-->
+<!--            font-size: 16px;-->
+<!--        }-->
+
+<!--        .form-submit-btn {-->
+<!--            padding: 15px;-->
+<!--            border: none;-->
+<!--            border-radius: 4px;-->
+<!--            background-color: #4CAF50;-->
+<!--            color: #fff;-->
+<!--            cursor: pointer;-->
+<!--            font-size: 16px;-->
+<!--            transition: background-color 0.3s ease;-->
+<!--        }-->
+
+<!--        .form-submit-btn:hover {-->
+<!--            background-color: #66BB6A;-->
+<!--        }-->
+
+<!--        .alert {-->
+<!--            padding: 20px;-->
+<!--            border: 1px solid transparent;-->
+<!--            border-radius: 4px;-->
+<!--            max-width: 100%;-->
+<!--            text-align: center;-->
+<!--            margin-bottom: 20px;-->
+<!--            transition: opacity 0.3s ease, transform 0.3s ease;-->
+<!--            transform: translateY(-20px);-->
+<!--            opacity: 0;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        .alert-show {-->
+<!--            transform: translateY(0);-->
+<!--            opacity: 1;-->
+<!--        }-->
+
+<!--        .alert-success {-->
+<!--            color: #155724;-->
+<!--            background-color: #d4edda;-->
+<!--            border-color: #c3e6cb;-->
+<!--        }-->
+
+<!--        .alert-error {-->
+<!--            color: #721c24;-->
+<!--            background-color: #f8d7da;-->
+<!--            border-color: #f5c6cb;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <img src="./GestAbsss.png" alt="Your Logo" class="logo">-->
+
+<!--    <div id="alert" class="alert"></div>-->
+
+<!--    <form id="studentForm" method="POST" onsubmit="event.preventDefault(); submitForm();" class="form" style="display: none;">-->
+<!--        <input type="text" id="Apogee" name="Apogee" required class="form__field" placeholder="Enter your Apogee">-->
+<!--        <button type="submit" class="form-submit-btn">Submit</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function setCookie(name, value, days) {-->
+<!--        var expires = "";-->
+<!--        if (days) {-->
+<!--            var date = new Date();-->
+<!--            date.setTime(date.getTime() + (days*24*60*60*1000));-->
+<!--            expires = "; expires=" + date.toUTCString();-->
+<!--        }-->
+<!--        document.cookie = name + "=" + (value || "")  + expires + "; path=/";-->
+<!--    }-->
+
+<!--    function getCookie(name) {-->
+<!--        var nameEQ = name + "=";-->
+<!--        var ca = document.cookie.split(';');-->
+<!--        for(var i=0;i < ca.length;i++) {-->
+<!--            var c = ca[i];-->
+<!--            while (c.charAt(0) == ' ') c = c.substring(1,c.length);-->
+<!--            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);-->
+<!--        }-->
+<!--        return null;-->
+<!--    }-->
+
+<!--    function showAlert(message, type) {-->
+<!--        var alertBox = document.getElementById('alert');-->
+<!--        alertBox.className = 'alert alert-show alert-' + type;-->
+<!--        alertBox.innerText = message;-->
+<!--        alertBox.style.display = 'block';-->
+<!--        setTimeout(() => {-->
+<!--            alertBox.style.display = 'none';-->
+<!--        }, 10000); // Display the alert for 10 seconds-->
+<!--    }-->
+
+<!--    function submitForm() {-->
+<!--        var Apogee = encodeURIComponent(document.getElementById('Apogee').value);-->
+<!--        var urlParams = new URLSearchParams(window.location.search);-->
+<!--        var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';-->
+<!--        var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';-->
+<!--        var group = urlParams.has('group') ? urlParams.get('group') : '';-->
+
+<!--        var ip = ''; // Add your logic to get the IP address here-->
+
+<!--        var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;-->
+
+<!--        fetch(formAction, {-->
+<!--            method: 'POST'-->
+<!--        })-->
+<!--            .then(response => {-->
+<!--                if (!response.ok) {-->
+<!--                    return response.text().then(errorText => {-->
+<!--                        throw new Error(errorText);-->
+<!--                    });-->
+<!--                }-->
+<!--                return response.text();-->
+<!--            })-->
+<!--            .then(data => {-->
+<!--                showAlert("Presence marked successfully", "success");-->
+<!--                setCookie("Apogee", Apogee, 7); // Store Apogee in cookies for 7 days-->
+<!--            })-->
+<!--            .catch(error => {-->
+<!--                showAlert("Error: " + error.message, "error");-->
+<!--            });-->
+<!--    }-->
+
+<!--    function submitFormIfApogeeExists() {-->
+<!--        var Apogee = getCookie("Apogee");-->
+<!--        if (Apogee) {-->
+<!--            var urlParams = new URLSearchParams(window.location.search);-->
+<!--            var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';-->
+<!--            var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';-->
+<!--            var group = urlParams.has('group') ? urlParams.get('group') : '';-->
+
+<!--            var ip = ''; // Add your logic to get the IP address here-->
+
+<!--            var formAction = "http://192.168.1.109:8080/api/absence/scan/" + sessionId + "/" + levelId + "/" + group + "?Apogee=" + Apogee + "&ip=" + ip;-->
+
+<!--            fetch(formAction, {-->
+<!--                method: 'POST'-->
+<!--            })-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        return response.text().then(errorText => {-->
+<!--                            throw new Error(errorText);-->
+<!--                        });-->
+<!--                    }-->
+<!--                    return response.text();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    showAlert("Presence marked successfully", "success");-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    showAlert("Error: " + error.message, "error");-->
+<!--                });-->
+<!--        } else {-->
+<!--            // Show the form if Apogee doesn't exist in cookies-->
+<!--            document.getElementById("studentForm").style.display = "flex";-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Automatically submit the form if Apogee exists in cookies-->
+<!--    submitFormIfApogeeExists();-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
 
 
 <!--<!DOCTYPE html>-->

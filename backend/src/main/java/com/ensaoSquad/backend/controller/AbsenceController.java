@@ -40,28 +40,64 @@ public class AbsenceController {
     @Autowired
     LevelService levelService;
 
+//    @PostMapping("/scan/{sessionId}/{levelId}/{group}")
+//    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@PathVariable String group){
+//        Student student = studentService.findByApogee(Apogee);
+//        if (student == null) {
+//            return new ResponseEntity<>("Étudiant introuvable avec l'apogée : " + Apogee, HttpStatus.NOT_FOUND);
+//        }else{
+//            Level level =student.getLevel();
+//            if(level.getLevelId()!=levelId){
+//                return new ResponseEntity<>("Vous etes pas de ce niveau : " , HttpStatus.NOT_FOUND);
+//            }else {
+//                if(!student.getGroupName().equals(group) && !group.equals("none")){
+//                    return new ResponseEntity<>("Vous etes pas de ce group : " , HttpStatus.NOT_FOUND);
+//
+//                }
+//            }
+//        }
+//
+//
+//        Long studentId = student.getStudentId();
+//        absenceService.markPresnt(sessionId,studentId,levelId,Apogee);
+//        return new ResponseEntity<>("Success", HttpStatus.OK);
+//    }
+
     @PostMapping("/scan/{sessionId}/{levelId}/{group}")
-    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@PathVariable String group){
+    public ResponseEntity<String> markPresent(
+            @PathVariable long sessionId,
+            @RequestParam long Apogee,
+            @PathVariable long levelId,
+            @PathVariable String group) {
+
         Student student = studentService.findByApogee(Apogee);
         if (student == null) {
             return new ResponseEntity<>("Étudiant introuvable avec l'apogée : " + Apogee, HttpStatus.NOT_FOUND);
-        }else{
-            Level level =student.getLevel();
-            if(level.getLevelId()!=levelId){
-                return new ResponseEntity<>("Vous etes pas de ce niveau : " , HttpStatus.NOT_FOUND);
-            }else {
-                if(!student.getGroupName().equals(group) && !group.equals("none")){
-                    return new ResponseEntity<>("Vous etes pas de ce group : " , HttpStatus.NOT_FOUND);
-
+        } else {
+            Level level = student.getLevel();
+            if (level.getLevelId() != levelId) {
+                return new ResponseEntity<>("Vous n'êtes pas de ce niveau : ", HttpStatus.NOT_FOUND);
+            } else {
+                if (!student.getGroupName().equals(group) && !group.equals("none")) {
+                    return new ResponseEntity<>("Vous n'êtes pas de ce groupe : ", HttpStatus.NOT_FOUND);
                 }
             }
         }
-
-
         Long studentId = student.getStudentId();
-        absenceService.markPresnt(sessionId,studentId,levelId,Apogee);
+        absenceService.markPresnt(sessionId, studentId, levelId, Apogee);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
+
+    // Additional endpoint to fetch student info
+    @GetMapping("/student/{apogee}")
+    public ResponseEntity<Student> getStudentInfo(@PathVariable long apogee) {
+        Student student = studentService.findByApogee(apogee);
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+
 
     @PostMapping("/isnotpresent/{levelId}/{Apogee}")
     public void isNotpresent(@PathVariable Long levelId , @PathVariable Long Apogee){

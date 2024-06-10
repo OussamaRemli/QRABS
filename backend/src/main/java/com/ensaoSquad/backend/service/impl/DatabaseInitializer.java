@@ -46,7 +46,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             Professor adminProfessor = new Professor();
             adminProfessor.setFirstName("admin");
             adminProfessor.setLastName("admin");
-            adminProfessor.setEmail("admin@example.com");
+            adminProfessor.setEmail("admin@gmail.com");
             adminProfessor.setPassword(passwordEncoder.encode("12345"));
             adminProfessor.setRole("ROLE_ADMIN");
             adminProfessor.setDepartment(adminDepartment);

@@ -182,11 +182,6 @@ public class ModuleServiceImp implements ModuleService {
                 moduleDTO.setModuleName(row.getCell(7).getStringCellValue());
                 moduleDTO.setNameByDepartment(row.getCell(8).getStringCellValue());
 
-                // Check if module with the same name already exists
-                if (moduleRepository.existsByModuleName(moduleDTO.getModuleName())) {
-                    System.out.println("Module name " + moduleDTO.getModuleName() + " already exists. Skipping insertion.");
-                    continue;
-                }
 
                 // Map DTO to entity
                 Module module = ModuleMapper.toEntity(moduleDTO);
@@ -222,6 +217,11 @@ public class ModuleServiceImp implements ModuleService {
                 Level level = levelRepository.findByLevelName(levelName);
                 if (level == null) {
                     throw new RessourceNotFoundException("Level with name " + levelName + " does not exist.");
+                }
+
+                if (moduleRepository.existsByModuleNameAndLevel_LevelId(moduleDTO.getModuleName(),level.getLevelId())) {
+                    System.out.println("Module name " + moduleDTO.getModuleName() + "with level: "+ levelName +" already exists. Skipping insertion.");
+                    continue;
                 }
 
                 module.setLevel(level);
@@ -264,42 +264,30 @@ public class ModuleServiceImp implements ModuleService {
                     // Module Name
                     Cell cellB = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueB = getCellValueAsString(cellB);
-                    if (cellValueB.isEmpty()) {
-                        continue;
-                    }
 
                     // Prof respo
                     Cell cellD = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueD = getCellValueAsString(cellD);
-                    if (cellValueD.isEmpty()) {
-                        continue;
-                    }
 
                     // Level name
                     Cell cellJ = row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueJ = getCellValueAsString(cellJ);
-                    if (cellValueJ.isEmpty()) {
-                        continue;
-                    }
 
                     Level level = levelRepository.findByLevelName(cellValueJ);
                     if (level == null) {
-                        throw new RessourceNotFoundException("Level with name " + cellValueJ + " not found.");
+                        continue;
                     }
 
                     Module module = moduleRepository.findByModuleNameAndLevel(cellValueB, level);
                     if (module == null) {
-                        throw new RessourceNotFoundException("Module with name " + cellValueB + " and level " + cellValueJ + " not found at row " + row.getRowNum());
+                        continue;
                     }
 
-                    System.out.println(module.getModuleName());
                     Optional<Professor> professorOptional = professorRepository.findByEmail(cellValueD);
                     if (professorOptional.isPresent()) {
                         Professor professor = professorOptional.get();
                         module.setProfessor(professor);
                         moduleRepository.save(module);
-                    } else {
-                        throw new RessourceNotFoundException("Professor with email " + cellValueD + " not found.");
                     }
                 }
             }

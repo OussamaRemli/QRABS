@@ -2,20 +2,15 @@ package com.ensaoSquad.backend.controller;
 
 
 import com.ensaoSquad.backend.dto.StudentAbsenceDTO;
-import com.ensaoSquad.backend.exception.RessourceNotFoundException;
-import com.ensaoSquad.backend.exception.StudentNotFoundException;
-import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.model.Module;
 import com.ensaoSquad.backend.service.*;
-import com.ensaoSquad.backend.service.impl.ProfessorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -244,6 +239,11 @@ public ResponseEntity<List<Long>> getAbsenceCountsTotal(
 
         Absence updatedAbsence = absenceService.toggleJustified(absenceId);
         return ResponseEntity.ok(updatedAbsence);
+    }
+
+    @GetMapping("/module/level")
+    public ResponseEntity<Boolean> getMaxAbsence(@RequestParam("levelId") long levelId, @RequestParam("module_id") long moduleId) {
+        return ResponseEntity.ok(absenceService.getMaxAbsence(moduleId,levelId));
     }
 
 }

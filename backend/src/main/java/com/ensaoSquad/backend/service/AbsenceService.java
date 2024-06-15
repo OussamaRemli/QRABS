@@ -32,4 +32,6 @@ public interface AbsenceService {
     public Map<Student, Map<String, Long>> getAbsenceCountsByModuleAndLevel(Module module, Level level);
 
     public boolean anyAbsencesExist();
+
+    public boolean getMaxAbsence(Long moduleId, Long levelId);
 }

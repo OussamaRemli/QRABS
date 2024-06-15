@@ -63,6 +63,16 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
     @Query("SELECT COUNT(a) FROM Absence a WHERE a.session.level.levelId = :levelId AND a.session.module.moduleName = :moduleName")
     Long countAbsenceByLevelAndModuleName(@Param("levelId") long levelId, @Param("moduleName") String moduleName);
 
+    @Query("SELECT MAX(absence_count) FROM (" +
+            "SELECT COUNT(a) AS absence_count " +
+            "FROM Absence a " +
+            "JOIN a.session s " +
+            "WHERE a.Justified = false " +
+            "AND s.module.moduleId = :moduleId " +
+            "AND s.level.levelId = :levelId " +
+            "GROUP BY a.student.studentId)")
+    Long findMaxAbsenceCountByModuleAndLevel(@Param("moduleId") Long moduleId, @Param("levelId") Long levelId);
+
 
 
 }

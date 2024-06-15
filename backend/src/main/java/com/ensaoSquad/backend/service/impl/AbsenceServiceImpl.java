@@ -195,5 +195,12 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceRepository.count() > 0;
     }
 
+    @Override
+    public boolean getMaxAbsence(Long moduleId, Long levelId) {
+        Long l=absenceRepository.findMaxAbsenceCountByModuleAndLevel(moduleId,levelId);
+        if(l==null)l=0L;
+        return l>3;
+    }
+
 
 }

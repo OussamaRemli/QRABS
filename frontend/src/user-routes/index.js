@@ -10,6 +10,10 @@ import MainLayout from "../user-layout/MainLayout";
 import AuthenticationRoutes from './AuthenticationRoutes';
 import SettingsPage from "../user-layout/MainLayout/Header/ProfileSection/Setting";
 import ReportedSession from "../user-views/dashboard/Default/ReportedSession";
+import ForgotPassword from "../user-views/pages/authentication/authentication3/ForgotPassword";
+import VerifyCode from "../user-views/pages/authentication/authentication3/VerifyCode";
+
+
 
 function UserRoutes() {
   // États pour gérer les routes et l'ID du professeur
@@ -88,8 +92,16 @@ function UserRoutes() {
     }
   }, [professorId]);
 
-  // Retourne les routes combinées, incluant les routes d'authentification
-  return useRoutes([AuthenticationRoutes, ...routes]);
+  return useRoutes([AuthenticationRoutes, ...routes, {
+    path: '/forgot-password',
+    element: <ForgotPassword/>
+
+  },{
+    path: '/Verify-Code',
+    element: <VerifyCode/>
+
+  },
+ ]);
 }
 
 export default UserRoutes;

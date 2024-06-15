@@ -191,5 +191,9 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceRepository.save(absence);
     }
 
+    public boolean anyAbsencesExist() {
+        return absenceRepository.count() > 0;
+    }
+
 
 }

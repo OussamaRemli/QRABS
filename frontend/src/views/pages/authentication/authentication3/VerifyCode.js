@@ -1,17 +1,13 @@
 import { Link } from 'react-router-dom';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 
-// project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import AuthLogin from '../auth-forms/AuthLogin';
 import Logo from 'ui-component/Logo';
+import VerifyCodeForm from "../auth-forms/VerifyCodeForm";
 
-
-// ================================|| AUTH3 - LOGIN ||================================ //
 
 const Login = () => {
   const theme = useTheme();
@@ -35,18 +31,20 @@ const Login = () => {
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
                           <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                            Hi, Welcome Back
+                          Verification Code
+
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
-                            Enter your credentials to continue
+                          A verification code has been sent to your email. Please enter the code below and set a new password.
                           </Typography>
                         </Stack>
                       </Grid>
                     </Grid>
                   </Grid>
                   <Grid item xs={12}>
-                    <AuthLogin />
+                    <VerifyCodeForm />
                   </Grid>
+              
                 </Grid>
               </AuthCardWrapper>
             </Grid>

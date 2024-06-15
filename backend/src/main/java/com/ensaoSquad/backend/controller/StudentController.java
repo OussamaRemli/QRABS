@@ -77,8 +77,15 @@ public class StudentController {
     }
      */
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<Void> deleteAllStudents(){
-        studentService.deleteAllStudent();
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAllStudents() {
+        boolean studentsExist = studentService.anyStudentsExist(); // Replace with your actual method to check existence
+
+        if (!studentsExist) {
+            return ResponseEntity.ok().build(); // Return success if no students exist
+        }
+
+        studentService.deleteAllStudent(); // Delete all students
+        return ResponseEntity.noContent().build(); // Return success after deletion
     }
+
 }

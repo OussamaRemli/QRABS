@@ -243,7 +243,6 @@ const SettingsPage = () => {
                     onChange={handleConfirmPasswordChange}
                     fullWidth margin="normal"
                 />
-                <EarningCard abr={'GINF4'}/>
             </Box>
             <Box mb={3}>
                 <Button variant="contained" color="primary" onClick={handlePasswordUpdate}>

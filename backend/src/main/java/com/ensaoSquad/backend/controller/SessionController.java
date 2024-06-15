@@ -72,10 +72,18 @@ public class SessionController {
         return ResponseEntity.noContent().build();
     }
      */
+
+
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<Void> deleteAllSession(){
-        sessionService.deleteAllsession();
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAllSessions() {
+        boolean sessionsExist = sessionService.anySessionsExist();
+
+        if (!sessionsExist) {
+            return ResponseEntity.ok().build(); // Return success if no sessions exist
+        }
+
+        sessionService.deleteAllsession(); // Delete all sessions
+        return ResponseEntity.noContent().build(); // Return success after deletion
     }
 
 

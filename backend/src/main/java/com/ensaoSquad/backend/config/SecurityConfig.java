@@ -28,6 +28,8 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter authFilter;
 
+
+
     public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -66,5 +68,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
 }
 

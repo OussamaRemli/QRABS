@@ -30,4 +30,6 @@ public interface AbsenceService {
     public Absence toggleJustified(long absenceId);
 
     public Map<Student, Map<String, Long>> getAbsenceCountsByModuleAndLevel(Module module, Level level);
+
+    public boolean anyAbsencesExist();
 }

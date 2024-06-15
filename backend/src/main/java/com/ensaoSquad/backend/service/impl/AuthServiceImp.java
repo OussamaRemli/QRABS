@@ -28,4 +28,6 @@ public class AuthServiceImp implements AuthService {
 
         return authRepository.findByProfessorId(id);
     }
+
+
 }

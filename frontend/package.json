@@ -2,6 +2,7 @@
   "name": "berry-free-material-react-cra",
   "version": "3.4.2",
   "private": true,
+  "proxy": "http://localhost:8080",
   "homepage": "https://berrydashboard.io/free",
   "dependencies": {
     "@emotion/cache": "^11.11.0",

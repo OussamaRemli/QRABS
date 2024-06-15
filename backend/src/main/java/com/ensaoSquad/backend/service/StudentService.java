@@ -15,7 +15,7 @@ public interface StudentService {
 
     List<StudentDTO> getStudentsByLevelNameAndGroupName(String levelName,String groupName);
 
-
+    public boolean anyStudentsExist();
     void deleteAllStudentsByLevel(String levelName);
 
     Student findByApogee(long apogee);

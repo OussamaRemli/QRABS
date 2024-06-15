@@ -35,5 +35,6 @@ public interface SessionService {
     List<Module> getProfessorsAndModules(Long id);
     List<Session> findAllSessionForProfessor(long professorId);
     void deleteAllsession();
+    public boolean anySessionsExist();
 
 }

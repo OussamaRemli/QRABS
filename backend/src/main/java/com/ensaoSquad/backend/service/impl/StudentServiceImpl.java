@@ -153,5 +153,9 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteAll();
     }
 
+    public boolean anyStudentsExist() {
+        return studentRepository.count() > 0;
+    }
+
 }
 

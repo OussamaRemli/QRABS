@@ -300,4 +300,7 @@ public class SessionServiceImpl implements SessionService {
         return sessionDTO;
     }
 
+    public boolean anySessionsExist() {
+        return sessionRepository.count() > 0;
+    }
 }

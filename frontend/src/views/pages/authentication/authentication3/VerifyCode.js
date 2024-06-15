@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
+import {Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';

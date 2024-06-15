@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import {
@@ -9,10 +7,7 @@ import {
     FormHelperText,
     InputLabel,
     OutlinedInput,
-    Typography,
-    useMediaQuery,
     Stack,
-    FormControlLabel 
 
 } from '@mui/material';
 import * as Yup from 'yup';
@@ -21,7 +16,6 @@ import axios from 'axios';
 
 const ForgotPasswordForm = ({ ...others }) => {
     const theme = useTheme();
-    const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
 
     const handleSubmit = async (values, { setErrors, setSubmitting }) => {
@@ -88,15 +82,14 @@ const ForgotPasswordForm = ({ ...others }) => {
                         )}
                     </FormControl>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-             
-              <Button
-                  variant="text"
-                  color="secondary"
-                  onClick={() => navigate('/')}
-                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
-              >
-                Back to sign up
-              </Button>
+                <Button
+                    variant="text"
+                    color="secondary"
+                    onClick={() => navigate('/')}
+                    sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                >
+                    Back to sign up
+                </Button>
 
             </Stack>
                     {errors.submit && (

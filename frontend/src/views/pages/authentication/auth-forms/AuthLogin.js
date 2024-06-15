@@ -1,22 +1,19 @@
 import { useState, useEffect  } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  Typography,
-  useMediaQuery
+  // useMediaQuery
 } from '@mui/material';
 
 // third party
@@ -30,7 +27,7 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+// import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -38,9 +35,9 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-  const customization = useSelector((state) => state.customization);
-  const [checked, setChecked] = useState(true);
+  // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  // const customization = useSelector((state) => state.customization);
+  // const [checked, setChecked] = useState(true);
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);

@@ -26,6 +26,8 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     @Query("DELETE FROM Session s WHERE s.level = :level")
     void deleteByLevel(@Param("level") Level level);
 
+    @Query("SELECT s FROM Session s WHERE s.level.levelName = :levelName")
+    List<Session> findSessionsByLevelName(@Param("levelName") String levelName);
 
 
      // retouner le  id du module á partir la séance actuelle  du professeur

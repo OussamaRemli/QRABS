@@ -65,8 +65,15 @@ public class SessionServiceImpl implements SessionService {
             Sheet sheet = workbook.getSheetAt(0);
             LevelDTO levelDTO = getLevelFromSheet(sheet);
             Level level = LevelMapper.toEntity(levelDTO);
-            //Delete the old sessions if exist
-            deleteAllSessionByLevelName(levelDTO.getLevelName());
+
+            // Fetch the existing sessions by level name
+            List<Session> existingSessions = sessionRepository.findSessionsByLevelName(levelDTO.getLevelName());
+
+            // Update the session day by adding 1
+            for (Session session : existingSessions) {
+                session.setSessionDay(session.getSessionDay() + "1");
+            }
+            sessionRepository.saveAll(existingSessions);
              String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
             int startRow = 9;
             int startColumn = 7;

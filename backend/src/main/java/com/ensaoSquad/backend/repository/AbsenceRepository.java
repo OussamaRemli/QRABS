@@ -30,6 +30,7 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
             "WHERE ses.professor = :professor " +
             "AND ses.module = :module " +
             "AND l = :level " +
+            "AND a.Justified = false " +
             "GROUP BY s, ses.sessionType")
     List<Object[]> getAbsenceCountByProfessorModuleAndLevel(@Param("professor") Professor professor,
                                                             @Param("module") Module module,
@@ -40,6 +41,7 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
             "JOIN s.level l " +
             "JOIN Session ses ON ses.level = l " +
             "JOIN Absence a ON a.student = s AND a.session = ses " +
+            "AND a.Justified = false " +
             "AND ses.module = :module " +
             "AND l = :level " +
             "GROUP BY s, ses.sessionType")
@@ -50,6 +52,7 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
             "FROM Absence a " +
             "JOIN a.session ses " +
             "WHERE a.student = :student " +
+            "AND a.Justified = false " +
             "AND ses.module = :module")
     List<Object[]> getStudentAbsencesByStudentIdAndModule(@Param("student") Student student, @Param("module") Module module);
 
@@ -57,10 +60,10 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
     @Query("SELECT COUNT(a) FROM Absence a JOIN a.session s WHERE s.module = :module")
     Long findByModule(@Param("module") Module module);
 
-    @Query("SELECT a.session.module.moduleName, COUNT(a) FROM Absence a WHERE a.session.level = :level GROUP BY a.session.module.moduleName")
+    @Query("SELECT a.session.module.moduleName, COUNT(a) FROM Absence a WHERE a.Justified = false AND a.session.level = :level GROUP BY a.session.module.moduleName")
     List<Object[]> countAbsenceByModuleInLevel(Level level);
 
-    @Query("SELECT COUNT(a) FROM Absence a WHERE a.session.level.levelId = :levelId AND a.session.module.moduleName = :moduleName")
+    @Query("SELECT COUNT(a) FROM Absence a WHERE a.Justified = false AND a.session.level.levelId = :levelId AND a.session.module.moduleName = :moduleName")
     Long countAbsenceByLevelAndModuleName(@Param("levelId") long levelId, @Param("moduleName") String moduleName);
 
     @Query("SELECT MAX(absence_count) FROM (" +

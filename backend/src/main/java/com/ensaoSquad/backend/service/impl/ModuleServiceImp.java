@@ -1,8 +1,6 @@
 package com.ensaoSquad.backend.service.impl;
 
 
-import com.ensaoSquad.backend.dto.ProfessorDTO;
-import com.ensaoSquad.backend.mapper.ProfessorMapper;
 import com.ensaoSquad.backend.model.*;
 import com.ensaoSquad.backend.dto.ModuleDTO;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
@@ -357,5 +355,15 @@ public class ModuleServiceImp implements ModuleService {
         Level level=module.getLevel();
         Long i=studentRepository.countStudentsByLevel(level);
         return Math.toIntExact(i);
+    }
+
+    @Override
+    public ModuleDTO findByModuleNameAndLevelName(String moduleName, Level level) {
+        Module module = moduleRepository.findByModuleNameAndLevel(moduleName,level);
+              if(module == null) {
+                throw   new RessourceNotFoundException("Module: " + moduleName + " n'existe pas dans le niveau "  + level.getLevelName());
+              }
+        return ModuleMapper.toDTO(module);
+
     }
 }

@@ -34,26 +34,33 @@ public class AbsenceServiceImpl implements AbsenceService {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private Map<Long, Set<Long>> presentStudents = new HashMap<>();
 
-    private Map<Long, Integer> levelCounts = new HashMap<>();
+    private final Map<Long, Set<Long>> presentStudents = new HashMap<>();
+    private final Map<Long, Integer> levelCounts = new HashMap<>();
+    private final Map<Map.Entry<Long, String>, Integer> groupCounts = new HashMap<>();
 
+    public synchronized void markPresnt(long seanceId, long studentId, long levelId, Long Apogee, String group) {
+        Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
 
+        if (!students.contains(studentId)) {
+            students.add(studentId);
+            this.template.convertAndSend("/topic/presence", Apogee);
 
-
-
-
-    @Override
-    public void markPresnt(long seanceId, long studentId, long levelId ,Long Apogee) {
-
-            Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
-            if (!students.contains(studentId)) {
-                students.add(studentId);
-                this.template.convertAndSend("/topic/presence", Apogee);
-                levelCounts.put(levelId,  students.size());
-                this.template.convertAndSend("/topic/count/"+levelId, levelCounts.get(levelId));
-         }
+            if (group.equals("none")) {
+                levelCounts.put(levelId, students.size());
+                this.template.convertAndSend("/topic/count/" + levelId, levelCounts.get(levelId));
+                System.out.println("Level " + levelId + " count: " + levelCounts.get(levelId));
+            } else {
+                Map.Entry<Long, String> groupKey = new AbstractMap.SimpleEntry<>(levelId, group);
+                int newGroupCount = groupCounts.getOrDefault(groupKey, 0) + 1;
+                groupCounts.put(groupKey, newGroupCount);
+                this.template.convertAndSend("/topic/count/" + levelId + "/" + group, newGroupCount);
+                System.out.println("Level " + levelId + " group " + group + " count: " + newGroupCount);
+            }
+        } else {
+            System.out.println("Student " + studentId + " is already marked present for level " + levelId);
         }
+    }
 
 
     @Override
@@ -85,10 +92,12 @@ public class AbsenceServiceImpl implements AbsenceService {
         }
 
         presentStudents.remove(levelId);
+        Map.Entry<Long, String> groupKey = new AbstractMap.SimpleEntry<>(levelId, group);
+        groupCounts.put(groupKey,0);
     }
 
     @Override
-    public void isNotPresent(long studentId, long levelId, Long apogee) {
+    public void isNotPresent(long studentId, long levelId, Long apogee, String group) {
         Set<Long> students = presentStudents.computeIfAbsent(levelId, k -> new HashSet<>());
         if (students.contains(studentId)) {
             students.remove(studentId);
@@ -100,8 +109,18 @@ public class AbsenceServiceImpl implements AbsenceService {
 
             this.template.convertAndSend("/topic/count/" + levelId, levelCounts.get(levelId));
             this.template.convertAndSend("/topic/absence", apogee); // Corrected the topic name
+
+            Map.Entry<Long, String> groupKey = new AbstractMap.SimpleEntry<>(levelId, group);
+            int newGroupCount = groupCounts.getOrDefault(groupKey, 0);
+            if(newGroupCount>0){
+            groupCounts.put(groupKey, newGroupCount-1);
+            }
+            this.template.convertAndSend("/topic/count/" + levelId + "/" + group, newGroupCount-1);
         }
     }
+
+
+
 
     
 
@@ -138,7 +157,7 @@ public class AbsenceServiceImpl implements AbsenceService {
     @Override
     public Map<Student, List<StudentAbsenceDTO>> getStudentAbsenceDetail(long appoge,Module module){
         Student student = studentRepository.findByApogee(appoge);
-        List<Object[]> results = absenceRepository.getStudentAbsencesByStudentIdAndModule(student, module);
+        List<Object[]> results = absenceRepository.getDetailsStudentAbsencesByStudentIdAndModule(student, module);
         List<StudentAbsenceDTO> studentAbsences = new ArrayList<>();
 
         for (Object[] result : results) {
@@ -199,7 +218,7 @@ public class AbsenceServiceImpl implements AbsenceService {
     public boolean getMaxAbsence(Long moduleId, Long levelId) {
         Long l=absenceRepository.findMaxAbsenceCountByModuleAndLevel(moduleId,levelId);
         if(l==null)l=0L;
-        return l>3;
+        return l>=3;
     }
 
 

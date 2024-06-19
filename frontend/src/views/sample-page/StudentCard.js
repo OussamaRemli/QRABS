@@ -7,7 +7,7 @@ export default function StudentCard({ Apogee }) {
 
     useEffect(() => {
         // Fetch student data
-        fetch(`http://localhost:8080/api/students/student/${Apogee}`)
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/students/student/${Apogee}`)
             .then(response => response.json())
             .then(data => {
                 setStudentData(data);
@@ -15,7 +15,7 @@ export default function StudentCard({ Apogee }) {
             .catch(error => console.error('Error fetching student data:', error));
 
         // Fetch image data
-        fetch(`http://localhost:8080/api/import-files/image/${Apogee}`)
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/import-files/image/${Apogee}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Image not found');

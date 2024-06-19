@@ -13,9 +13,9 @@ import java.io.IOException;
 @RequestMapping("/Qr")
 @CrossOrigin("*")
 public class QrController {
-    @GetMapping("/scan/{sessionId}/{levelId}/{group}")
-    public String scanCodeQr(@PathVariable long sessionId, @PathVariable long levelId,@PathVariable String group ,HttpServletResponse response) {
-        return "redirect:/index.html?sessionId=" + sessionId + "&levelId=" + levelId + "&group=" + group;
+    @GetMapping("/scan/{sessionId}/{levelId}/{group}/{code}")
+    public String scanCodeQr(@PathVariable long sessionId, @PathVariable long levelId,@PathVariable String group ,@PathVariable String code , HttpServletResponse response) {
+        return "redirect:/index.html?sessionId=" + sessionId + "&levelId=" + levelId + "&group=" + group + "&code=" + code;
     }
 
 }

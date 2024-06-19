@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
@@ -57,11 +58,7 @@ public class StudentServiceImpl implements StudentService {
                 throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
             }
 
-            //if the students already exists in database they shoudln't be inserted
-            // that's will cause some errors like uniq contstraint for emails duplicated
-            if (studentRepository.existsStudentByLevel(level)) {
-                throw new UploadExcelException("Des étudiants existent déjà pour ce niveau. Impossible de charger de nouveaux étudiants.");
-            }
+
 
             Iterator<Row> rowIterator = sheet.iterator();
             // Skip header rows to achieve values
@@ -83,9 +80,17 @@ public class StudentServiceImpl implements StudentService {
                 }
 
                 StudentDTO studentDTO = new StudentDTO();
+                if (apogeeExists((long) row.getCell(2).getNumericCellValue())) {
+                    throw new MultipleFoundException("un étudiant avec l'apogee " + (long) row.getCell(2).getNumericCellValue() + " déja existe");
+                }
+
                 studentDTO.setApogee((long) row.getCell(2).getNumericCellValue());
+
                 studentDTO.setFirstName(row.getCell(4).getStringCellValue());
                 studentDTO.setLastName(row.getCell(3).getStringCellValue());
+                if (emailExists(row.getCell(5).getStringCellValue())) {
+                    throw new MultipleFoundException("un étudiant avec l'email " + row.getCell(5).getStringCellValue() + " déja existe");
+                }
                 studentDTO.setEmail(row.getCell(5).getStringCellValue());
                 studentDTO.setGroupName(row.getCell(6).getStringCellValue());
 
@@ -155,6 +160,16 @@ public class StudentServiceImpl implements StudentService {
 
     public boolean anyStudentsExist() {
         return studentRepository.count() > 0;
+    }
+
+    @Override
+    public boolean apogeeExists(long apogee) {
+        return studentRepository.existsByApogee(apogee);
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return studentRepository.existsByEmail(email);
     }
 
 }

@@ -10,6 +10,7 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import Countdown from "./Countdown";
 import axios from 'axios';
+
 const Dashboard = () => {
     const [day, setDay] = useState();
     const [time, setTime] = useState();
@@ -36,7 +37,7 @@ const Dashboard = () => {
             console.error('Erreur lors de la récupération des données du token:', error);
         }
 
-        const socket = new SockJS('http://localhost:8080/ws');
+        const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
         const stompClient = Stomp.over(socket);
 
         stompClient.connect({}, () => {
@@ -52,6 +53,8 @@ const Dashboard = () => {
                 setApogee((prevApogee) => prevApogee.filter((apogee) => apogee !== Number(message.body)));
             });
 
+         
+
             return () => {
                 presenceSubscription.unsubscribe();
                 countSubscription.unsubscribe();
@@ -60,7 +63,7 @@ const Dashboard = () => {
             };
         });
 
-        axios.get(`http://localhost:8080/api/session/currentSession/${professorId}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/session/currentSession/${professorId}`)
         .then((response) => {
             setDataSession(response.data);
         })
@@ -68,7 +71,10 @@ const Dashboard = () => {
             // Handle error
             console.error('Error fetching data:', error);
         });
+
+        
 }, [professorId]);
+
 
     useEffect(() => {
         if (dataSession.length > 0) {
@@ -134,7 +140,7 @@ const Dashboard = () => {
                 </Grid>
             )}
             {isNow && (
-                <Grid container spacing={gridSpacing}>
+                <Grid container spacing={gridSpacing} mt={0.5}>
                     <Grid item xs={12}>
                         <Grid container spacing={gridSpacing}>
                             <Grid item style={{ flexBasis: '350px', flexGrow: 0, flexShrink: 0 }}>
@@ -150,7 +156,10 @@ const Dashboard = () => {
                                 <SectorCard levelNames={dataSession.map(item => item.level.levelName)} group={group} />
                             </Grid>
                             <Grid item style={{ flexBasis: '150px', flexGrow: 0, flexShrink: 0 }}>
-                                <PresentCountCard count={count} />
+                                    <PresentCountCard
+                                        levelId={dataSession[selectedSector].level.levelId}
+                                        group={group}
+                                    />
                             </Grid>
                         </Grid>
                     </Grid>
@@ -185,7 +194,6 @@ const Dashboard = () => {
                                 <br />
                                 {selectedSector !== null && (
                                     <Qrcode
-                                        url={`http://192.168.1.109:8080/Qr/scan/${dataSession[selectedSector].sessionId}/${dataSession[selectedSector].level.levelId}/${group}`}
                                         sessionId={dataSession[selectedSector].sessionId}
                                         levelId={dataSession[selectedSector].level.levelId}
                                         group={group}
@@ -229,7 +237,7 @@ export default Dashboard;
 //             } catch (error) {
 //                 console.error('Erreur lors de la récupération des données du token:', error);
 //             }
-//             const socket = new SockJS('http://localhost:8080/ws');
+//             const socket = new SockJS('`${process.env.REACT_APP_BASE_URL}/ws');
 //             const stompClient = Stomp.over(socket);
 //
 //             // Subscribe to WebSocket topic
@@ -252,7 +260,7 @@ export default Dashboard;
 //                 };
 //             });
 //
-//             fetch(`http://localhost:8080/api/session/currentSession/${professorId}`)
+//             fetch(`${process.env.REACT_APP_BASE_URL}/api/session/currentSession/${professorId}`)
 //                 .then(response => response.json())
 //                 .then(dataSession => {
 //                     setDataSession(dataSession);

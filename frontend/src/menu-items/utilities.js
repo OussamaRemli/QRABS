@@ -31,7 +31,7 @@ const getRandomColor = () => {
 
 // Fetch data from the API
 async function fetchLevels() {
-  const response = await fetch('http://localhost:8080/api/levels');
+  const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/levels`);
   const data = await response.json();
   return data;
 }

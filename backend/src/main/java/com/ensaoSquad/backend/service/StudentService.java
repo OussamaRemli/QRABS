@@ -26,4 +26,7 @@ public interface StudentService {
     );
     
     void deleteAllStudent();
+
+    boolean apogeeExists(long apogee);
+    boolean emailExists(String email);
 }

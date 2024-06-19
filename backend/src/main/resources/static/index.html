@@ -207,6 +207,8 @@
         var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
         var group = urlParams.has('group') ? urlParams.get('group') : '';
 
+        console.log("Fetching data for Apogee:", Apogee);
+
         fetch(`http://192.168.1.109:8080/api/absence/student/${Apogee}`)
             .then(response => {
                 if (!response.ok) {
@@ -225,6 +227,7 @@
                 showSnackbar(content);
             })
             .catch(error => {
+                console.error("Error fetching data:", error);
                 showAlert("Error: " + error.message, "error");
             });
     }
@@ -235,10 +238,11 @@
         var sessionId = urlParams.has('sessionId') ? urlParams.get('sessionId') : '';
         var levelId = urlParams.has('levelId') ? urlParams.get('levelId') : '';
         var group = urlParams.has('group') ? urlParams.get('group') : '';
+        var code = urlParams.has('code') ? urlParams.get('code') : '';
 
-        var ip = ''; // Add your logic to get the IP address here
+        var formAction = `http://192.168.1.109:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&code=${code}`;
 
-        var formAction = `http://192.168.1.109:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&ip=${ip}`;
+        console.log("Submitting presence for Apogee:", Apogee);
 
         fetch(formAction, {
             method: 'POST'
@@ -252,12 +256,14 @@
                 return response.text();
             })
             .then(data => {
+                console.log("Presence marked successfully:", data);
                 showAlert("Presence marked successfully", "success");
                 setCookie("Apogee", Apogee, 7); // Store Apogee in cookies for 7 days
                 hideSnackbar();
                 document.getElementById("studentForm").style.display = "none"; // Hide the form
             })
             .catch(error => {
+                console.error("Error marking presence:", error);
                 showAlert("Error: " + error.message, "error");
             });
     }
@@ -280,6 +286,7 @@
 </script>
 </body>
 </html>
+
 
 
 

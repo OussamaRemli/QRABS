@@ -48,7 +48,7 @@ const Filiere = ({ levelId, levelName,sectorName, isLoading, onClick }) => {
     useEffect(()=>{
       const fetchTotalAbsence = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/absence/level?levelId=${levelId}`);
+          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/level?levelId=${levelId}`);
           setTotal(response.data)
         } catch (error) {
           console.error('Error fetching absence:', error);

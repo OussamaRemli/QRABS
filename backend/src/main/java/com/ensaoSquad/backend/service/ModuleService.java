@@ -8,6 +8,7 @@ import com.ensaoSquad.backend.model.Professor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ModuleService {
     ModuleDTO createModule(ModuleDTO moduleDto);
@@ -35,4 +36,6 @@ public interface ModuleService {
 
     int countStudentsInLevel(Module module);
 
-    }
+
+    ModuleDTO findByModuleNameAndLevelName(String moduleName, Level level);
+}

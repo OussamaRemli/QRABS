@@ -93,7 +93,7 @@ const FirebaseLogin = ({ ...others }) => {
               setSubmitting(false);
 
               // Récupérer le token JWT depuis la réponse de votre API (assumant que le token est dans la réponse user)
-              const response = await fetch('http://localhost:8080/api/professors/authenticate', {
+              const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/professors/authenticate`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

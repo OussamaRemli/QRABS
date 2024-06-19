@@ -52,6 +52,12 @@ public interface AbsenceRepository extends JpaRepository<Absence ,Long> {
             "FROM Absence a " +
             "JOIN a.session ses " +
             "WHERE a.student = :student " +
+            "AND ses.module = :module")
+    List<Object[]> getDetailsStudentAbsencesByStudentIdAndModule(@Param("student") Student student, @Param("module") Module module);
+    @Query("SELECT ses.sessionType, a.dateAbsence, a.absenceId, a.Justified " +
+            "FROM Absence a " +
+            "JOIN a.session ses " +
+            "WHERE a.student = :student " +
             "AND a.Justified = false " +
             "AND ses.module = :module")
     List<Object[]> getStudentAbsencesByStudentIdAndModule(@Param("student") Student student, @Param("module") Module module);

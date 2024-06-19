@@ -27,7 +27,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
     }, [moduleId, studentApogee]);
 
     const fetchData = () => {
-        axios.get(`http://localhost:8080/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
             .then(response => {
                 const studentData = response.data[Object.keys(response.data)[0]];
                 const rowData = studentData.map(item => ({
@@ -44,7 +44,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
     }
 
     const handleClick = (absenceId) => {
-        axios.put(`http://localhost:8080/api/absence/absence/justify?absenceId=${absenceId}`)
+        axios.put(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/justify?absenceId=${absenceId}`)
             .then(response => {
                 if (response.status === 200) {
                     console.log('La justification de l\'absence a réussi.');
@@ -147,7 +147,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
 //     }, [moduleId, studentApogee]);
 
 //     const fetchData = () => {
-//         axios.get(`http://localhost:8080/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
+//         axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
 //             .then(response => {
 //                 const studentData = response.data[Object.keys(response.data)[0]];
 //                 const rowData = studentData.map(item => ({
@@ -164,7 +164,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
 //     }
 
 //     const handleClick = (absenceId) => {
-//         axios.put(`http://localhost:8080/api/absence/absence/justify?absenceId=${absenceId}`)
+//         axios.put(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/justify?absenceId=${absenceId}`)
 //             .then(response => {
 //                 if (response.status === 200) {
 //                     console.log('La justification de l\'absence a réussi.');

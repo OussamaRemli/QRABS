@@ -345,6 +345,9 @@ def retrieve_encodings_from_db(db_name):
         print(f"Erreur lors de la récupération des encodages de la base de données : {e}")
         return [], []
 
+# Ensemble pour suivre les apogées déjà traités avec succès
+processed_apogees = set()
+
 def perform_face_recognition(session_data, camera_index):
     try:
         sessionId = session_data['sessionId']
@@ -395,13 +398,176 @@ def perform_face_recognition(session_data, camera_index):
                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
                 if name != "Unknown":
-                    apogee, _ = os.path.splitext(name)
-                    apogee = int(apogee)
+                    apogee_str, _ = os.path.splitext(name)
+                    apogee_parts = apogee_str.split('-')
+                    if len(apogee_parts) == 2:
+                        apogee = apogee_parts[0]
+                        if apogee.isdigit():
+                            apogee = int(apogee)
+                            if apogee not in processed_apogees:
+                                # Envoyer la requête seulement si cet apogée n'a pas encore été traité
+                                springBootEndpoint = f"http://localhost:8080/api/absence/forprofesseur/{sessionId}/{levelId}/{group}?Apogee={apogee}"
+                                response = requests.post(springBootEndpoint)
+                                print(response.text)
 
-                    ip = str(random.randint(0, 255))
-                    springBootEndpoint = f"http://localhost:8080/api/absence/scan/{sessionId}/{levelId}/{group}?Apogee={apogee}&ip={ip}"
-                    response = requests.post(springBootEndpoint)
-                    print(response.text)
+                                # Ajouter cet apogée à la liste des apogées traités avec succès
+                                processed_apogees.add(apogee)
+
+            cv2.imshow('Video', frame)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        video_capture.release()
+        cv2.destroyAllWindows()
+
+    except Exception as e:
+        print(f"Erreur lors de l'exécution de la reconnaissance faciale pour la session {sessionId} : {e}")
+        return {"error": f"Erreur lors de l'exécution de la reconnaissance faciale pour la session {sessionId}"}
+
+
+@app.route('/start-recognition', methods=['POST'])
+def start_recognition():
+    data = request.json
+    sessionId = data['sessionId']
+    levelId = data['levelId']
+    group = data['group']
+    camera_index = data.get('cameraIndex', 0)  # Par défaut, utiliser la caméra 0
+
+    # Créer les données de session
+    session_data = {
+        'sessionId': sessionId,
+        'levelId': levelId,
+        'group': group
+    }
+
+    # Soumettre la tâche de reconnaissance faciale au pool de threads
+    executor.submit(perform_face_recognition, session_data, camera_index)
+
+    return jsonify({"message": "Reconnaissance faciale démarrée."})
+
+@app.route('/prestart-recognition', methods=['POST', 'OPTIONS'])
+def options():
+    if request.method == 'OPTIONS':
+        response = jsonify({"message": "OPTIONS request received"})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        return response
+    else:
+        return jsonify({"message": "POST request received"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5005)
+from flask import Flask, request, jsonify
+import cv2
+import numpy as np
+import face_recognition
+import sqlite3
+import requests
+import random
+import os
+from flask_cors import CORS
+from concurrent.futures import ThreadPoolExecutor
+
+app = Flask(__name__)
+CORS(app)
+
+# Créer un pool de threads pour gérer la reconnaissance faciale
+executor = ThreadPoolExecutor(max_workers=4)
+
+# Fonction pour récupérer les encodages et les étiquettes de la base de données SQLite
+def retrieve_encodings_from_db(db_name):
+    try:
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+
+        c.execute("SELECT label, encoding FROM Encodings")
+        rows = c.fetchall()
+
+        labels = []
+        encodings = []
+
+        for row in rows:
+            labels.append(row[0])
+            encoding_bytes = row[1]
+            encoding = np.frombuffer(encoding_bytes, dtype=np.float64)
+            encodings.append(encoding)
+
+        conn.close()
+
+        return labels, encodings
+    except Exception as e:
+        print(f"Erreur lors de la récupération des encodages de la base de données : {e}")
+        return [], []
+
+# Ensemble pour suivre les apogées déjà traités avec succès
+processed_apogees = set()
+
+def perform_face_recognition(session_data, camera_index):
+    try:
+        sessionId = session_data['sessionId']
+        levelId = session_data['levelId']
+        group = session_data['group']
+
+        # Capture vidéo à partir de la caméra spécifiée
+        video_capture = cv2.VideoCapture(camera_index)
+        
+        if not video_capture.isOpened():
+            print(f"La caméra {camera_index} n'a pas pu être ouverte pour la session {sessionId}")
+            return {"error": f"La caméra {camera_index} n'a pas pu être ouverte pour la session {sessionId}"}
+
+        known_face_labels, known_face_encodings = retrieve_encodings_from_db('face_encodings.db')
+
+        while True:
+            ret, frame = video_capture.read()
+            if not ret:
+                print(f"Échec de la capture vidéo pour la session {sessionId} depuis la caméra {camera_index}")
+                return {"error": f"Échec de la capture vidéo pour la session {sessionId} depuis la caméra {camera_index}"}
+
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            rgb_small_frame = small_frame[:, :, ::-1]
+
+            face_locations = face_recognition.face_locations(rgb_small_frame)
+            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+
+            face_names = []
+            for face_encoding in face_encodings:
+                name = "Unknown"
+                matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+                face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                best_match_index = np.argmin(face_distances)
+                if matches[best_match_index]:
+                    name = known_face_labels[best_match_index]
+
+                face_names.append(name)
+
+            for (top, right, bottom, left), name in zip(face_locations, face_names):
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
+
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+
+                if name != "Unknown":
+                    apogee_str, _ = os.path.splitext(name)
+                    apogee_parts = apogee_str.split('-')
+                    if len(apogee_parts) == 2:
+                        apogee = apogee_parts[0]
+                        if apogee.isdigit():
+                            apogee = int(apogee)
+                            if apogee not in processed_apogees:
+                                # Envoyer la requête seulement si cet apogée n'a pas encore été traité
+                                springBootEndpoint = f"http://localhost:8080/api/absence/forprofesseur/{sessionId}/{levelId}/{group}?Apogee={apogee}"
+                                response = requests.post(springBootEndpoint)
+                                print(response.text)
+
+                                # Ajouter cet apogée à la liste des apogées traités avec succès
+                                processed_apogees.add(apogee)
 
             cv2.imshow('Video', frame)
 

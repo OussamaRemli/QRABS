@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.service.impl;
 
 import com.ensaoSquad.backend.dto.LevelDTO;
+import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.mapper.LevelMapper;
 import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Session;
@@ -55,6 +56,9 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public LevelDTO getLevelByName(String levelName) {
         Level level = levelRepository.findByLevelName(levelName);
+        if(level==null) {
+            throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");
+        }
         return LevelMapper.toDTO(level);
     }
 

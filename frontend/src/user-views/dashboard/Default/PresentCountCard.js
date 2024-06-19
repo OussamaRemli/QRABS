@@ -1,22 +1,12 @@
-import PropTypes from 'prop-types';
 
-// material-ui
 import {styled} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
-
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
-// import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import {useEffect, useState} from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import {gridPaginationRowCountSelector} from "@mui/x-data-grid";
 
-// assets
-// import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-
-// styles
 const CardWrapper = styled(MainCard)(({theme}) => ({
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.light,
@@ -44,61 +34,67 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
     }
 }));
 
-// ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const PresentCountCard = ({levelId}) => {
-    const [count, setCount] = useState({});
 
-    useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        const stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            const countSubscription = stompClient.subscribe(`/topic/count/${levelId}`, function (message) {
-                const parsedMessage = JSON.parse(message.body);
-                console.log("Parsed message:", parsedMessage);
-                setCount(prevCount => ({
-                    ...prevCount,
-                    [levelId]: parsedMessage // Stocker le compteur sous levelId
-                }));
-            });
+    const PresentCountCard = ({ levelId, group }) => {
+        const [count, setCount] = useState(() => {
+            const savedCount = localStorage.getItem('countQrabs');
+            return savedCount ? JSON.parse(savedCount) : {};
         });
-        return () => {
-            if (stompClient && stompClient.connected) {
-                stompClient.disconnect();
-            }
-        };
-    }, [levelId]);// Include presentCardcount here if it's used inside this component
-
+    
+        useEffect(() => {
+            // Sauvegarder la valeur de count dans localStorage chaque fois que count change
+            localStorage.setItem('countQrabs', JSON.stringify(count));
+        }, [count]);
+    
+        useEffect(() => {
+            const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+            const stompClient = Stomp.over(socket);
+    
+            stompClient.connect({}, () => {
+                const topic = group === 'none' ? `/topic/count/${levelId}` : `/topic/count/${levelId}/${group}`;
+                
+                const countSubscription = stompClient.subscribe(topic, (message) => {
+                    const parsedMessage = JSON.parse(message.body);
+                    console.log("Parsed message:", parsedMessage);
+                    setCount(prevCount => ({
+                        ...prevCount,
+                        [levelId]: parsedMessage // Store the count under levelId
+                    }));
+                });
+            });
+    
+            return () => {
+                if (stompClient && stompClient.connected) {
+                    stompClient.disconnect();
+                }
+            };
+        }, [levelId, group]);
 
     return (
-        <>
-            <CardWrapper border={false} content={false}>
-                <Box sx={{p: 2}}>
-                    <List sx={{py: 0}}>
-                        <ListItem alignItems="center" disableGutters sx={{py: 0}}>
-                            <PeopleAltIcon/>
-                            <ListItemText
-                                sx={{
-                                    py: 0,
-                                    mt: 0.45,
-                                    mb: 0.45
-                                }}
-                                primary={
-                                    <Typography variant="h4" sx={{color: '#fff'}}>
-                                        {count[levelId]}                                    </Typography>
-                                }
-                                secondary={
-                                    <Typography variant="subtitle2" sx={{color: 'primary.light', mt: 0.25}}>
-                                    </Typography>
-                                }
-                            />
-                        </ListItem>
-                    </List>
-                </Box>
-            </CardWrapper>
-        </>
+        <CardWrapper border={false} content={false}>
+            <Box sx={{ p: 2 }}>
+                <List sx={{ py: 0 }}>
+                    <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
+                    <PeopleAltIcon sx={{ mr: 1 }} />
+                    <ListItemText
+                            sx={{ py: 0, mt: 0.45, mb: 0.45 }}
+                            primary={
+                                <Typography variant="h4" sx={{ color: '#fff', ml: 1 }}>
+                                     {count[levelId]}
+                                 </Typography>
+
+                            }
+                            secondary={
+                                <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
+                                </Typography>
+                            }
+                        />
+                    </ListItem>
+                </List>
+            </Box>
+        </CardWrapper>
     );
 };
-
 
 export default PresentCountCard;

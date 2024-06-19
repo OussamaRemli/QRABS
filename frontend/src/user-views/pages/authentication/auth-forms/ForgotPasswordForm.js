@@ -24,31 +24,30 @@ const ForgotPasswordForm = ({ ...others }) => {
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setSubmitting(true);
-    
+    const handleSubmit = async (values, { setErrors, setSubmitting }) => {
         try {
             const response = await axios.post(
-                'http://localhost:8080/api/professors/forgot-password',
-                { email },
+                `${process.env.REACT_APP_BASE_URL}/api/professors/forgot-password?email=${values.email}`,
+                {},
                 {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 }
             );
-    
+
             if (response.status === 200) {
                 console.log("Email sent: ", response.data);
-                history.push('/verify-code', { email }); // Navigate to VerifyCode with email in state
+                navigate('/verify-code', { state: { email: values.email } }); // Navigate to VerifyCode with email in state
             } else {
                 throw new Error('Failed to send email');
             }
         } catch (err) {
             console.error('Request failed:', err);
             if (err.response && err.response.status === 400) {
-                setErrors({ submit: err.response.data || 'Email does not exist.' });
+                setErrors({ submit: 'Bad request. Please check your input.' });
+            } else if (err.response && err.response.data && err.response.data.message) {
+                setErrors({ submit: err.response.data.message });
             } else {
                 setErrors({ submit: 'An unexpected error occurred. Please try again later.' });
             }
@@ -56,7 +55,7 @@ const ForgotPasswordForm = ({ ...others }) => {
             setSubmitting(false);
         }
     };
-    
+
     return (
         <Formik
             initialValues={{

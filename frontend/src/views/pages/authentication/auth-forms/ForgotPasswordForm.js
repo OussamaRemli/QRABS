@@ -21,7 +21,7 @@ const ForgotPasswordForm = ({ ...others }) => {
     const handleSubmit = async (values, { setErrors, setSubmitting }) => {
         try {
             const response = await axios.post(
-                `http://localhost:8080/api/professors/forgot-password?email=${values.email}`,
+                `${process.env.REACT_APP_BASE_URL}/api/professors/forgot-password?email=${values.email}`,
                 {},
                 {
                     headers: {

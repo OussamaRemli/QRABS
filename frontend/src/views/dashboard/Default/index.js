@@ -31,7 +31,7 @@ const Dashboard = () => {
   // Fonction pour récupérer tous les filières
   const fetchLevels = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/levels');
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/levels`);
       const formattedLevels = response.data.map(level => ({
         levelId: level.levelId,
         levelName: level.levelName,
@@ -84,7 +84,7 @@ const Dashboard = () => {
 
   const handleAddFiliere = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/levels/createFiliere', sectorAbbreviation, {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/levels/createFiliere`, sectorAbbreviation, {
         headers: {
           'Content-Type': 'text/plain'
         }

@@ -45,7 +45,7 @@ const Module = ({ name, professor, levelId, isLoading, onClick, isActive }) => {
     useEffect(()=>{
       const fetchTotalAbsence = async () => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/absence/level/module?levelId=${levelId}&moduleName=${name}`);
+          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/level/module?levelId=${levelId}&moduleName=${name}`);
           setTotal(response.data)
         } catch (error) {
           console.error('Error fetching absence:', error);

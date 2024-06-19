@@ -1,5 +1,7 @@
-import {useState} from 'react';
-// material-ui
+import {useState,useEffect} from 'react';
+
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 import {
     Button,
     ButtonGroup,
@@ -9,12 +11,10 @@ import {
 } from '@mui/material';
 import Alert from '@mui/material/Alert';
 
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
 import {CardActions} from "@mui/material";
 import {gridSpacing} from 'store/constant';
 
-// assets
 import FullscreenSharpIcon from '@mui/icons-material/FullscreenSharp';
 import CloseFullscreenOutlinedIcon from '@mui/icons-material/CloseFullscreenOutlined';
 import QRCode from "react-qr-code";
@@ -26,8 +26,54 @@ import CustomDialog from "./Dialog";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import * as React from "react";
 import Face from '../../../assets/images/1.svg';
-const Qrcode = ({url,levelId,sessionId,group}) => {
+const Qrcode = ({levelId,sessionId,group}) => {
 
+
+
+    useEffect(() => {
+        let stompClient = null;
+        let codeSubscription = null;
+    
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/code?levelId=${levelId}`);
+                setCode(response.data);
+                
+                // Assuming you want to do something with the response here
+                console.log('Data fetched:', response.data);
+            } catch (error) {
+                console.error('Fetch Data Error:', error);
+            }
+        };
+    
+        const connectWebSocket = () => {
+            const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+            stompClient = Stomp.over(socket);
+    
+            stompClient.connect({}, () => {
+                codeSubscription = stompClient.subscribe(`/topic/code/${levelId}`, (message) => {
+                    setCode(message.body);
+                    // Force a re-render if necessary
+                    forceUpdate();
+                });
+            });
+        };
+    
+        fetchData().then(connectWebSocket); // Ensure WebSocket connects after fetching data
+    
+        return () => {
+            if (codeSubscription) {
+                codeSubscription.unsubscribe();
+            }
+            if (stompClient && stompClient.connected) {
+                stompClient.disconnect();
+            }
+        };
+    }, [levelId]); // Add levelId as a dependency to re-run effect if it changes
+    
+
+     
+    const [code,setCode]=useState('');
     const [isExpanded, setQrIsExpanded] = useState(false);
     const [isDone, setIsDone] = useState([]);
     const [openCameraDialog, setOpenCameraDialog] = useState(false);
@@ -73,7 +119,7 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
 
     const handleConfirm = (levelId,sessionId,group) => {
 
-        fetch(`http://localhost:8080/api/absence/${sessionId}/${levelId}/${group}`, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/${sessionId}/${levelId}/${group}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,9 +134,13 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
 
                 }
                 setSnackbarSeverity('success');
-                setSnackbarMessage('l absence est bien enregistré');
+                setSnackbarMessage("l'absence est bien enregistré");
                 setOpenSnackbar(true);
                 setIsDone([...isDone, levelId]);
+                localStorage.setItem('countQrabs', JSON.stringify(0));
+                localStorage.setItem('presentQrabs', JSON.stringify(''));
+
+
 
             })
             .catch(error => {
@@ -106,7 +156,7 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
     }
 
     const sendToPython = () => {
-        const pythonServerEndpoint = 'http://localhost:5005/prestart-recognition';
+        const pythonServerEndpoint = 'http://192.168.1.109:5005/prestart-recognition';
         const data = {
             sessionId: sessionId,
             levelId: levelId,
@@ -115,7 +165,7 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
 
         axios.post(pythonServerEndpoint)
             .then(()=> {
-                axios.post('http://localhost:5005/start-recognition',data)// Exécutez ces actions juste après l'envoi de la requête
+                axios.post('http://192.168.1.109:5005/start-recognition',data)// Exécutez ces actions juste après l'envoi de la requête
                     .then(()=>{});
                 setFacialRecognition(true);
            
@@ -129,7 +179,7 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
 
     };
     function stopFacialRecognition() {
-        axios.post('http://localhost:5005/stop-recognition')
+        axios.post('http://192.168.1.109:5005/stop-recognition')
             .then(response => {
                 console.log(response.data);
             })
@@ -200,7 +250,7 @@ const Qrcode = ({url,levelId,sessionId,group}) => {
                                 <Grid container alignItems="center" justifyContent="center">
                                     {!facialRecognition ? (
                                         <QRCode
-                                            value={url}
+                                            value={`${process.env.REACT_APP_BASE_URL}/Qr/scan/${sessionId}/${levelId}/${group}/${code}`}
                                             style={{
                                                 width: isExpanded ? '35%' : '80%',
                                                 height: isExpanded ? '35%' : '80%',

@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.exception.DuplicateException;
+import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND); // Changed to HttpStatus.NOT_FOUND
     }
 
     @ExceptionHandler(DuplicateException.class)
@@ -36,6 +37,14 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MultipleFoundException.class)
+    public ResponseEntity<Object> handleMultipleFoundException(MultipleFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 }
 

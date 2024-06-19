@@ -90,7 +90,7 @@ const EarningCard = ({ abr }) => {
       const formData = new FormData();
       formData.append('file', selectedStudentFile);
 
-      axios.post('http://localhost:8080/api/students/upload', formData)
+      axios.post(`${process.env.REACT_APP_BASE_URL}/api/students/upload`, formData)
         .then((response) => {
           console.log('Students uploaded:');
           setSnackbarSeverity('success');
@@ -120,7 +120,7 @@ const EarningCard = ({ abr }) => {
       const formData = new FormData();
       formData.append('file', selectedSessionFile);
 
-      axios.post('http://localhost:8080/api/session/upload', formData)
+      axios.post(`${process.env.REACT_APP_BASE_URL}/api/session/upload`, formData)
         .then((response) => {
           console.log('Sessions uploaded:', response.data);
           setSnackbarSeverity('success');
@@ -145,7 +145,7 @@ const EarningCard = ({ abr }) => {
         formData.append('files', file);
       }
 
-      axios.post('http://localhost:8080/api/import-files/upload', formData)
+      axios.post(`${process.env.REACT_APP_BASE_URL}/api/import-files/upload`, formData)
         .then((response) => {
           console.log('Images uploaded:', response.data);
           setSnackbarSeverity('success');

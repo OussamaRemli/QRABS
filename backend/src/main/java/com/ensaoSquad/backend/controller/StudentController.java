@@ -2,6 +2,7 @@ package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.DepartmentDTO;
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.exception.MultipleFoundException;
 import com.ensaoSquad.backend.exception.RessourceNotFoundException;
 import com.ensaoSquad.backend.exception.UploadExcelException;
 import com.ensaoSquad.backend.model.Professor;
@@ -33,7 +34,7 @@ public class StudentController {
         try {
             List<StudentDTO> uploadedStudents = studentService.uploadStudentsFromExcel(file);
             return ResponseEntity.ok(uploadedStudents);
-        }catch (UploadExcelException | RessourceNotFoundException ex) {
+        }catch (UploadExcelException | RessourceNotFoundException | MultipleFoundException ex) {
             // Exception will be caught by the exception handler defined in the controller advice
             throw ex;
         } catch (Exception e) {

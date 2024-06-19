@@ -23,7 +23,7 @@
 // const SamplePage = Loadable(lazy(() => import('user-views/sample-page')));
 //
 // // Fetch data from the API
-// const response = await fetch('http://localhost:8080/api/modules/professor/75');
+// const response = await fetch('`${process.env.REACT_APP_BASE_URL}/api/modules/professor/75');
 // const data = await response.json();
 //
 // // ==============================|| MAIN ROUTING ||============================== //

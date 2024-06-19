@@ -11,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -34,6 +31,9 @@ public class AbsenceController {
     ModuleService moduleService;
     @Autowired
     LevelService levelService;
+
+    private Map<Long, String> levelCode = new HashMap<>();
+
 
 //    @PostMapping("/scan/{sessionId}/{levelId}/{group}")
 //    public ResponseEntity<String> markPresent(@PathVariable long sessionId , @RequestParam long Apogee , @PathVariable long levelId ,@PathVariable String group){
@@ -62,8 +62,11 @@ public class AbsenceController {
     public ResponseEntity<String> markPresent(
             @PathVariable long sessionId,
             @RequestParam long Apogee,
+            @RequestParam String code,
             @PathVariable long levelId,
             @PathVariable String group) {
+
+        if(code.equals(levelCode.get(levelId))){
 
         Student student = studentService.findByApogee(Apogee);
         if (student == null) {
@@ -79,8 +82,11 @@ public class AbsenceController {
             }
         }
         Long studentId = student.getStudentId();
-        absenceService.markPresnt(sessionId, studentId, levelId, Apogee);
+        absenceService.markPresnt(sessionId, studentId, levelId, Apogee,group);
         return new ResponseEntity<>("Success", HttpStatus.OK);
+    }else {
+            return new ResponseEntity<>("Séance invalide",HttpStatus.NOT_FOUND);
+        }
     }
 
     // Additional endpoint to fetch student info
@@ -94,11 +100,11 @@ public class AbsenceController {
     }
 
 
-    @PostMapping("/isnotpresent/{levelId}/{Apogee}")
-    public void isNotpresent(@PathVariable Long levelId , @PathVariable Long Apogee){
+    @PostMapping("/isnotpresent/{levelId}/{Apogee}/{group}")
+    public void isNotpresent(@PathVariable Long levelId , @PathVariable Long Apogee, @PathVariable String group){
         Student student = studentService.findByApogee(Apogee);
         Long studentId = student.getStudentId();
-        absenceService.isNotPresent(studentId,levelId,Apogee);
+        absenceService.isNotPresent(studentId,levelId,Apogee,group);
     }
 
 
@@ -246,4 +252,42 @@ public ResponseEntity<List<Long>> getAbsenceCountsTotal(
         return ResponseEntity.ok(absenceService.getMaxAbsence(moduleId,levelId));
     }
 
+    @GetMapping("/code")
+    public ResponseEntity<String> generateCode(@RequestParam("levelId") long levelId) {
+        String code = sendCode(levelId);
+        return ResponseEntity.ok(code); // Return the generated code in the response
+    }
+
+
+    @PostMapping("/forprofesseur/{sessionId}/{levelId}/{group}")
+    public ResponseEntity<String> isPresent( @PathVariable long sessionId,
+                                             @RequestParam long Apogee,
+                                             @PathVariable long levelId,
+                                             @PathVariable String group
+
+    ){
+        Student student = studentService.findByApogee(Apogee);
+        Long studentId = student.getStudentId();
+        absenceService.markPresnt(sessionId, studentId, levelId, Apogee,group);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
+
+    public String sendCode(long levelId) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(10);
+
+        for (int i = 0; i <10; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(randomIndex));
+        }
+        levelCode.put(levelId,sb.toString());
+        this.template.convertAndSend("/topic/code/"+levelId, sb.toString());
+
+        System.out.println(sb.toString()+"is sent");
+        return sb.toString();
+
+
+    }
 }

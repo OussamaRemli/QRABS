@@ -59,6 +59,8 @@ const App = () => {
         console.error('Unknown or undefined role:', role);
       }
     }
+    console.log('API Base URL:', process.env.REACT_APP_API_BASE_URL);
+
   }, []);
 
   return (

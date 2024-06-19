@@ -35,6 +35,76 @@ public class ImageController {
     private StudentRepository studentRepository;
 
 
+//    @PostMapping("/upload")
+//    public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
+//        if (files == null || files.length == 0) {
+//            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner des fichiers à télécharger.");
+//            return "redirect:/uploadStatus";
+//        }
+//
+//        try {
+//            RestTemplate restTemplate = new RestTemplate();
+//
+//            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+//            for (MultipartFile file : files) {
+//                // Ici, nous traitons le fichier et stockons le contenu nécessaire
+//                // au lieu de tenter de sérialiser l'objet MultipartFile directement
+//                Path filePath = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+//                Files.write(filePath, file.getBytes());
+//                body.add("files", new FileSystemResource(filePath.toFile()));
+//            }
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+//
+//            String pythonScriptUrl = "http://localhost:5000/process";
+//            ResponseEntity<String> response = restTemplate.exchange(pythonScriptUrl, HttpMethod.POST, requestEntity, String.class);
+//
+//            System.out.println(response.getBody());
+//
+//            redirectAttributes.addFlashAttribute("message", "Fichiers téléchargés et traités avec succès !");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("message", "Échec du téléchargement des fichiers.");
+//        }
+//
+//        return "redirect:/uploadStatus";
+//    }
+
+
+    @GetMapping("/image/{apogee}")
+    public ResponseEntity<Resource> getImage(@PathVariable long apogee) {
+        // Retrieve the student details from the database based on their name
+        Student student = studentRepository.findByApogee(apogee);
+        if (student == null) {
+            return ResponseEntity.notFound().build(); // Student not found
+        }
+
+        // Construct the file path for the student's image using their apogee
+        String fileName = student.getApogee() + "-" + student.getLevel().getLevelId() + ".jpg";
+        Path imagePath = Paths.get(UPLOADED_FOLDER + fileName);
+
+        try {
+            // Load the image file
+            Resource resource = new UrlResource(imagePath.toUri());
+
+            // Check if the image file exists
+            if (!resource.exists() || !resource.isReadable()) {
+                return ResponseEntity.notFound().build(); // Image file not found
+            }
+
+            // Return the image file
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build(); // Error loading image
+        }
+    }
+
     @PostMapping("/upload")
     public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
         if (files == null || files.length == 0) {
@@ -47,11 +117,34 @@ public class ImageController {
 
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             for (MultipartFile file : files) {
-                // Ici, nous traitons le fichier et stockons le contenu nécessaire
-                // au lieu de tenter de sérialiser l'objet MultipartFile directement
-                Path filePath = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+                // Vérification de l'extension du fichier
+                String originalFilename = file.getOriginalFilename();
+
+
+                // Extraction de l'apogee à partir du nom du fichier
+                String[] parts = originalFilename.split("\\.");
+                long apogee = Long.parseLong(parts[0]);
+
+                // Recherche de l'étudiant par apogee
+                Student student = studentRepository.findByApogee(apogee);
+                if (student == null) {
+                    redirectAttributes.addFlashAttribute("message", "Étudiant non trouvé pour l'apogee " + apogee);
+                    return "redirect:/uploadStatus";
+                }
+
+                // Récupération du levelId depuis l'objet Student
+                long levelId = student.getLevel().getLevelId(); // Vérifiez la méthode appropriée pour obtenir le levelId
+
+                // Nouveau nom de fichier avec apogee-levelId.jpg
+                String newFileName = apogee + "-" + levelId + ".jpg";
+                Path filePath = Paths.get(UPLOADED_FOLDER + newFileName);
+
+                // Stockage du fichier renommé
                 Files.write(filePath, file.getBytes());
                 body.add("files", new FileSystemResource(filePath.toFile()));
+
+                // Debug - Afficher le nouveau nom de fichier
+                System.out.println("Nouveau nom de fichier : " + newFileName);
             }
 
             HttpHeaders headers = new HttpHeaders();
@@ -75,36 +168,6 @@ public class ImageController {
 
 
 
-    @GetMapping("/image/{apogee}")
-    public ResponseEntity<Resource> getImage(@PathVariable long apogee) {
-        // Retrieve the student details from the database based on their name
-        Student student = studentRepository.findByApogee(apogee);
-        if (student == null) {
-            return ResponseEntity.notFound().build(); // Student not found
-        }
-
-        // Construct the file path for the student's image using their apogee
-        String fileName = student.getApogee() + ".jpg";
-        Path imagePath = Paths.get(UPLOADED_FOLDER + fileName);
-
-        try {
-            // Load the image file
-            Resource resource = new UrlResource(imagePath.toUri());
-
-            // Check if the image file exists
-            if (!resource.exists() || !resource.isReadable()) {
-                return ResponseEntity.notFound().build(); // Image file not found
-            }
-
-            // Return the image file
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(resource);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build(); // Error loading image
-        }
-    }
 
 
 }

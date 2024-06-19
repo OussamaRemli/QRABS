@@ -62,14 +62,14 @@ const EarningCard = ({ isLoading, name, abr }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/levels/has-schedule?levelName=${abr}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/api/levels/has-schedule?levelName=${abr}`)
       .then((response) => {
         setHasSchedule(response.data);
       })
       .catch((error) => console.error('Il y a eu une erreur!', error));
 
     axios
-      .get(`http://localhost:8080/api/levels/has-students?levelName=${abr}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/api/levels/has-students?levelName=${abr}`)
       .then((response) => {
         setHasStudents(response.data);
       })
@@ -101,7 +101,7 @@ const EarningCard = ({ isLoading, name, abr }) => {
       formData.append('file', selectedStudentFile);
 
       axios
-        .post('http://localhost:8080/api/students/upload', formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/api/students/upload`, formData)
         .then((response) => {
           setSnackbarSeverity('success');
           setSnackbarMessage('Students uploaded successfully');
@@ -124,7 +124,7 @@ const EarningCard = ({ isLoading, name, abr }) => {
       formData.append('file', selectedSessionFile);
 
       axios
-        .post('http://localhost:8080/api/session/upload', formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/api/session/upload`, formData)
         .then((response) => {
           setSnackbarSeverity('success');
           setSnackbarMessage('Sessions uploaded successfully');
@@ -149,7 +149,7 @@ const EarningCard = ({ isLoading, name, abr }) => {
       }
 
       axios
-        .post('http://localhost:8080/api/import-files/upload', formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/api/import-files/upload`, formData)
         .then((response) => {
           setSnackbarSeverity('success');
           setSnackbarMessage('Images uploaded successfully');

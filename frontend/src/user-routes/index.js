@@ -43,7 +43,7 @@ function UserRoutes() {
         const SamplePage = Loadable(lazy(() => import('user-views/sample-page')));
 
         // Appel à l'API pour récupérer les modules du professeur
-        const response = await fetch(`http://localhost:8080/api/session/professor/${professorId}/modules`);
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/session/professor/${professorId}/modules`);
         const data = await response.json();
 
         // Définition des routes principales

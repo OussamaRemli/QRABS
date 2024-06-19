@@ -65,7 +65,9 @@ public class ProfessorServiceImpl implements ProfessorService {
                 ProfessorDTO professorDTO = new ProfessorDTO();
 
                 // Extracting values from columns F, G, H, and I
-                String departmentName = getMergedCellValue(sheet, row.getRowNum(), 5); // Column F (0-indexed)
+
+
+                String departmentName = getMergedCellValue(sheet, row.getRowNum()+1, 5 ); // Column F (1-indexed)
                 // Check if the department exists
                 Optional<Department> departmentOptional = departmentRepository.findByDepartmentName(departmentName);
                 Department department;
@@ -74,11 +76,11 @@ public class ProfessorServiceImpl implements ProfessorService {
                 } else {
                     throw new RessourceNotFoundException("Departement: " + departmentName + " n'existe pas.");
                 }
-                String email = row.getCell(8).getStringCellValue(); // Column I (0-indexed)
+                String email = row.getCell(8).getStringCellValue(); // Column I (1-indexed)
 
                 // Check if the Gmail address occurs more than once
                 if (!gmailAddresses.add(email)) {
-                    throw new DuplicateException("Duplicate Gmail address found in the Excel file: " + email);
+                    throw new DuplicateException("le gmail: " + email +"existe déja");
                 }
 
                 // Check if professor with the same email already exists in the database

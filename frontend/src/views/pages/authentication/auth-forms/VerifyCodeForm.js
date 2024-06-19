@@ -25,7 +25,8 @@ const VerifyCodeForm = ({ ...others }) => {
     try {
       // Verify the code and update password
       const response = await axios.post(
-        'http://localhost:8080/api/professors/verify-code',
+
+          `${process.env.REACT_APP_BASE_URL}/api/professors/verify-code`,
         { email, verificationCode: values.code, newPassword: values.password },
         { headers: { 'Content-Type': 'application/json' } }
       );

@@ -1,18 +1,9 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import {styled} from '@mui/material/styles';
 import {Box, List, ListItem, ListItemText, Typography} from '@mui/material';
-
-// project imports
 import MainCard from 'ui-component/cards/MainCard';
-// import {useEffect, useState} from "react";
-// import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
-// assets
-// import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 
-// styles
 const CardWrapper = styled(MainCard)(({theme}) => ({
     backgroundColor: theme.palette.primary.dark,
     color: theme.palette.primary.light,
@@ -40,7 +31,6 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
     }
 }));
 
-// ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
 const ModuleCard = ({moduleName, sessionType,levelNames,startTime, endTime}) => {
 
@@ -64,9 +54,13 @@ const ModuleCard = ({moduleName, sessionType,levelNames,startTime, endTime}) => 
                                     </Typography>
                                 }
                                 secondary={
-                                    <Typography variant="subtitle2" sx={{color: 'primary.light', mt: 0.25}}>
-                                        {sessionType} : de {startTime} á {endTime}
-                                    </Typography>
+                                    <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
+                                    {sessionType}
+                                    {startTime !== 0 && endTime !== 0 ? (
+                                        ` : de ${startTime} á ${endTime}`
+                                    ) : null}
+                                </Typography>
+                                
                                 }
 
                             />

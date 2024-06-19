@@ -78,7 +78,7 @@ public interface SessionRepository extends JpaRepository<Session ,Long> {
     List<Session> findByModule(Module module);
 
     List<Session> findByProfessorProfessorId(Long professorId);
-    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId ")
+    @Query("SELECT s FROM Session s WHERE s.professor.professorId = :professorId AND s.sessionDay != 'none'")
     List<Session> findAllSessionForProfessor(long professorId);
 
 }

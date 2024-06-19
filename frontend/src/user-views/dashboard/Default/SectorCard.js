@@ -54,7 +54,7 @@ const SectorCard = ({levelNames,group}) => {
                                 }}
                                 primary={<Typography variant="h4">
                                     Niveau: {Array.isArray(levelNames) ? levelNames.join(', ') : levelNames
-                                }{group !== 'none' ? `, ${group}` : ''}
+                                }{group !== 'none' ? `- ${group}` : ''}
                                 </Typography>
                                 }
                             />

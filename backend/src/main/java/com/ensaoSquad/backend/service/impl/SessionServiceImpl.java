@@ -46,6 +46,7 @@ public class SessionServiceImpl implements SessionService {
     private LevelRepository levelRepository;
     @Autowired
     private AbsenceRepository absenceRepository;
+
     private final LevelService levelService;
     private ModuleService moduleService;
     @Autowired
@@ -71,7 +72,7 @@ public class SessionServiceImpl implements SessionService {
 
             // Update the session day by adding 1
             for (Session session : existingSessions) {
-                session.setSessionDay(session.getSessionDay() + "1");
+                session.setSessionDay("none");
             }
             sessionRepository.saveAll(existingSessions);
              String[] weekDays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -96,6 +97,7 @@ public class SessionServiceImpl implements SessionService {
         boolean byGroup = isByGroup(sheet, startRow, startColumn);
         List<SessionDTO> uploadedSessionDTOs = new ArrayList<>();
 
+
         if (byGroup) {
             for (int i = 0; i < 2; i++) {
                 String moduleName = sheet.getRow(startRow).getCell(startColumn + i * 3).getStringCellValue();
@@ -103,10 +105,10 @@ public class SessionServiceImpl implements SessionService {
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn + i * 3).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn + i * 3).getStringCellValue();
                 String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn + i * 3)
-                        .getStringCellValue().split("\\|");
+                        .getStringCellValue().split("-");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
-                ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
+                ModuleDTO moduleDTO = moduleService.findByModuleNameAndLevelName(moduleName,LevelMapper.toEntity(levelDTO));
                 Professor prof;
                 if (professorData.length == 3) {
                     long profId = Long.parseLong(professorData[2]);
@@ -114,8 +116,9 @@ public class SessionServiceImpl implements SessionService {
                 }else{
                     List<Professor> professors = professorService.findByFirstNameAndLastName(professorData[1], professorData[0]);
                     if (professors.size() > 1) {
-                        throw new MultipleFoundException("More than one professor found with first name: " +
-                                professorData[1] + " and last name: " + professorData[0]);
+                        throw new MultipleFoundException("Plus d'un professeur trouvé avec le prénom : " +
+                                professorData[1] + " et le nom de famille : " + professorData[0]);
+
                     }
                     prof = professors.isEmpty() ? null : professors.get(0);
                 }
@@ -135,11 +138,11 @@ public class SessionServiceImpl implements SessionService {
             if (!moduleName.isEmpty()) {
                 String groupName = sheet.getRow(startRow + 1).getCell(startColumn).getStringCellValue();
                 String sessionType = sheet.getRow(startRow + 2).getCell(startColumn).getStringCellValue();
-                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue().split("\\|");
+                String[] professorData = sheet.getRow(startRow + 3).getCell(startColumn).getStringCellValue().split("-");
                 String startTimeString = sheet.getRow(8).getCell(startColumn).getStringCellValue();
                 String endTimeString = sheet.getRow(8).getCell(startColumn + 3).getStringCellValue();
 
-                ModuleDTO moduleDTO = moduleService.findModuleByName(moduleName);
+                ModuleDTO moduleDTO = moduleService.findByModuleNameAndLevelName(moduleName,LevelMapper.toEntity(levelDTO));
                 if (moduleDTO == null) {
                     throw new RessourceNotFoundException("Le module " + moduleDTO + " n'existe pas");
                 }
@@ -171,8 +174,8 @@ public class SessionServiceImpl implements SessionService {
     }
 
     public LevelDTO getLevelFromSheet(Sheet sheet) {
-        Row headerRow = sheet.getRow(0);
-        String levelName = headerRow.getCell(2).getStringCellValue();
+        Row headerRow = sheet.getRow(1);
+        String levelName = headerRow.getCell(15).getStringCellValue();
         LevelDTO levelDTO = levelService.getLevelByName(levelName);
         if (levelDTO == null) {
             throw new RessourceNotFoundException("Le niveau " + levelName + " n'existe pas");

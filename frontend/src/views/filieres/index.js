@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import axios from 'axios';
 import { Grid, Divider, Snackbar, Alert } from '@mui/material';
 import Loadable from 'ui-component/Loadable';
@@ -27,6 +27,7 @@ const Filieres = ({ abr }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [activeModuleId, setActiveModuleId] = useState(null);
+  const samplePageRef = useRef(null);
 
   useEffect(() => {
     const fetchStudentsByLevelName = async () => {
@@ -76,6 +77,10 @@ const Filieres = ({ abr }) => {
     setSnackbarMessage(`Module sélectionné : ${moduleName}`);
     setSnackbarOpen(true);
     setActiveModuleId(moduleId);
+    // Scroll to absence list 
+    if (samplePageRef.current) {
+      samplePageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -110,7 +115,7 @@ const Filieres = ({ abr }) => {
           ))}
         </Grid>
       </Grid>
-      <Grid item xs={12} marginTop="16px" lg={12}>
+      <Grid item xs={12} marginTop="16px" lg={12} ref={samplePageRef}>
         {selectedModuleId && (
           <>
             <Divider sx={{ margin: '16px 0', backgroundColor: 'primary.main', height: '2px' }} />

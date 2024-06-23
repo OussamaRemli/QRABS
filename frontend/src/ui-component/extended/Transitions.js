@@ -1,11 +1,6 @@
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
-
-// material-ui
 import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
-
-// ==============================|| TRANSITIONS ||============================== //
-
 const Transitions = forwardRef(({ children, position, type, direction, ...others }, ref) => {
   let positionSX = {
     transformOrigin: '0 0 0'
@@ -105,3 +100,12 @@ Transitions.defaultProps = {
 };
 
 export default Transitions;
+
+// This code defines a React component Transitions using Material-UI transitions
+// (Grow, Collapse, Fade, Slide, Zoom) with configurable animation types, positions, and directions.
+
+
+
+
+
+

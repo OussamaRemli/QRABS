@@ -1,14 +1,16 @@
 import { Suspense } from 'react';
-
-// project imports
 import Loader from './Loader';
-
-// ==============================|| LOADABLE - LAZY LOADING ||============================== //
 
 const Loadable = (Component) => (props) => (
   <Suspense fallback={<Loader />}>
     <Component {...props} />
   </Suspense>
 );
-
 export default Loadable;
+
+
+
+// This code utilizes React Suspense to
+// manage asynchronous component loading,
+// displaying a Loader component as a fallback
+// while the main component loads.

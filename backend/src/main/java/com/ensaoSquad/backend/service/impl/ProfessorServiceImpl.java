@@ -58,16 +58,19 @@ public class ProfessorServiceImpl implements ProfessorService {
             Sheet sheet = workbook.getSheetAt(0); // Only one sheet
 
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next(); // Skip header row
-
+            for (int i = 0; i < 5; i++) { // Skip the first 5 rows
+                if (rowIterator.hasNext()) {
+                    rowIterator.next();
+                }
+            }
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
+
                 ProfessorDTO professorDTO = new ProfessorDTO();
 
                 // Extracting values from columns F, G, H, and I
 
-
-                String departmentName = getMergedCellValue(sheet, row.getRowNum()+1, 5 ); // Column F (1-indexed)
+                String departmentName = getMergedCellValue(sheet, row.getRowNum(), 6 ); // Column F (1-indexed)
                 // Check if the department exists
                 Optional<Department> departmentOptional = departmentRepository.findByDepartmentName(departmentName);
                 Department department;
@@ -76,12 +79,12 @@ public class ProfessorServiceImpl implements ProfessorService {
                 } else {
                     throw new RessourceNotFoundException("Departement: " + departmentName + " n'existe pas.");
                 }
-                String email = row.getCell(8).getStringCellValue(); // Column I (1-indexed)
+                String email = row.getCell(9).getStringCellValue(); // Column I (1-indexed)
 
                 // Check if the Gmail address occurs more than once
-                if (!gmailAddresses.add(email)) {
-                    throw new DuplicateException("le gmail: " + email +"existe déja");
-                }
+//                if (gmailAddresses.add(email)) {
+//                    throw new DuplicateException("le gmail: " + email +" existe plusieurs fois");
+//                }
 
                 // Check if professor with the same email already exists in the database
                 if (professorRepository.findByEmail(email).isPresent()) {
@@ -89,8 +92,8 @@ public class ProfessorServiceImpl implements ProfessorService {
                 }
 
                 // Map other data
-                professorDTO.setLastName(row.getCell(6).getStringCellValue()); // Column G (0-indexed)
-                professorDTO.setFirstName(row.getCell(7).getStringCellValue()); // Column H (0-indexed)
+                professorDTO.setLastName(row.getCell(7).getStringCellValue()); // Column G (0-indexed)
+                professorDTO.setFirstName(row.getCell(8).getStringCellValue()); // Column H (0-indexed)
                 professorDTO.setEmail(email);
                 professorDTO.setPassword(passwordEncoder.encode("12345")); // Assuming a default password
                 professorDTO.setDepartment(DepartmentMapper.toDTO(department));

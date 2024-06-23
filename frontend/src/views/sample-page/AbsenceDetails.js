@@ -14,7 +14,6 @@ import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlin
 function createData(Id, Date, Seance, Justifie) {
     return { Id, Date, Seance, Justifie };
 }
-
 export default function BasicTable({ moduleId, studentApogee }) {
     const [rows, setRows] = useState([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -26,7 +25,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
     }, [moduleId, studentApogee]);
 
     const fetchData = () => {
-        axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
+        axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/absence/details?studentApogee=${studentApogee}&moduleId=${moduleId}`)
             .then(response => {
                 const studentData = response.data[Object.keys(response.data)[0]];
                 const rowData = studentData.map(item => ({
@@ -43,7 +42,7 @@ export default function BasicTable({ moduleId, studentApogee }) {
     }
 
     const handleClick = (absenceId) => {
-        axios.put(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/justify?absenceId=${absenceId}`)
+        axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/absence/justify?absenceId=${absenceId}`)
             .then(response => {
                 if (response.status === 200) {
                     console.log('La justification de l\'absence a réussi.');
@@ -59,10 +58,10 @@ export default function BasicTable({ moduleId, studentApogee }) {
                 setOpenSnackbar(true)
             });
     }
-    const handleSnackbarOpen = (message) => {
-        setSnackbarMessage(message);
-        setOpenSnackbar(true);
-    };   
+    // const handleSnackbarOpen = (message) => {
+    //     setSnackbarMessage(message);
+    //     setOpenSnackbar(true);
+    // };
     const handleSnackbarClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;

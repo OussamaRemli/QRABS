@@ -272,6 +272,7 @@ public ResponseEntity<List<Long>> getAbsenceCountsTotal(
     ){
         Student student = studentService.findByApogee(Apogee);
         Long studentId = student.getStudentId();
+        System.out.println("recu oui tu as réaliser "+ Apogee);
         absenceService.markPresnt(sessionId, studentId, levelId, Apogee,group);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

@@ -34,6 +34,8 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
 
 const ModuleCard = ({moduleName, sessionType,levelNames,startTime, endTime}) => {
 
+    console.log(levelNames);
+
 
 
     return (

@@ -106,11 +106,10 @@ public class ImageController {
     }
 
     @PostMapping("/upload")
-    public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
         if (files == null || files.length == 0) {
             redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner des fichiers à télécharger.");
-            return "redirect:/uploadStatus";
-        }
+            return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);        }
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -129,7 +128,7 @@ public class ImageController {
                 Student student = studentRepository.findByApogee(apogee);
                 if (student == null) {
                     redirectAttributes.addFlashAttribute("message", "Étudiant non trouvé pour l'apogee " + apogee);
-                    return "redirect:/uploadStatus";
+                    return new ResponseEntity<>("Étudiant non trouvé pour l'apogee", HttpStatus.BAD_REQUEST);
                 }
 
                 // Récupération du levelId depuis l'objet Student
@@ -152,18 +151,19 @@ public class ImageController {
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-            String pythonScriptUrl = "http://localhost:5000/process";
+            String pythonScriptUrl = "http://localhost:5010/process";
             ResponseEntity<String> response = restTemplate.exchange(pythonScriptUrl, HttpMethod.POST, requestEntity, String.class);
 
             System.out.println(response.getBody());
 
             redirectAttributes.addFlashAttribute("message", "Fichiers téléchargés et traités avec succès !");
+            return new ResponseEntity<>("ichiers téléchargés et traités avec succès !", HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", "Échec du téléchargement des fichiers.");
         }
 
-        return "redirect:/uploadStatus";
+        return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
     }
 
 

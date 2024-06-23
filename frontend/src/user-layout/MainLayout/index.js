@@ -1,23 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-
-// material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
-
-// project imports
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
-// import Customization from '../Customization';
 import navigation from 'menu-items';
 import { drawerWidth } from 'store/constant';
 import { SET_MENU } from 'store/actions';
-
-// assets
 import { IconChevronRight } from '@tabler/icons-react';
-
-// styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && prop !== 'theme' })(({ theme, open }) => ({
   ...theme.typography.mainContent,
   borderBottomLeftRadius: 0,
@@ -50,8 +41,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' && pr
     marginRight: '10px'
   }
 }));
-
-// ==============================|| MAIN LAYOUT ||============================== //
 
 const MainLayout = () => {
   const theme = useTheme();

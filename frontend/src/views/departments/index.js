@@ -82,7 +82,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les professeurs par le nom du département
   const fetchProfessorsByDepartment = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/professors/department/${name}`);
+      const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/department/${name}`);
       const formattedProfessors = response.data.map(professor => ({
         professorId: professor.professorId,
         firstName: professor.firstName,
@@ -97,7 +97,7 @@ const Departement = ({name,abr}) => {
   // Fonction pour récupérer les modules par le nom du département
   const fetchModulesByDepartment = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/modules/department/${name}`);
+      const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/department/${name}`);
       const formattedModules = response.data.map(module => ({
         moduleId: module.moduleId,
         moduleName: module.moduleName,
@@ -119,7 +119,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer tous les professeurs (pour le formulaire)
     const fetchProfessors = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/professors/all`);
+        const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/all`);
         const formattedProfessors = response.data.map(professor => ({
           professorId: professor.professorId,
           firstName: professor.firstName,
@@ -133,7 +133,7 @@ const Departement = ({name,abr}) => {
     // Fonction pour récupérer les niveaux
     const fetchLevels = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/levels`);
+        const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/levels`);
         const formattedLevels = response.data.map(level => ({
           levelId: level.levelId,
           levelName: level.levelName,
@@ -197,7 +197,7 @@ const Departement = ({name,abr}) => {
         },
         nameByDepartment: newNameByDepartment
       };
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/modules`, moduleData);
+      await axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules`, moduleData);
       // Refresh modules list after adding
         setNewModuleName('');
         setNewIntituleModule('');
@@ -233,7 +233,7 @@ const Departement = ({name,abr}) => {
       };
   
       // Envoyer les données au backend avec Axios
-      await axios.post(`${process.env.REACT_APP_BASE_URL}/api/professors`, professorData);
+      await axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors`, professorData);
       
       // Réinitialiser les champs du formulaire après l'ajout
       setNewProfessorFirstName('');
@@ -263,7 +263,7 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post(`${process.env.REACT_APP_BASE_URL}/api/modules/upload`, formData)
+      axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/upload`, formData)
         .then((response) => {
           console.log('modules uploaded:');
           setSelectedFile(null);
@@ -286,7 +286,7 @@ const Departement = ({name,abr}) => {
       formData.append('file', selectedFile);
 
       axios.post(
-          `${process.env.REACT_APP_BASE_URL}/api/professors/upload`, formData)
+          `${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/upload`, formData)
         .then((response) => {
           console.log('professors uploaded!');
           setSelectedFile(null);
@@ -308,7 +308,7 @@ const Departement = ({name,abr}) => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      axios.post(`${process.env.REACT_APP_BASE_URL}/api/modules/uploadRespo`, formData)
+      axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/uploadRespo`, formData)
         .then((response) => {
           console.log('professors uploaded!');
           setSelectedFile(null);

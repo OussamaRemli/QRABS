@@ -14,7 +14,7 @@ function Users({ sessionId, levelId, level, group, apogee }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/students/${level}/${group}`);
+                const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/${level}/${group}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch student data');
                 }
@@ -38,7 +38,7 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                 // Fetch photos for each student
                 await Promise.all(data.map(async student => {
                     try {
-                        const imageResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/api/import-files/image/${student.apogee}`);
+                        const imageResponse = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/import-files/image/${student.apogee}`);
                         if (!imageResponse.ok) {
                             throw new Error('Image not found');
                         }
@@ -87,8 +87,8 @@ function Users({ sessionId, levelId, level, group, apogee }) {
     const handlePresenceChange = (apogee, isPresent) => async () => {
         try {
             const url = isPresent
-                ? `${process.env.REACT_APP_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${apogee}`
-                : `${process.env.REACT_APP_BASE_URL}/api/absence/isnotpresent/${levelId}/${apogee}/${group}`;
+                ? `${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${apogee}`
+                : `${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/isnotpresent/${levelId}/${apogee}/${group}`;
             const method = 'POST';
 
             const response = await fetch(url, {
@@ -239,7 +239,7 @@ export default Users;
 //         const fetchData = async () => {
 //             try {
 //                 // Fetch initial student data
-//                 const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/students/${level}/${group}`);
+//                 const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/${level}/${group}`);
 //                 if (!response.ok) {
 //                     throw new Error('Failed to fetch student data');
 //                 }
@@ -260,7 +260,7 @@ export default Users;
 //                 // Fetch photos for each student
 //                 await Promise.all(data.map(async student => {
 //                     try {
-//                         const imageResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/api/import-files/image/${student.apogee}`);
+//                         const imageResponse = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/import-files/image/${student.apogee}`);
 //                         if (!imageResponse.ok) {
 //                             throw new Error('Image not found');
 //                         }
@@ -302,7 +302,7 @@ export default Users;
 //         const updatePresence = async () => {
 //             try {
 //                 // Fetch updated presence data based on apogee
-//                 const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/presence/${sessionId}/${levelId}/${group}`, {
+//                 const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/presence/${sessionId}/${levelId}/${group}`, {
 //                     method: 'POST',
 //                     headers: {
 //                         'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ export default Users;
 
 //     const isNotPresent = (levelId, Apogee) => async () => {
 //         try {
-//             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/isnotpresent/${levelId}/${Apogee}/${group}`, {
+//             const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/isnotpresent/${levelId}/${Apogee}/${group}`, {
 //                 method: 'POST',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -380,7 +380,7 @@ export default Users;
 
 //     const isPresent = (sessionId, levelId, Apogee) => async () => {
 //         try {
-//             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${Apogee}`, {
+//             const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${Apogee}`, {
 //                 method: 'POST',
 //                 headers: {
 //                     'Content-Type': 'application/json',
@@ -525,7 +525,7 @@ export default Users;
 //     useEffect(() => {
 //         const fetchData = async () => {
 //             try {
-//                 const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/students/${level}/${group}`);
+//                 const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/${level}/${group}`);
 //                 if (!response.ok) {
 //                     throw new Error('Failed to fetch student data');
 //                 }
@@ -541,7 +541,7 @@ export default Users;
 //                 setUsers(updatedUsers);
 //                 await Promise.all(data.map(async student => {
 //                     try {
-//                         const imageResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/api/import-files/image/${student.apogee}`);
+//                         const imageResponse = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/import-files/image/${student.apogee}`);
 //                         if (!imageResponse.ok) {
 //                             throw new Error('Image not found');
 //                         }
@@ -563,7 +563,7 @@ export default Users;
 //     }, [level, apogee]);
 
 //     const isNotPresent = (levelId, Apogee) => () => {
-//         fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/isnotpresent/${levelId}/${Apogee}/${group}`, {
+//         fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/isnotpresent/${levelId}/${Apogee}/${group}`, {
 //             method: 'POST',
 //             headers: {
 //                 'Content-Type': 'application/json',
@@ -582,7 +582,7 @@ export default Users;
 
 
 //     const isPresent = (sessionId, levelId, Apogee) => {
-//         fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${Apogee}`, {
+//         fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/forprofesseur/${sessionId}/${levelId}/${group}?Apogee=${Apogee}`, {
 //             method: 'POST',
 //             headers: {
 //                 'Content-Type': 'application/json',

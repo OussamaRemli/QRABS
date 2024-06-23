@@ -52,14 +52,14 @@ const MenuList = () => {
         const professorId = parseInt(tokenPayload.id, 10);
 
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/session/professor/${professorId}/modules`
+          `${process.env.REACT_APP_SPRING_BASE_URL}/api/session/professor/${professorId}/modules`
         );
         const data = response.data;
 
         const moduleAbsences = await Promise.all(
           data.map(async (module) => {
             const absenceResponse = await axios.get(
-              `${process.env.REACT_APP_BASE_URL}/api/absence/level/module`,
+              `${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/level/module`,
               {
                 params: {
                   levelId: module.level.levelId,
@@ -69,7 +69,7 @@ const MenuList = () => {
             );
 
             const absenceAResponse = await axios.get(
-              `${process.env.REACT_APP_BASE_URL}/api/absence/module/level`,
+              `${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/module/level`,
               {
                 params: {
                   levelId: module.level.levelId,
@@ -161,7 +161,7 @@ export default MenuList;
 //   useEffect(() => {
 //     const fetchData = async () => {
 //       try {
-//         const response = await fetch('`${process.env.REACT_APP_BASE_URL}/api/modules/professor/57');
+//         const response = await fetch('`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/professor/57');
 //         const data = await response.json();
 //
 //         const utilities = {

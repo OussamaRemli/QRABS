@@ -17,6 +17,7 @@ const studentsColumns = [
 ];
 
 const Filieres = ({ abr }) => {
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setLoading] = useState(true);
   const [students, setStudents] = useState([]);
   const [modules, setModules] = useState([]);
@@ -32,7 +33,7 @@ const Filieres = ({ abr }) => {
   useEffect(() => {
     const fetchStudentsByLevelName = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/students/${abr}`);
+        const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/${abr}`);
         const formattedStudents = response.data.map((student, index) => ({
           id: index + 1,
           studentApogee: student.apogee,
@@ -49,7 +50,7 @@ const Filieres = ({ abr }) => {
 
     const fetchModulessByLevelName = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/modules/levelName/${abr}`);
+        const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/levelName/${abr}`);
         const filteredModules = response.data.filter(module => module.professor !== null);
         const formattedModules = filteredModules.map(module => ({
           moduleName: module.moduleName,

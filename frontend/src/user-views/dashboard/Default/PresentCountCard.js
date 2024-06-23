@@ -48,7 +48,7 @@ const CardWrapper = styled(MainCard)(({theme}) => ({
         }, [count]);
     
         useEffect(() => {
-            const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+            const socket = new SockJS(`${process.env.REACT_APP_SPRING_BASE_URL}/ws`);
             const stompClient = Stomp.over(socket);
     
             stompClient.connect({}, () => {

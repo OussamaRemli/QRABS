@@ -11,7 +11,7 @@
 // };
 
 // // Fetch data from the endpoint using the extracted professor ID
-// fetch(`${process.env.REACT_APP_BASE_URL}/api/modules/professor/${professorId}`)
+// fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/professor/${professorId}`)
 //     .then(response => response.json())
 //     .then(data => {
 //         data.forEach(module => {
@@ -37,7 +37,7 @@
 // };
 //
 // // Fetch data from the endpoint
-// fetch('`${process.env.REACT_APP_BASE_URL}/api/modules/professor/75')
+// fetch('`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/professor/75')
 //     .then(response => response.json())
 //     .then(data => {
 //         data.forEach(module => {

@@ -209,7 +209,7 @@
 
         console.log("Fetching data for Apogee:", Apogee);
 
-        fetch(`http://192.168.1.109:8080/api/absence/student/${Apogee}`)
+        fetch(`http://192.168.1.106:8080/api/absence/student/${Apogee}`)
             .then(response => {
                 if (!response.ok) {
                     return response.text().then(errorText => {
@@ -240,7 +240,7 @@
         var group = urlParams.has('group') ? urlParams.get('group') : '';
         var code = urlParams.has('code') ? urlParams.get('code') : '';
 
-        var formAction = `http://192.168.1.109:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&code=${code}`;
+        var formAction = `http://192.168.1.106:8080/api/absence/scan/${sessionId}/${levelId}/${group}?Apogee=${Apogee}&code=${code}`;
 
         console.log("Submitting presence for Apogee:", Apogee);
 

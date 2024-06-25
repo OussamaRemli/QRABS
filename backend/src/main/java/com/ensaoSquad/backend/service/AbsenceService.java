@@ -34,6 +34,7 @@ public interface AbsenceService {
     public boolean anyAbsencesExist();
 
     public boolean getMaxAbsence(Long moduleId, Long levelId);
+    public boolean getMaxAbsenceByLevel(Long levelId);
 
 ;
 }

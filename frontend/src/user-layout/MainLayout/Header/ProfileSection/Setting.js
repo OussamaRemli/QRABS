@@ -44,7 +44,7 @@ const SettingsPage = () => {
                     setNewProfessorEmail(tokenPayload.sub);
 
                     // Fetch professor's sessions
-                    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/session/sessions/${parseInt(tokenPayload.id, 10)}`);
+                    const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/session/sessions/${parseInt(tokenPayload.id, 10)}`);
                     setProfessorSessions(response.data);
                 } else {
                     console.log('Aucun token trouvé dans le localStorage');
@@ -73,7 +73,7 @@ const SettingsPage = () => {
                     departmentId: professorDepartmentId
                 }
             };
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/professors`, professorData);
+            await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors`, professorData);
             setSnackbarSeverity('success');
             setSnackbarMessage('Mise à jour réussie');
             setOpenSnackbar(true);
@@ -103,7 +103,7 @@ const SettingsPage = () => {
             const professorData ={
                email : newProfessorEmail
             }
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/professors/${professorId}/email`, professorData);
+            await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/${professorId}/email`, professorData);
 
             setSnackbarSeverity('success');
             setSnackbarMessage('E-mail mis à jour avec succès.');
@@ -138,7 +138,7 @@ const SettingsPage = () => {
                 password: newProfessorPassword
             };
 
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/professors/${professorId}/password`, professorData);
+            await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/${professorId}/password`, professorData);
 
             setSnackbarSeverity('success');
             setSnackbarMessage('Mot de passe mis à jour avec succès.');

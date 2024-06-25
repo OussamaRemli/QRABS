@@ -36,8 +36,6 @@ const CardStyle = styled(Card)(({ theme }) => ({
   }
 }));
 
-// ==============================|| PROFILE MENU - UPGRADE PLAN CARD ||============================== //
-
 const UpgradePlanCard = ({name,abr}) => (
   <CardStyle>
     <CardContent>

@@ -37,7 +37,7 @@ const Dashboard = () => {
             console.error('Erreur lors de la récupération des données du token:', error);
         }
 
-        const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+        const socket = new SockJS(`${process.env.REACT_APP_SPRING_BASE_URL}/ws`);
         const stompClient = Stomp.over(socket);
 
         stompClient.connect({}, () => {
@@ -63,7 +63,7 @@ const Dashboard = () => {
             };
         });
 
-        axios.get(`${process.env.REACT_APP_BASE_URL}/api/session/currentSession/${professorId}`)
+        axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/session/currentSession/${professorId}`)
         .then((response) => {
             setDataSession(response.data);
         })
@@ -237,7 +237,7 @@ export default Dashboard;
 //             } catch (error) {
 //                 console.error('Erreur lors de la récupération des données du token:', error);
 //             }
-//             const socket = new SockJS('`${process.env.REACT_APP_BASE_URL}/ws');
+//             const socket = new SockJS('`${process.env.REACT_APP_SPRING_BASE_URL}/ws');
 //             const stompClient = Stomp.over(socket);
 //
 //             // Subscribe to WebSocket topic
@@ -260,7 +260,7 @@ export default Dashboard;
 //                 };
 //             });
 //
-//             fetch(`${process.env.REACT_APP_BASE_URL}/api/session/currentSession/${professorId}`)
+//             fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/session/currentSession/${professorId}`)
 //                 .then(response => response.json())
 //                 .then(dataSession => {
 //                     setDataSession(dataSession);

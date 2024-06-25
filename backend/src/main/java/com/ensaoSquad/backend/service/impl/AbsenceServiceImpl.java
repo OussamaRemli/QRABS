@@ -221,5 +221,13 @@ public class AbsenceServiceImpl implements AbsenceService {
         return l>=3;
     }
 
+    @Override
+    public boolean getMaxAbsenceByLevel(Long levelId) {
+        Long l=absenceRepository.findMaxAbsenceCountByLevel(levelId);
+        System.out.println(l);
+        if(l==null)l=0L;
+        return l>=3;
+    }
+
 
 }

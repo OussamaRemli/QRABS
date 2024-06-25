@@ -251,6 +251,10 @@ public ResponseEntity<List<Long>> getAbsenceCountsTotal(
     public ResponseEntity<Boolean> getMaxAbsence(@RequestParam("levelId") long levelId, @RequestParam("module_id") long moduleId) {
         return ResponseEntity.ok(absenceService.getMaxAbsence(moduleId,levelId));
     }
+    @GetMapping("/absence/level")
+    public ResponseEntity<Boolean> getMaxAbsenceByLevel(@RequestParam("levelId") long levelId) {
+        return ResponseEntity.ok(absenceService.getMaxAbsenceByLevel(levelId));
+    }
 
     @GetMapping("/code")
     public ResponseEntity<String> generateCode(@RequestParam("levelId") long levelId) {
@@ -268,6 +272,7 @@ public ResponseEntity<List<Long>> getAbsenceCountsTotal(
     ){
         Student student = studentService.findByApogee(Apogee);
         Long studentId = student.getStudentId();
+        System.out.println("recu oui tu as réaliser "+ Apogee);
         absenceService.markPresnt(sessionId, studentId, levelId, Apogee,group);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

@@ -1,10 +1,10 @@
 // // material-ui
 // import { styled } from '@mui/material/styles';
 // import { Button, Card, CardContent, Grid, Stack, Typography } from '@mui/material';
-
+//
 // // project imports
 // import AnimateButton from 'ui-component/extended/AnimateButton';
-
+//
 // // styles
 // const CardStyle = styled(Card)(({ theme }) => ({
 //   background: theme.palette.warning.light,
@@ -35,9 +35,9 @@
 //     right: '-70px'
 //   }
 // }));
-
+//
 // // ==============================|| PROFILE MENU - UPGRADE PLAN CARD ||============================== //
-
+//
 // const UpgradePlanCard = () => (
 //   <CardStyle>
 //     <CardContent>
@@ -64,5 +64,5 @@
 //     </CardContent>
 //   </CardStyle>
 // );
-
+//
 // export default UpgradePlanCard;

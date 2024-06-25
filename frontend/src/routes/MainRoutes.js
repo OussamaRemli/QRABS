@@ -10,7 +10,7 @@ const Update = Loadable(lazy(() => import('layout/MainLayout/Header/ProfileSecti
 
 // Fetch data from the API
 async function fetchLevels() {
-  const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/levels`);
+  const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/levels`);
   const data = await response.json();
   return data;
 }

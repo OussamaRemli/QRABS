@@ -80,6 +80,7 @@ const SettingsPage = () => {
         try {
             const { id, email: currentEmail } = professorData;
             const newEmail = professorData.email;
+            console.log(currentEmail);
 
             if (!newEmail) {
                 throw new Error("L'e-mail est requis.");
@@ -87,7 +88,7 @@ const SettingsPage = () => {
 
             const updatedProfessor = { id, email: newEmail };
 
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/professors/${id}/email`, updatedProfessor);
+            await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/${id}/email`, updatedProfessor);
 
             setSnackbarSeverity('success');
             setSnackbarMessage('E-mail mis à jour avec succès.');
@@ -118,7 +119,7 @@ const SettingsPage = () => {
 
             const updatedProfessor = { id, password: newProfessorPassword };
 
-            await axios.put(`${process.env.REACT_APP_BASE_URL}/api/professors/${id}/password`, updatedProfessor);
+            await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/${id}/password`, updatedProfessor);
 
             setSnackbarSeverity('success');
             setSnackbarMessage('Mot de passe mis à jour avec succès.');
@@ -151,15 +152,15 @@ const SettingsPage = () => {
             }
     
             // Confirmation du mot de passe avec l'API
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/confirm-password`, {
+            const response = await axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/auth/confirm-password`, {
                 email: professorData.email,
                 password: resetPassword,
             });
     
             if (response.data === 'Password confirmed successfully.') {
                 // Réinitialisation réussie, envoyer les requêtes DELETE
-                const deleteSessionsResponse = await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/session/deleteAll`);
-                const deleteStudentsResponse = await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/students/deleteAll`);
+                const deleteSessionsResponse = await axios.delete(`${process.env.REACT_APP_SPRING_BASE_URL}/api/session/deleteAll`);
+                const deleteStudentsResponse = await axios.delete(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/deleteAll`);
     
                 // Vérifier les réponses des suppressions
                 if (deleteSessionsResponse.status === 200 && deleteStudentsResponse.status === 200) {

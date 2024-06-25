@@ -8,6 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 
 function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
+     console.log(professorId);
     const [users, setUsers] = useState([]);
     const [TypeSession, setTypeSession] = useState("Total");
     const buttonStyle = (sessionType) => ({
@@ -17,7 +18,7 @@ function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
 
     useEffect(() => {
         // Utilisation de fetch pour récupérer les données des absences
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/absence/count?moduleId=${moduleId}&levelId=${levelId}`)
+        fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/absence/count?moduleId=${moduleId}&levelId=${levelId}`)
             .then(response => response.json())
             .then(data => {
                 const updatedUsers = Object.keys(data).map(key => {
@@ -51,7 +52,7 @@ function AbsenceList({ levelId, moduleId,professorId, onButtonClick }) {
                 setUsers(updatedUsers);
                 // Boucle pour récupérer les images des étudiants
                 updatedUsers.forEach(user => {
-                    fetch(`${process.env.REACT_APP_BASE_URL}/api/import-files/image/${user.Apogee}`)
+                    fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/import-files/image/${user.Apogee}`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Image not found');

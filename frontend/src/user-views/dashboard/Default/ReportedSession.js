@@ -37,7 +37,7 @@ const ReportedSession = () => {
     useEffect(() => {
         if (professorId !== '') { // Vérifie si l'id du professeur a été extrait
             setLoading(false); // Si l'id a été extrait, le chargement est terminé
-            const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+            const socket = new SockJS(`${process.env.REACT_APP_SPRING_BASE_URL}/ws`);
             const stompClient = Stomp.over(socket);
 
             stompClient.connect({}, function () {
@@ -116,7 +116,7 @@ const ReportedSession = () => {
                                       style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                     <br/>
                                         <Qrcode
-                                            url={`${process.env.REACT_APP_BASE_URL}/Qr/scan/${Session.sessionId}/${Session.level.levelId}/${group}`}
+                                            url={`${process.env.REACT_APP_SPRING_BASE_URL}/Qr/scan/${Session.sessionId}/${Session.level.levelId}/${group}`}
                                             sessionId={Session.sessionId}
                                             levelId={Session.level.levelId}
                                             group={group}

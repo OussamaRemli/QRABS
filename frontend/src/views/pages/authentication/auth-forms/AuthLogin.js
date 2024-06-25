@@ -93,7 +93,7 @@ const FirebaseLogin = ({ ...others }) => {
               setSubmitting(false);
 
               // Récupérer le token JWT depuis la réponse de votre API (assumant que le token est dans la réponse user)
-              const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/professors/authenticate`, {
+              const response = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/authenticate`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -117,6 +117,7 @@ const FirebaseLogin = ({ ...others }) => {
                 console.log("error auth!!")
                 // Si la réponse n'est pas réussie, afficher une erreur
                 const errorData = await response.text();
+                console.log(errorData);
                 throw new Error("Email or Password doesn't matched!");
               }
             }

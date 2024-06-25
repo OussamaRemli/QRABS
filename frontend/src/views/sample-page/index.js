@@ -1,8 +1,7 @@
-import {Button, ButtonGroup, Grid, IconButton} from '@mui/material';
+import {Grid, IconButton} from '@mui/material';
 import {gridSpacing} from 'store/constant';
 
 import AbsenceList from './AbsenceList';
-import Chart from './PieChart';
 
 import StudentCard from './StudentCard';
 import AbsenceDetails from './AbsenceDetails';

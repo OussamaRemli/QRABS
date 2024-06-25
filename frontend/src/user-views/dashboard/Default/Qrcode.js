@@ -1,5 +1,4 @@
-import {useState,useEffect} from 'react';
-
+import {useState,useEffect ,useRef} from 'react';
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import {
@@ -10,11 +9,9 @@ import {
     Typography
 } from '@mui/material';
 import Alert from '@mui/material/Alert';
-
 import MainCard from 'ui-component/cards/MainCard';
 import {CardActions} from "@mui/material";
 import {gridSpacing} from 'store/constant';
-
 import FullscreenSharpIcon from '@mui/icons-material/FullscreenSharp';
 import CloseFullscreenOutlinedIcon from '@mui/icons-material/CloseFullscreenOutlined';
 import QRCode from "react-qr-code";
@@ -25,31 +22,88 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import CustomDialog from "./Dialog";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import * as React from "react";
-import Face from '../../../assets/images/1.svg';
+import Webcam from "react-webcam";
+
 const Qrcode = ({levelId,sessionId,group}) => {
 
+    const webcamRef = useRef(null);
+    const [sendingActive, setSendingActive] = useState(false);
+    const [devices, setDevices] = useState([]);
+    const [selectedDevice, setSelectedDevice] = useState('');
 
+    let cameraStream = null;
+
+    const getVideoDevices = async () => {
+        try {
+            // Demande les autorisations d'accès aux périphériques multimédias
+            cameraStream =await navigator.mediaDevices.getUserMedia({ video: true });
+
+            // Obtient la liste des périphériques vidéo
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+            // Sélectionne le premier périphérique par défaut
+            if (videoDevices.length > 0) {
+                setSelectedDevice(videoDevices[0].deviceId);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la récupération des périphériques vidéo :', error);
+        }
+    };
+
+
+
+
+    const captureAndSend = async () => {
+        if (!webcamRef.current) {
+            console.error('Webcam reference is not set.');
+            return;
+        }
+
+        const imageSrc = webcamRef.current.getScreenshot();
+
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_FLASK_BASE_URL}/api`, { data: imageSrc, sessionId: sessionId, group: group });
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Error sending photo:', error);
+        }
+    };
+
+    useEffect(() => {
+        let intervalId;
+
+        if (sendingActive) {
+            intervalId = setInterval(() => {
+                captureAndSend();
+            }, 3000); // Capture and send photo every 5 seconds
+        }
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [sendingActive]);
 
     useEffect(() => {
         let stompClient = null;
         let codeSubscription = null;
-    
+
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/absence/code?levelId=${levelId}`);
+                const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/code?levelId=${levelId}`);
                 setCode(response.data);
-                
+
                 // Assuming you want to do something with the response here
                 console.log('Data fetched:', response.data);
             } catch (error) {
                 console.error('Fetch Data Error:', error);
             }
         };
-    
+
         const connectWebSocket = () => {
-            const socket = new SockJS(`${process.env.REACT_APP_BASE_URL}/ws`);
+            const socket = new SockJS(`${process.env.REACT_APP_SPRING_BASE_URL}/ws`);
             stompClient = Stomp.over(socket);
-    
+
             stompClient.connect({}, () => {
                 codeSubscription = stompClient.subscribe(`/topic/code/${levelId}`, (message) => {
                     setCode(message.body);
@@ -58,9 +112,9 @@ const Qrcode = ({levelId,sessionId,group}) => {
                 });
             });
         };
-    
+
         fetchData().then(connectWebSocket); // Ensure WebSocket connects after fetching data
-    
+
         return () => {
             if (codeSubscription) {
                 codeSubscription.unsubscribe();
@@ -70,9 +124,9 @@ const Qrcode = ({levelId,sessionId,group}) => {
             }
         };
     }, [levelId]); // Add levelId as a dependency to re-run effect if it changes
-    
 
-     
+
+
     const [code,setCode]=useState('');
     const [isExpanded, setQrIsExpanded] = useState(false);
     const [isDone, setIsDone] = useState([]);
@@ -119,7 +173,7 @@ const Qrcode = ({levelId,sessionId,group}) => {
 
     const handleConfirm = (levelId,sessionId,group) => {
 
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/absence/${sessionId}/${levelId}/${group}`, {
+        fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/absence/${sessionId}/${levelId}/${group}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -156,19 +210,12 @@ const Qrcode = ({levelId,sessionId,group}) => {
     }
 
     const sendToPython = () => {
-        const pythonServerEndpoint = 'http://192.168.1.109:5005/prestart-recognition';
-        const data = {
-            sessionId: sessionId,
-            levelId: levelId,
-            group: group
-        };
+        const pythonServerEndpoint = `${process.env.REACT_APP_FLASK_BASE_URL}/prestart-recognition`;
 
         axios.post(pythonServerEndpoint)
             .then(()=> {
-                axios.post('http://192.168.1.109:5005/start-recognition',data)// Exécutez ces actions juste après l'envoi de la requête
-                    .then(()=>{});
-                setFacialRecognition(true);
-           
+                getVideoDevices();
+                setSendingActive(true);
             })
             .catch(error => {
                 console.error('Erreur lors de l\'envoi des données à Python:', error);
@@ -179,14 +226,14 @@ const Qrcode = ({levelId,sessionId,group}) => {
 
     };
     function stopFacialRecognition() {
-        axios.post('http://192.168.1.109:5005/stop-recognition')
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error("Erreur lors de l'arrêt de la reconnaissance faciale :", error);
-            });
+        if(cameraStream) {
+            navigator.mediaDevices.getUserMedia({video: false});
+        }
     }
+
+        const videoConstraints = {
+        deviceId: selectedDevice ? { exact: selectedDevice } : undefined,
+    };
 
 
 
@@ -248,16 +295,24 @@ const Qrcode = ({levelId,sessionId,group}) => {
                         <Grid container spacing={gridSpacing}>
                             <Grid item xs={12}>
                                 <Grid container alignItems="center" justifyContent="center">
-                                    {!facialRecognition ? (
+                                    {!sendingActive ? (
                                         <QRCode
-                                            value={`${process.env.REACT_APP_BASE_URL}/Qr/scan/${sessionId}/${levelId}/${group}/${code}`}
+                                            value={`${process.env.REACT_APP_SPRING_BASE_URL}/Qr/scan/${sessionId}/${levelId}/${group}/${code}`}
                                             style={{
                                                 width: isExpanded ? '35%' : '80%',
                                                 height: isExpanded ? '35%' : '80%',
                                             }}
                                         />
                                     ) : (
-                                        <img src={Face}  />
+                                        <Webcam
+                                            audio={false}
+                                            ref={webcamRef}
+                                            screenshotFormat="image/jpeg"
+                                            width={200}
+                                            height={210}
+                                            videoConstraints={videoConstraints}
+                                        />
+
                                     )}
                                 </Grid>
                             </Grid>
@@ -292,8 +347,8 @@ const Qrcode = ({levelId,sessionId,group}) => {
             </MainCard>
             {openCameraDialog && <CustomDialog title={"Détection Faciale"} subtitle={"Veuillez utiliser la détection faciale pour procéder à l'enregistrement"} open={openCameraDialog} onClose={handleCameraCancel} onCancel={handleCameraCancel} onConfirm={()=>{sendToPython();
                 handleCameraCancel();}}/> }
-            {openMarkAbsenceDialog && <CustomDialog title={"Confirmation de l'absence "} subtitle={"Êtes-vous sûr de vouloir marquer cette absence ?"} open={openMarkAbsenceDialog} onClose={handleMarkAbsenceCameraCancel} onCancel={handleMarkAbsenceCameraCancel} onConfirm={() => {if(facialRecognition){stopFacialRecognition();} handleConfirm(levelId, sessionId, group);handleMarkAbsenceCameraCancel();}} />}
-            {openQrcodeDialog && <CustomDialog title={"Annulalation de Détection Faciale"} subtitle={"Êtes-vous sûr de vouloir annuler la detection faciale ?"} open={openQrcodeDialog} onClose={handleQrcodeCancel} onCancel={handleQrcodeCancel} onConfirm={() => {stopFacialRecognition(); setFacialRecognition(false); handleQrcodeCancel();}} />}
+            {openMarkAbsenceDialog && <CustomDialog title={"Confirmation de l'absence "} subtitle={"Êtes-vous sûr de vouloir marquer cette absence ?"} open={openMarkAbsenceDialog} onClose={handleMarkAbsenceCameraCancel} onCancel={handleMarkAbsenceCameraCancel} onConfirm={() => { stopFacialRecognition(); setSendingActive(false); handleConfirm(levelId, sessionId, group);handleMarkAbsenceCameraCancel();}} />}
+            {openQrcodeDialog && <CustomDialog title={"Annulalation de Détection Faciale"} subtitle={"Êtes-vous sûr de vouloir annuler la detection faciale ?"} open={openQrcodeDialog} onClose={handleQrcodeCancel} onCancel={handleQrcodeCancel} onConfirm={() => {stopFacialRecognition(); setSendingActive(false); handleQrcodeCancel();}} />}
 
         </>
     );

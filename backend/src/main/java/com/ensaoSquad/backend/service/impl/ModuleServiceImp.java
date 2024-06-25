@@ -161,7 +161,11 @@ public class ModuleServiceImp implements ModuleService {
             Sheet sheet = workbook.getSheetAt(0); // Only one sheet
 
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next();
+            for (int i = 0; i < 5; i++) { // Skip the first 5 rows
+                if (rowIterator.hasNext()) {
+                    rowIterator.next();
+                }
+            }
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -200,7 +204,7 @@ public class ModuleServiceImp implements ModuleService {
                     targetLevelSuffix = "3";
                 } else if (semestre.equalsIgnoreCase("s3") || semestre.equalsIgnoreCase("s4")) {
                     targetLevelSuffix = "4";
-                } else if (semestre.equalsIgnoreCase("s5")) {
+                } else if (semestre.equalsIgnoreCase("s5")|| semestre.equalsIgnoreCase("s6")) {
                     targetLevelSuffix = "5";
                 }
 
@@ -210,11 +214,11 @@ public class ModuleServiceImp implements ModuleService {
                         .map(Level::getLevelName)
                         .filter(name -> name.endsWith(finalTargetLevelSuffix))
                         .findFirst()
-                        .orElseThrow(() -> new RessourceNotFoundException("No level found for sector " + filiere + " and semester " + semestre));
+                        .orElseThrow(() -> new RessourceNotFoundException("semstre invalide" +semestre+ "dans" +filiere));
 
                 Level level = levelRepository.findByLevelName(levelName);
                 if (level == null) {
-                    throw new RessourceNotFoundException("Level with name " + levelName + " does not exist.");
+                    throw new RessourceNotFoundException("le niveau " + levelName + " n'existe pas.");
                 }
 
                 if (moduleRepository.existsByModuleNameAndLevel_LevelId(moduleDTO.getModuleName(),level.getLevelId())) {
@@ -254,31 +258,35 @@ public class ModuleServiceImp implements ModuleService {
             Sheet sheet = workbook.getSheetAt(0); // Only one sheet
 
             Iterator<Row> rowIterator = sheet.iterator();
-            rowIterator.next(); // Skip header row
+            for (int i = 0; i < 6; i++) { // Skip the first 5 rows
+                if (rowIterator.hasNext()) {
+                    rowIterator.next();
+                }
+            }
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 if (!isRowEmpty(row)) {
                     // Module Name
-                    Cell cellB = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellB = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueB = getCellValueAsString(cellB);
 
                     // Prof respo
-                    Cell cellD = row.getCell(12, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellD = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueD = getCellValueAsString(cellD);
 
                     // Level name
-                    Cell cellJ = row.getCell(11, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellJ = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     String cellValueJ = getCellValueAsString(cellJ);
 
                     Level level = levelRepository.findByLevelName(cellValueJ);
                     if (level == null) {
-                        continue;
+                        throw new RessourceNotFoundException("Le niveau " + cellValueJ + " n'existe pas.");
                     }
 
                     Module module = moduleRepository.findByModuleNameAndLevel(cellValueB, level);
                     if (module == null) {
-                        continue;
+                        throw new RessourceNotFoundException("Le module " + cellValueB + " n'existe pas dans le niveau "+cellValueJ);
                     }
 
                     Optional<Professor> professorOptional = professorRepository.findByEmail(cellValueD);
@@ -286,6 +294,9 @@ public class ModuleServiceImp implements ModuleService {
                         Professor professor = professorOptional.get();
                         module.setProfessor(professor);
                         moduleRepository.save(module);
+                    }else{
+                        throw new RessourceNotFoundException("Acun professeur avev l'email " + cellValueD );
+
                     }
                 }
             }

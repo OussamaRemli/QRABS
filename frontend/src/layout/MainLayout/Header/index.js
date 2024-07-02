@@ -60,10 +60,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
         </ButtonBase>
       </Box>
 
-<<<<<<< HEAD
-=======
       {/* <SearchSection /> */}
->>>>>>> c48500895760d7cc11bd93b80524606e4f2a1842
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
 

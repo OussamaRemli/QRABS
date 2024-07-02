@@ -123,7 +123,7 @@ const Dashboard = () => {
     <Grid container spacing={gridSpacing} justifyContent={'center'} alignItems={'center'}>
       <Grid item xs={12} lg={12} marginTop={'16px'}>
         {/* Bouton pour ajouter une filière */}
-        <Button onClick={() => setShowForm(!showForm)}>Ajouter une filière</Button>
+        {/*<Button onClick={() => setShowForm(!showForm)}>Ajouter une filière</Button>*/}
         
         {/* Formulaire pour ajouter une filière */}
         {showForm && (

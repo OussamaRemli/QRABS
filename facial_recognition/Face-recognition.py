@@ -7,14 +7,12 @@ import face_recognition
 import sqlite3
 import numpy as np
 import requests
-import face_recognition
-import sqlite3
-from flask import Flask, request, jsonify
 import logging
-import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 CORS(app)
+load_dotenv()
 
 # Function to retrieve encodings and labels from SQLite database
 def retrieve_encodings_from_db(db_name):
@@ -90,7 +88,8 @@ def receive_photo():
             parts = name.split('-')  
             apogee = parts[0]  
             levelId = parts[1].split('.')[0]
-            springBootEndpoint = f"http://localhost:8080/api/absence/forprofesseur/{sessionId}/{levelId}/{group}?Apogee={apogee}"
+            BackendUrl = os.getenv('BackendUrl')
+            springBootEndpoint = f"http://{BackendUrl}/api/absence/forprofesseur/{sessionId}/{levelId}/{group}?Apogee={apogee}"
             response = requests.post(springBootEndpoint)
 
     os.remove(filepath)

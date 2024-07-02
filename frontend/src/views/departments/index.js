@@ -345,15 +345,15 @@ const Departement = ({name,abr}) => {
           <Grid item lg={12} md={6} sm={6} xs={12}>
             <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
           </Grid>
-          <Grid item lg={12} md={6} sm={6} xs={12} justifyContent={'center'}>
-            <Stack direction="row" spacing={3} justifyContent={'center'}>
-            <Button color="secondary" size="large" variant={activeTab === 'modules' ? 'contained' : 'outlined'} onClick={() => handleTabChange('modules')} >Voir Modules</Button>
-            <Button color="secondary" size="large" variant={showAddModuleForm ? 'contained' : 'outlined'} onClick={toggleAddModuleForm}>Ajouter Module</Button>
-            <Button color="secondary" size="large" variant={activeTab === 'professors' ? 'contained' : 'outlined'} onClick={() => handleTabChange('professors')} >Voir Professeurs</Button>
-            <Button color="secondary" size="large" variant={showAddProfessorForm ? 'contained' : 'outlined'} onClick={toggleAddProfessorForm}>Ajouter Professeur</Button>
-            <Button color="secondary" size="large" variant={showAffectationForm ? 'contained' : 'outlined'} onClick={toggleAffectationForm}>Affecter Modules au Professeur</Button>
-            </Stack>
-          </Grid>
+          {/*<Grid item lg={12} md={6} sm={6} xs={12} justifyContent={'center'}>*/}
+          {/*  /!*<Stack direction="row" spacing={3} justifyContent={'center'}>*!/*/}
+          {/*  /!*<Button color="secondary" size="large" variant={activeTab === 'modules' ? 'contained' : 'outlined'} onClick={() => handleTabChange('modules')} >Voir Modules</Button>*!/*/}
+          {/*  /!*<Button color="secondary" size="large" variant={showAddModuleForm ? 'contained' : 'outlined'} onClick={toggleAddModuleForm}>Ajouter Module</Button>*!/*/}
+          {/*  /!*<Button color="secondary" size="large" variant={activeTab === 'professors' ? 'contained' : 'outlined'} onClick={() => handleTabChange('professors')} >Voir Professeurs</Button>*!/*/}
+          {/*  /!*<Button color="secondary" size="large" variant={showAddProfessorForm ? 'contained' : 'outlined'} onClick={toggleAddProfessorForm}>Ajouter Professeur</Button>*!/*/}
+          {/*  /!*<Button color="secondary" size="large" variant={showAffectationForm ? 'contained' : 'outlined'} onClick={toggleAffectationForm}>Affecter Modules au Professeur</Button>*!/*/}
+          {/*  /!*</Stack>*!/*/}
+          {/*</Grid>*/}
           <Snackbar
               open={openSnackbar}
               autoHideDuration={4000}

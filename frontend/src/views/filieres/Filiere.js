@@ -8,7 +8,7 @@ import { Book } from '@mui/icons-material';
 import axios from 'axios';
 
 const CardWrapper = styled(MainCard)(({ theme, clicked,total  }) => ({
-    backgroundColor: total >= 3 && clicked ? '#800000' : (total >= 3 ? '#A91101' : (clicked ? theme.palette.primary[800] : theme.palette.primary.dark)),  color: theme.palette.primary.light,
+    backgroundColor: total >= 3 && clicked ? '#800000' : (total >= 3 ? '#A91101' : (clicked ? theme.palette.primary[800] : theme.palette.primary.dark)),
     color: theme.palette.primary.light,
     overflow: 'hidden',
     position: 'relative',

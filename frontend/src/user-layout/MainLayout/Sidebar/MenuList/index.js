@@ -23,12 +23,12 @@ const MenuList = () => {
   const [menuItems, setMenuItems] = useState([
     {
       id: 'dashboard',
-      title: 'Dashboard',
+      title: 'Accueil',
       type: 'group',
       children: [
         {
           id: 'default',
-          title: 'Dashboard',
+          title: 'Accueil',
           type: 'item',
           url: '/dashboard/default',
           icon: icons.IconDashboard,

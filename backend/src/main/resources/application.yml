@@ -1,8 +1,3 @@
-#server:
-#  port: 8080
-#  ssl:
-#    key-store: C:/Users/LLLNNN/OneDrive/Desktop/GestAbs/backend/src/main/resources/keystore.p12
-#    key-store-password: oussama
-#    key-store-type: PKCS12
-#    key-alias: my-ssl-cert
-#
+spring:
+  main:
+    allow-bean-definition-overriding: true

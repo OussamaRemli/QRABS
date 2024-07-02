@@ -4,6 +4,7 @@ import com.ensaoSquad.backend.model.Student;
 import com.ensaoSquad.backend.repository.StudentRepository;
 import org.python.core.PyException;
 import org.python.util.PythonInterpreter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,44 +35,9 @@ public class ImageController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Value("${flask_url}")
+    private String flaskUrl;
 
-//    @PostMapping("/upload")
-//    public String uploadFiles(@RequestParam("files") MultipartFile[] files, RedirectAttributes redirectAttributes) {
-//        if (files == null || files.length == 0) {
-//            redirectAttributes.addFlashAttribute("message", "Veuillez sélectionner des fichiers à télécharger.");
-//            return "redirect:/uploadStatus";
-//        }
-//
-//        try {
-//            RestTemplate restTemplate = new RestTemplate();
-//
-//            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-//            for (MultipartFile file : files) {
-//                // Ici, nous traitons le fichier et stockons le contenu nécessaire
-//                // au lieu de tenter de sérialiser l'objet MultipartFile directement
-//                Path filePath = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-//                Files.write(filePath, file.getBytes());
-//                body.add("files", new FileSystemResource(filePath.toFile()));
-//            }
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-//
-//            String pythonScriptUrl = "http://localhost:5000/process";
-//            ResponseEntity<String> response = restTemplate.exchange(pythonScriptUrl, HttpMethod.POST, requestEntity, String.class);
-//
-//            System.out.println(response.getBody());
-//
-//            redirectAttributes.addFlashAttribute("message", "Fichiers téléchargés et traités avec succès !");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            redirectAttributes.addFlashAttribute("message", "Échec du téléchargement des fichiers.");
-//        }
-//
-//        return "redirect:/uploadStatus";
-//    }
 
 
     @GetMapping("/image/{apogee}")
@@ -151,7 +117,7 @@ public class ImageController {
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-            String pythonScriptUrl = "http://localhost:5010/process";
+            String pythonScriptUrl = flaskUrl+"/process";
             ResponseEntity<String> response = restTemplate.exchange(pythonScriptUrl, HttpMethod.POST, requestEntity, String.class);
 
             System.out.println(response.getBody());

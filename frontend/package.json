@@ -12,6 +12,7 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/lab": "^5.0.0-alpha.163",
     "@mui/material": "^5.15.15",
+    "@mui/styles": "^5.15.21",
     "@mui/system": "^5.15.7",
     "@mui/utils": "^5.15.7",
     "@mui/x-charts": "^7.3.0",

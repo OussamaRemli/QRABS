@@ -8,12 +8,12 @@ const icons = { IconDashboard };
 
 const dashboard = {
   id: 'dashboard',
-  title: 'Dashboard',
+  title: 'Acceuil',
   type: 'group',
   children: [
     {
       id: 'default',
-      title: 'Dashboard',
+      title: 'Acceuil',
       type: 'item',
       url: '/dashboard/default',
       icon: icons.IconDashboard,

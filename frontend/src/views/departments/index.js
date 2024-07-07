@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Grid, ButtonGroup, Button } from '@mui/material';
+import { Grid, Tab, Tabs, Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import TotalIncomeLightCard from '../dashboard/Default/TotalIncomeLightCard';
 import { gridSpacing } from 'store/constant';
 import './departments.css';
 
 const modulesColumns = [
-  { field: 'intituleModule', headerName: 'Intitulé module', flex: 0.35 ,headerAlign: 'center',  renderCell: (params) => <div className="center-text">{params.value}</div>},
-  { field: 'moduleName', headerName: 'Element de module', flex: 0.35 ,headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div>},
-  { field: 'level', headerName: 'Niveau', flex: 0.3 ,headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div>}
+  { field: 'intituleModule', headerName: 'Intitulé module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'moduleName', headerName: 'Element de module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'level', headerName: 'Niveau', flex: 0.3, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> }
 ];
 
-
 const professorsColumns = [
-  { field: 'Prénom', headerName: 'First Name', flex: 0.25,headerAlign: 'center',  renderCell: (params) => <div className="center-text">{params.value}</div> },
-  { field: 'Nom', headerName: 'Last Name', flex: 0.25,headerAlign: 'center',  renderCell: (params) => <div className="center-text">{params.value}</div>},
-  { field: 'Email', headerName: 'Email', flex: 0.5,headerAlign: 'center',  renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'Prénom', headerName: 'Prénom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'Nom', headerName: 'Nom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'Email', headerName: 'Email', flex: 0.5, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
 ];
 
 const Departement = ({ name, abr }) => {
@@ -64,52 +63,49 @@ const Departement = ({ name, abr }) => {
 
   if (!localStorage.getItem('token')) return null;
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
   };
 
   return (
     <div className="container">
-   
       <Grid container spacing={gridSpacing}>
-        <Grid item xs={12} className="card">
+        <Grid item xs={12}>
           <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
         </Grid>
 
-        <div className="buttons">
-          <ButtonGroup variant="contained" aria-label="outlined primary button group">
-            <Button onClick={() => handleTabChange('modules')} className={activeTab === 'modules' ? 'active' : ''}>
-              Voir Modules
-            </Button>
-            <Button onClick={() => handleTabChange('professors')} className={activeTab === 'professors' ? 'active' : ''}>
-              Voir Professeurs
-            </Button>
-          </ButtonGroup>
-        </div>
+        <Grid item xs={12}>
+          <Tabs value={activeTab} onChange={handleTabChange} aria-label="Tabs">
+            <Tab label="Modules" value="modules" />
+            <Tab label="Professeurs" value="professors" />
+          </Tabs>
+        </Grid>
 
         <Grid item lg={12} xs={12} md={8} className="data-grid">
-          {activeTab === 'modules' && (
-            <div style={{ height: '100%', width: '100%' }}>
-              <DataGrid
-                loading={isLoading}
-                rows={modules}
-                columns={modulesColumns}
-                pageSize={5}
-                getRowId={(row) => row.moduleId}
-              />
-            </div>
-          )}
-          {activeTab === 'professors' && (
-            <div style={{ height: '100%', width: '100%' }}>
-              <DataGrid
-                loading={isLoading}
-                rows={professors}
-                columns={professorsColumns}
-                pageSize={5}
-                getRowId={(row) => row.professorId}
-              />
-            </div>
-          )}
+          <Box mt={3}>
+            {activeTab === 'modules' && (
+              <div style={{ height: '100%', width: '100%' }}>
+                <DataGrid
+                  loading={isLoading}
+                  rows={modules}
+                  columns={modulesColumns}
+                  pageSize={5}
+                  getRowId={(row) => row.moduleId}
+                />
+              </div>
+            )}
+            {activeTab === 'professors' && (
+              <div style={{ height: '100%', width: '100%' }}>
+                <DataGrid
+                  loading={isLoading}
+                  rows={professors}
+                  columns={professorsColumns}
+                  pageSize={5}
+                  getRowId={(row) => row.professorId}
+                />
+              </div>
+            )}
+          </Box>
         </Grid>
       </Grid>
     </div>

@@ -32,7 +32,6 @@ function valueText(value) {
   return `${value}px`;
 }
 
-// ==============================|| LIVE CUSTOMIZATION ||============================== //
 
 const Customization = () => {
   const theme = useTheme();

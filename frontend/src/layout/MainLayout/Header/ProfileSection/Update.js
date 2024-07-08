@@ -2,8 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, Box, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { MailOutline, LockOutlined, Delete, Add } from '@mui/icons-material';
-import axios from 'axios';
+import { styled } from '@mui/material/styles';
 
+import axios from 'axios';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 const SettingsPage = () => {
     const [professorData, setProfessorData] = useState({
         id: '',
@@ -22,11 +36,39 @@ const SettingsPage = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogFeild, setOpenDialogFeild] = useState(false);
     const [tabValue, setTabValue] = useState(0);
-    const [newFiliereName, setNewFiliereName] = useState('');
     const [newFiliereAbbreviation, setNewFiliereAbbreviation] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const navigate = useNavigate();
 
+    const handleImportModules = () => {
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+    
+            console.log('FormData:', formData.get('file')); // Vérifiez que le fichier est bien ajouté à FormData
+    
+            axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/upload`, formData)
+                .then((response) => {
+                    console.log('Modules uploaded:', response.data);
+                    setSelectedFile(null);
+                    setSnackbarSeverity('success');
+                    setSnackbarMessage('Modules uploaded successfully');
+                    setOpenSnackbar(true);
+                })
+                .catch((error) => {
+                    console.error('Upload error:', error); // Ajoutez ceci pour voir les erreurs complètes
+                    const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+                    setSnackbarSeverity('error');
+                    setSnackbarMessage(errorMessage);
+                    setOpenSnackbar(true);
+                });
+        } else {
+            console.log('No file selected');
+        }
+    };
+    
+    
     useEffect(() => {
         fetchProfessorData();
     }, []);
@@ -206,7 +248,6 @@ const SettingsPage = () => {
             setSnackbarSeverity('success');
             setSnackbarMessage('Filière ajoutée avec succès.');
             setOpenSnackbar(true);
-            setNewFiliereName('');
             setNewFiliereAbbreviation('');
         } catch (error) {
             console.error('Erreur lors de l\'ajout de la filière :', error);
@@ -283,6 +324,23 @@ const SettingsPage = () => {
 
             {tabValue === 1 && (
                 <Box mb={4}>
+
+                    <Box display="flex" alignItems="center" mb={2}>
+                        <Add sx={{ mr: 1 }} />
+                        <Typography variant="h5">Importer les modules via excel</Typography>
+                    </Box>
+                    <Button
+                     component="label"
+                     role={undefined}
+                     variant="contained"
+                     tabIndex={-1}
+                    startIcon={<CloudUploadIcon />}
+                    onClick={() => handleImportModules()}
+                    >
+                    Upload file
+                   <VisuallyHiddenInput type="file" />
+                   </Button>
+
                     <Box display="flex" alignItems="center" mb={2}>
                         <Add sx={{ mr: 1 }} />
                         <Typography variant="h5">Ajouter une filière</Typography>

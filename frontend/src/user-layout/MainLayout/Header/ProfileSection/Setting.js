@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Select, MenuItem, TextField, Button, Box, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import EarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
 const SettingsPage = () => {
     const [selectedSession, setSelectedSession] = useState('');

@@ -3,15 +3,12 @@ import { lazy, useEffect, useState } from "react";
 import Loadable from "../ui-component/Loadable";
 import MainLayout from "../user-layout/MainLayout";
 
-// Importation des composants pour le routage
-// const DashboardDefault = Loadable(lazy(() => import('user-views/dashboard/Default')));
-// const Update = Loadable(lazy(() => import('user-layout/MainLayout/Header/ProfileSection/Update')));
-// const SamplePage = Loadable(lazy(() => import('user-views/sample-page')));
+
 import AuthenticationRoutes from './AuthenticationRoutes';
 import SettingsPage from "../user-layout/MainLayout/Header/ProfileSection/Setting";
 import ReportedSession from "../user-views/dashboard/Default/ReportedSession";
-import ForgotPassword from "../user-views/pages/authentication/authentication3/ForgotPassword";
-import VerifyCode from "../user-views/pages/authentication/authentication3/VerifyCode";
+import ForgotPassword from "../views/pages/authentication/authentication3/ForgotPassword";
+import VerifyCode from "../views/pages/authentication/authentication3/VerifyCode";
 
 
 

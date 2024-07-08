@@ -6,18 +6,11 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider, Button } from '@mui/material';
 import Typewriter from 'typewriter-effect';
 
-// routing
-
+// rng
 import ThemeRoutes from 'routes'; // Importing ThemeRoutes from 'routes'
-//import LoginRoute from 'login-routes'; // Importing LoginRoutes from 'routes'
-//import AuthenticationRoutes from 'routes/AuthenticationRoutes'
-//import Routes from 'routes'; // Importing UserRoutes from 'user-routes'
 import Routes from 'user-routes';
-
-// defaultTheme
 import themes from 'themes';
 
-// project imports
 import NavigationScroll from 'layout/NavigationScroll';
 import adminImage from './assets/images/Admin.png'; // Importez votre image d'administrateur
 import professorImage from './assets/images/Professor.png'; // Importez votre image de professeur

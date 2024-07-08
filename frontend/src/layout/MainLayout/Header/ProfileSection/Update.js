@@ -41,32 +41,111 @@ const SettingsPage = () => {
 
     const navigate = useNavigate();
 
-    const handleImportModules = () => {
-        if (selectedFile) {
-            const formData = new FormData();
-            formData.append('file', selectedFile);
-    
-            console.log('FormData:', formData.get('file')); // Vérifiez que le fichier est bien ajouté à FormData
-    
-            axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/upload`, formData)
-                .then((response) => {
-                    console.log('Modules uploaded:', response.data);
-                    setSelectedFile(null);
-                    setSnackbarSeverity('success');
-                    setSnackbarMessage('Modules uploaded successfully');
-                    setOpenSnackbar(true);
-                })
-                .catch((error) => {
-                    console.error('Upload error:', error); // Ajoutez ceci pour voir les erreurs complètes
-                    const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
-                    setSnackbarSeverity('error');
-                    setSnackbarMessage(errorMessage);
-                    setOpenSnackbar(true);
-                });
-        } else {
-            console.log('No file selected');
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            handleImportModules(file); // Directly call the upload function with the selected file
         }
     };
+
+    const handleImportModules = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        console.log('FormData:', formData.get('file')); // Verify that the file is correctly added to FormData
+
+        axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Set the correct content type for file uploads
+            }
+        })
+        .then((response) => {
+            console.log('Modules uploaded:', response.data);
+            setSelectedFile(null);
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Modules uploaded successfully');
+            setOpenSnackbar(true);
+        })
+        .catch((error) => {
+            console.error('Upload error:', error); // Add this line to see complete error details
+            const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+            setSnackbarSeverity('error');
+            setSnackbarMessage(errorMessage);
+            setOpenSnackbar(true);
+        });
+    };
+
+    const handleProfessorFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            handleImportProfessor(file); // Directly call the upload function with the selected file
+        }
+    };
+
+    const handleImportProfessor = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        console.log('FormData:', formData.get('file')); // Verify that the file is correctly added to FormData
+
+        axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/professors/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Set the correct content type for file uploads
+            }
+        })
+        .then((response) => {
+            console.log('Modules uploaded:', response.data);
+            setSelectedFile(null);
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Professors uploaded successfully');
+            setOpenSnackbar(true);
+        })
+        .catch((error) => {
+            console.error('Upload error:', error); // Add this line to see complete error details
+            const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+            setSnackbarSeverity('error');
+            setSnackbarMessage(errorMessage);
+            setOpenSnackbar(true);
+        });
+    };
+    
+    const handleFileSouhaitsChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            handleImportSouhaits(file); // Directly call the upload function with the selected file
+        }
+    };
+    
+    const handleImportSouhaits = (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        console.log('FormData:', formData.get('file')); // Verify that the file is correctly added to FormData
+
+        axios.post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/modules/uploadRespo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // Set the correct content type for file uploads
+            }
+        })
+        .then((response) => {
+            console.log('Modules uploaded:', response.data);
+            setSelectedFile(null);
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Professors uploaded successfully');
+            setOpenSnackbar(true);
+        })
+        .catch((error) => {
+            console.error('Upload error:', error); // Add this line to see complete error details
+            const errorMessage = error.response?.data?.message || 'An error occurred during file upload';
+            setSnackbarSeverity('error');
+            setSnackbarMessage(errorMessage);
+            setOpenSnackbar(true);
+        });
+    };
+    
     
     
     useEffect(() => {
@@ -329,17 +408,72 @@ const SettingsPage = () => {
                         <Add sx={{ mr: 1 }} />
                         <Typography variant="h5">Importer les modules via excel</Typography>
                     </Box>
-                    <Button
-                     component="label"
-                     role={undefined}
-                     variant="contained"
-                     tabIndex={-1}
-                    startIcon={<CloudUploadIcon />}
-                    onClick={() => handleImportModules()}
-                    >
-                    Upload file
-                   <VisuallyHiddenInput type="file" />
-                   </Button>
+                    <Box display="flex" alignItems="center" mb={2}>
+
+                    <input
+                type="file"
+                style={{ display: 'none' }}
+                id="upload-file-input"
+                onChange={handleFileChange}
+            />
+            
+            <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                htmlFor="upload-file-input"
+            >
+                Upload file
+            </Button>
+            </Box>
+
+            <Box display="flex" alignItems="center" mb={2}>
+                        <Add sx={{ mr: 1 }} />
+                        <Typography variant="h5">Importer les professeurs via excel</Typography>
+            </Box>
+                    <Box display="flex" alignItems="center" mb={2}>
+
+                    <input
+                type="file"
+                style={{ display: 'none' }}
+                id="upload-file-professor-input"
+                onChange={handleProfessorFileChange}
+            />
+            
+            <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                htmlFor="upload-file-professor-input"
+            >
+                Upload file
+            </Button>
+            </Box>
+            <Box display="flex" alignItems="center" mb={2}>
+                        <Add sx={{ mr: 1 }} />
+                        <Typography variant="h5">Importer les affectations  via excel</Typography>
+                    </Box>
+                    <Box display="flex" alignItems="center" mb={2}>
+
+                    <input
+                type="file"
+                style={{ display: 'none' }}
+                id="upload-file-souhaits-input"
+                onChange={handleFileSouhaitsChange}
+            />
+            
+            <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                htmlFor="upload-file-souhaits-input"
+            >
+                Upload file
+            </Button>
+            </Box>
+
+
+
 
                     <Box display="flex" alignItems="center" mb={2}>
                         <Add sx={{ mr: 1 }} />

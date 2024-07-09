@@ -1,4 +1,4 @@
-import { useState, useEffect  } from 'react';
+import { useState, useEffect  ,useRef} from 'react';
 // import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 // material-ui
@@ -21,7 +21,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project imports
-import useScriptRef from 'hooks/useScriptRef';
+// import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
@@ -30,6 +30,20 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 const FirebaseLogin = ({ ...others }) => {
+
+  const useScriptRef = () => {
+    const scripted = useRef(true);
+  
+    useEffect(
+      () => () => {
+        scripted.current = false;
+      },
+      []
+    );
+  
+    return scripted;
+  };
+
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   const navigate = useNavigate();

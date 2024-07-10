@@ -69,12 +69,12 @@ const Departement = ({ name, abr }) => {
 
   return (
     <div className="container">
-      <Grid container spacing={gridSpacing}>
+      <Grid container spacing={gridSpacing} mt={0.1}>
         <Grid item xs={12}>
           <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <Tabs value={activeTab} onChange={handleTabChange} aria-label="Tabs">
             <Tab label="Modules" value="modules" />
             <Tab label="Professeurs" value="professors" />
@@ -82,7 +82,7 @@ const Departement = ({ name, abr }) => {
         </Grid>
 
         <Grid item lg={12} xs={12} md={8} className="data-grid">
-          <Box mt={3}>
+          <Box mt={1}>
             {activeTab === 'modules' && (
               <div style={{ height: '100%', width: '100%' }}>
                 <DataGrid

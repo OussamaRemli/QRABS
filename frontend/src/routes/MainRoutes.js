@@ -6,7 +6,7 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const Departement = Loadable(lazy(() => import('views/departments')));
 const Filiere = Loadable(lazy(() => import('views/filieres')));
-const Update = Loadable(lazy(() => import('layout/MainLayout/Header/ProfileSection/Update')));
+const Settings = Loadable(lazy(() => import('layout/MainLayout/Header/ProfileSection/Settings')));
 
 // Fetch data from the API
 async function fetchLevels() {
@@ -79,8 +79,8 @@ const MainRoutes = {
     },
     ...filiereRoutes,
     {
-      path: 'update',
-      element: <Update />
+      path: 'Settings',
+      element: <Settings />
     }
   ]
 };

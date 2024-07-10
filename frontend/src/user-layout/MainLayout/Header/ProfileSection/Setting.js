@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Select, MenuItem, TextField, Button, Box, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { MailOutline, LockOutlined, Delete, Add } from '@mui/icons-material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
 
 const SettingsPage = () => {
     const [selectedSession, setSelectedSession] = useState('');
@@ -187,11 +190,13 @@ const SettingsPage = () => {
 
     return (
         <Container>
-            <Typography variant="h4" gutterBottom>Paramètres</Typography>
+            <Typography  mt={3} mb={2} variant="h1" gutterBottom>Paramètres</Typography>
 
             <Box mb={2}>
-                <Typography variant="h6">Marquer l'absence</Typography>
-                <Typography variant="subtitle1">En cas de report d'une séance, vous êtes invité(e) à indiquer votre absence pour cette séance.</Typography>
+            <Box display="flex" alignItems="center" mt={4} mb={2}>
+                        <CheckBoxIcon sx={{ mr: 1 }} />
+                        <Typography variant="h3">Maruqer l'absence</Typography>
+                    </Box>                   <Typography variant="subtitle1">En cas de report d'une séance, vous êtes invité(e) à indiquer votre absence pour cette séance.</Typography>
                 <Select value={selectedSession} onChange={handleSessionChange} fullWidth margin="normal">
                     <MenuItem value="">
                         <em>Choisir une séance</em>
@@ -211,8 +216,10 @@ const SettingsPage = () => {
             </Box>
 
             <Box mb={2}>
-                <Typography variant="h6">Changer l'email</Typography>
-                <TextField
+            <Box display="flex" alignItems="center" mb={2}>
+                        <MailOutline sx={{ mr: 1 }} />
+                        <Typography variant="h3">Changer l'email</Typography>
+                    </Box>                <TextField
                     label="Nouvelle adresse e-mail"
                     type="email"
                     value={newProfessorEmail}
@@ -227,8 +234,10 @@ const SettingsPage = () => {
             </Box>
 
             <Box mb={2}>
-                <Typography variant="h6">Changer le mot de passe</Typography>
-                <TextField
+            <Box display="flex" alignItems="center" mt={4} mb={2}>
+                        <LockOutlined sx={{ mr: 1 }} />
+                        <Typography variant="h3">Changer le mot de passe</Typography>
+                    </Box>                <TextField
                     label="Nouveau mot de passe"
                     type="password"
                     value={newProfessorPassword}

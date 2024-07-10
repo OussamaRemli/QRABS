@@ -118,7 +118,7 @@ const ProfileSection = () => {
     prevOpen.current = open;
   }, [open]);
   const handleAccountSettingsClick = () => {
-    navigate('/update');
+    navigate('/Settings');
   };
 
 

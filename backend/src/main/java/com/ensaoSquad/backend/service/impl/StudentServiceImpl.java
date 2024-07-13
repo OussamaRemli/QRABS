@@ -22,6 +22,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -158,6 +159,8 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteAll();
     }
 
+
+
     public boolean anyStudentsExist() {
         return studentRepository.count() > 0;
     }
@@ -172,5 +175,39 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.existsByEmail(email);
     }
 
+
+    public Student updateStudent(long apogee, Student updatedStudent) {
+        Optional<Student> optionalStudent = Optional.ofNullable(studentRepository.findByApogee(apogee));
+
+        if (optionalStudent.isPresent()) {
+            Student existingStudent = optionalStudent.get();
+            existingStudent.setFirstName(updatedStudent.getFirstName());
+            existingStudent.setLastName(updatedStudent.getLastName());
+            existingStudent.setEmail(updatedStudent.getEmail());
+            existingStudent.setGroupName(updatedStudent.getGroupName());
+            existingStudent.setLevel(updatedStudent.getLevel());
+
+            return studentRepository.save(existingStudent);
+        } else {
+            throw new RuntimeException("Student not found with apogee: " + apogee);
+        }
+    }
+
+    public boolean deleteStudentByApogee(long apogee) {
+        Optional<Student> studentOptional = Optional.ofNullable(studentRepository.findByApogee(apogee));
+        if (studentOptional.isPresent()) {
+            studentRepository.delete(studentOptional.get());
+            return true;
+        }
+        return false;
+    }
+
+    public List<Student> getStudentsByLevelNameModel(String levelName) {
+        return studentRepository.findByLevel_LevelName(levelName);
+    }
+
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
+    }
 }
 

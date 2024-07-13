@@ -25,6 +25,12 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @PutMapping("/update/{apogee}")
+    public Student updateStudent(@PathVariable long apogee, @RequestBody Student updatedStudent) {
+        return studentService.updateStudent(apogee, updatedStudent);
+    }
+
+
     @PostMapping("/upload")
     public ResponseEntity<?> uploadStudentsFromExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -89,4 +95,26 @@ public class StudentController {
         return ResponseEntity.noContent().build(); // Return success after deletion
     }
 
+
+    @DeleteMapping("/delete/{apogee}")
+    public ResponseEntity<String> deleteStudentByApogee(@PathVariable long apogee) {
+        boolean isDeleted = studentService.deleteStudentByApogee(apogee);
+        if (isDeleted) {
+            return ResponseEntity.ok("Student with apogee " + apogee + " deleted successfully.");
+        } else {
+            return ResponseEntity.status(404).body("Student with apogee " + apogee + " not found.");
+        }
+    }
+
+    @GetMapping("/level/name/{levelName}")
+    public ResponseEntity<List<Student>> getStudentsByLevelNameModel(@PathVariable String levelName) {
+        List<Student> students = studentService.getStudentsByLevelNameModel(levelName);
+        return ResponseEntity.ok(students);
+    }
+
+    @PostMapping
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        Student savedStudent = studentService.addStudent(student);
+        return ResponseEntity.ok(savedStudent);
+    }
 }

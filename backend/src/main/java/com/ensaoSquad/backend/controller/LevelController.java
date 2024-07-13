@@ -1,6 +1,8 @@
 package com.ensaoSquad.backend.controller;
 
 import com.ensaoSquad.backend.dto.LevelDTO;
+import com.ensaoSquad.backend.model.Level;
+import com.ensaoSquad.backend.repository.LevelRepository;
 import com.ensaoSquad.backend.service.LevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,16 @@ public class LevelController {
     @Autowired
     private LevelService levelService;
 
+    @Autowired
+    private LevelRepository levelRepository;
+
     @PostMapping
     public ResponseEntity<LevelDTO> createLevel(@RequestBody LevelDTO levelDTO) {
         LevelDTO createdLevel = levelService.createLevel(levelDTO);
         return new ResponseEntity<>(createdLevel, HttpStatus.CREATED);
     }
+
+
 
     @PostMapping("/createFiliere")
     public ResponseEntity<List<LevelDTO>> addSectorData(@RequestBody String sectorAbbreviation) {
@@ -57,5 +64,21 @@ public class LevelController {
     public ResponseEntity<Boolean> checkLevelStudents(@RequestParam String levelName) {
         boolean hasStudents = levelService.levelHasStudents(levelName);
         return ResponseEntity.ok(hasStudents);
+    }
+
+    @PutMapping("/{id}")
+    public Level updateLevel(@PathVariable long id, @RequestBody Level updatedLevel) {
+        Level existingLevel = levelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Filière introuvable avec l'ID : " + id));
+
+        existingLevel.setLevelName(updatedLevel.getLevelName());
+        existingLevel.setSectorName(updatedLevel.getSectorName());
+
+        return levelRepository.save(existingLevel);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteLevel(@PathVariable long id) {
+        levelRepository.deleteById(id);
     }
 }

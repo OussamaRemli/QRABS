@@ -1,6 +1,7 @@
 package com.ensaoSquad.backend.service;
 
 import com.ensaoSquad.backend.dto.StudentDTO;
+import com.ensaoSquad.backend.model.Level;
 import com.ensaoSquad.backend.model.Professor;
 import com.ensaoSquad.backend.model.Student;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,12 +14,18 @@ public interface StudentService {
     List<StudentDTO> uploadStudentsFromExcel(MultipartFile file);
     List<StudentDTO> getStudentsByLevelName(String levelName);
 
+    public List<Student> getStudentsByLevelNameModel(String levelName);
+
     List<StudentDTO> getStudentsByLevelNameAndGroupName(String levelName,String groupName);
 
     public boolean anyStudentsExist();
     void deleteAllStudentsByLevel(String levelName);
 
     Student findByApogee(long apogee);
+
+    public Student updateStudent(long studentId, Student updatedStudent);
+
+    public boolean deleteStudentByApogee(long apogee);
 
 
     List<List<StudentDTO>> getStudentsTaughtByProfessorInTimeframe(
@@ -27,6 +34,9 @@ public interface StudentService {
     
     void deleteAllStudent();
 
+
     boolean apogeeExists(long apogee);
     boolean emailExists(String email);
+
+    public Student addStudent(Student student);
 }

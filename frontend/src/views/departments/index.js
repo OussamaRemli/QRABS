@@ -4,18 +4,18 @@ import { Grid, Tab, Tabs, Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import TotalIncomeLightCard from '../dashboard/Default/TotalIncomeLightCard';
 import { gridSpacing } from 'store/constant';
-import './departments.css';
+import '../../assets/scss/style.css';
 
 const modulesColumns = [
-  { field: 'intituleModule', headerName: 'Intitulé module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
-  { field: 'moduleName', headerName: 'Element de module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
-  { field: 'level', headerName: 'Niveau', flex: 0.3, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> }
+  { field: 'intituleModule', headerName: 'Intitulé module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> },
+  { field: 'moduleName', headerName: 'Element de module', flex: 0.35, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> },
+  { field: 'level', headerName: 'Niveau', flex: 0.3, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> }
 ];
 
 const professorsColumns = [
-  { field: 'Prénom', headerName: 'Prénom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
-  { field: 'Nom', headerName: 'Nom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
-  { field: 'Email', headerName: 'Email', flex: 0.5, headerAlign: 'center', renderCell: (params) => <div className="center-text">{params.value}</div> },
+  { field: 'Prénom', headerName: 'Prénom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> },
+  { field: 'Nom', headerName: 'Nom', flex: 0.25, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> },
+  { field: 'Email', headerName: 'Email', flex: 0.5, headerAlign: 'center', renderCell: (params) => <div className="header-center-text">{params.value}</div> },
 ];
 
 const Departement = ({ name, abr }) => {
@@ -68,7 +68,7 @@ const Departement = ({ name, abr }) => {
   };
 
   return (
-    <div className="container">
+    <div className="departement-container">
       <Grid container spacing={gridSpacing} mt={0.1}>
         <Grid item xs={12}>
           <TotalIncomeLightCard isLoading={isLoading} abr={abr} name={name} />
@@ -81,7 +81,7 @@ const Departement = ({ name, abr }) => {
           </Tabs>
         </Grid>
 
-        <Grid item lg={12} xs={12} md={8} className="data-grid">
+        <Grid item lg={12} xs={12} md={8} className="departement-data-grid">
           <Box mt={1}>
             {activeTab === 'modules' && (
               <div style={{ height: '100%', width: '100%' }}>
@@ -91,6 +91,7 @@ const Departement = ({ name, abr }) => {
                   columns={modulesColumns}
                   pageSize={5}
                   getRowId={(row) => row.moduleId}
+                  hideFooter
                 />
               </div>
             )}
@@ -102,6 +103,7 @@ const Departement = ({ name, abr }) => {
                   columns={professorsColumns}
                   pageSize={5}
                   getRowId={(row) => row.professorId}
+                  hideFooter
                 />
               </div>
             )}

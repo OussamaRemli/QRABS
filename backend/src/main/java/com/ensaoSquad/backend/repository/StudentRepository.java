@@ -41,4 +41,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByApogee(long apogee);
     boolean existsByEmail(String email);
 
+    List<Student> findByLevel_LevelName(String levelName);
+
+
 }

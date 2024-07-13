@@ -11,7 +11,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { MailOutline, LockOutlined, Delete, Add } from '@mui/icons-material';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import ButtonBase from '@mui/material/ButtonBase';
-
+import ModifyLevel from './ModifyLevel';
+import ModifyStudent from './ModifyStudent';
 import { styled } from '@mui/material/styles';
 
 import axios from 'axios';
@@ -51,14 +52,31 @@ const SettingsPage = () => {
     const [showImportations, setShowImportations] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
 
+    const [openModifyLevel, setOpenModifyLevel] = useState(false);
+    const [openModifyStudent, setOpenModifyStudent] = useState(false);
 
+
+    const handleOpenModifyLevel = () => {
+        setOpenModifyLevel(true);
+    };
+
+    const handleOpenModifyStudent = () => {
+        setOpenModifyStudent(true);
+    };
+    const handleCloseModifyLevel = () => {
+        setOpenModifyLevel(false);
+    };
+
+    const handleCloseModifyStudent = () => {
+        setOpenModifyStudent(false);
+    };
     const navigate = useNavigate();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
-            handleImportModules(file); // Directly call the upload function with the selected file
+            handleImportModules(file); 
         }
     };
 
@@ -550,11 +568,21 @@ const SettingsPage = () => {
                  <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => setShowUpdate(!showUpdate)}>
                   <SettingsBackupRestoreIcon sx={{ mr: 1 }} />
                   <ButtonBase>
-    <Typography variant="h3">gérer les ressources</Typography>
+    <Typography variant="h3">Gestion des ressources</Typography>
   </ButtonBase>                    </Box>
                     <Typography variant="subtitle1" mb={2}>
                         modifier les données
                     </Typography>
+                    <Collapse in={showUpdate}>
+                    <Button variant="contained" color="primary" onClick={handleOpenModifyLevel}>
+                Modifier une filière
+                  </Button>
+                  <ModifyLevel open={openModifyLevel} onClose={handleCloseModifyLevel} />
+                  <Button variant="contained" color="primary" onClick={handleOpenModifyStudent}>
+                Modifier  étudiants
+                  </Button>
+                   <ModifyStudent open={openModifyStudent} onClose={handleCloseModifyStudent} />
+                    </Collapse>
                     <Box display="flex" alignItems="center" mt={4} mb={2}>
                         <Delete sx={{ mr: 1 }} />
                         <Typography variant="h3">Réinitialiser les données</Typography>

@@ -574,13 +574,15 @@ const SettingsPage = () => {
                         modifier les données
                     </Typography>
                     <Collapse in={showUpdate}>
-                    <Button variant="contained" color="primary" onClick={handleOpenModifyLevel}>
-                Modifier une filière
-                  </Button>
+                    <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => handleOpenModifyLevel()}>
+                  <ButtonBase>
+    <Typography variant="h4">modifier les filière</Typography>
+  </ButtonBase>                    </Box>
                   <ModifyLevel open={openModifyLevel} onClose={handleCloseModifyLevel} />
-                  <Button variant="contained" color="primary" onClick={handleOpenModifyStudent}>
-                Modifier  étudiants
-                  </Button>
+                  <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => handleOpenModifyStudent()}>
+                  <ButtonBase>
+    <Typography variant="h4">modifier étudiant</Typography>
+  </ButtonBase>                    </Box>
                    <ModifyStudent open={openModifyStudent} onClose={handleCloseModifyStudent} />
                     </Collapse>
                     <Box display="flex" alignItems="center" mt={4} mb={2}>

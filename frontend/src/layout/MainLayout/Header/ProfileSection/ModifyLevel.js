@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Dialog,
   DialogTitle,
@@ -6,35 +7,27 @@ import {
   DialogActions,
   Button,
   IconButton,
-  TextField,
   Snackbar,
   Alert,
   createTheme,
-  ThemeProvider
+  ThemeProvider,
+  TextField,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { Edit as EditIcon, Delete as DeleteIcon, Save as SaveIcon, Close as CloseIcon } from '@mui/icons-material';
-import axios from 'axios';
+import { Close as CloseIcon, Edit as EditIcon, Delete as DeleteIcon, Save as SaveIcon } from '@mui/icons-material';
+import '../../../../assets/scss/style.css';
+import Input from '@mui/material/Input';
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-    background: {
-      default: '#f4f6f8',
-      paper: '#fff',
-    },
+    primary: { main: '#1976d2' },
+    secondary: { main: '#dc004e' },
+    background: { default: '#f4f6f8', paper: '#fff' },
   },
-  typography: {
-    fontFamily: 'Roboto, sans-serif',
-  },
+  typography: { fontFamily: 'Roboto, sans-serif' },
 });
 
-function ModifyLevel(props) {
+const ModifyLevel = ({ open, onClose }) => {
   const [levels, setLevels] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [newSectorName, setNewSectorName] = useState('');
@@ -47,8 +40,12 @@ function ModifyLevel(props) {
 
   const fetchLevels = async () => {
     try {
-      const response = await axios.get('/api/levels');
-      setLevels(response.data);
+      const response = await axios.get(`${process.env.REACT_APP_SPRING_BASE_URL}/api/levels`);
+      const levelsWithId = response.data.map((level) => ({
+        ...level,
+        id: level.levelId,
+      }));
+      setLevels(levelsWithId);
     } catch (error) {
       console.error('Error fetching levels:', error);
     }
@@ -62,8 +59,8 @@ function ModifyLevel(props) {
   const handleSave = async () => {
     if (editingId) {
       try {
-        await axios.put(`/api/levels/${editingId}`, {
-          sectorName: newSectorName
+        await axios.put(`${process.env.REACT_APP_SPRING_BASE_URL}/api/levels/${editingId}`, {
+          sectorName: newSectorName,
         });
         fetchLevels();
         setEditingId(null);
@@ -78,7 +75,7 @@ function ModifyLevel(props) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/api/levels/${id}`);
+      await axios.delete(`${process.env.REACT_APP_SPRING_BASE_URL}/api/levels/${id}`);
       fetchLevels();
       setNotification({ open: true, message: 'Level deleted successfully!', severity: 'success' });
     } catch (error) {
@@ -89,7 +86,7 @@ function ModifyLevel(props) {
 
   const handleClose = () => {
     setEditingId(null);
-    props.onClose();
+    onClose();
   };
 
   const handleSearchChange = (event) => {
@@ -105,29 +102,23 @@ function ModifyLevel(props) {
       field: 'sectorName',
       headerName: 'Sector Name',
       flex: 1,
-      renderCell: (params) => (
+      renderCell: (params) =>
         editingId === params.row.levelId ? (
-          <TextField
-            fullWidth
+          <Input
             value={newSectorName}
             onChange={(e) => setNewSectorName(e.target.value)}
-            variant="standard"  // Utiliser variant="standard" pour supprimer les bordures
-            size="small"
-            InputProps={{
-              disableUnderline: true,  // Désactiver la bordure
-              sx: {
-                height: '100%',  // Ajuster la hauteur
-                '& input': {
-                  height: '100%',  // Ajuster la hauteur du texte
-                  padding: '8px',  // Ajouter un padding pour l'espace intérieur
-                },
+            disableUnderline
+            sx={{
+              fontSize: 'inherit',
+              padding: 0,
+              '& .MuiInputBase-input': {
+                fontSize: 'inherit',
               },
             }}
           />
         ) : (
           params.value
-        )
-      ),
+        ),
     },
     {
       field: 'actions',
@@ -136,16 +127,30 @@ function ModifyLevel(props) {
       renderCell: (params) => (
         <>
           {editingId === params.row.levelId ? (
-            <IconButton onClick={handleSave} color="primary">
-              <SaveIcon />
+            <IconButton
+              color="primary"
+              onClick={handleSave}
+              size="small"
+              sx={{ marginRight: 1 }}
+            >
+              <SaveIcon fontSize="small" />
             </IconButton>
           ) : (
-            <IconButton color="primary" onClick={() => handleEditClick(params.row)}>
-              <EditIcon />
+            <IconButton
+              color="primary"
+              onClick={() => handleEditClick(params.row)}
+              size="small"
+              sx={{ marginRight: 1 }}
+            >
+              <EditIcon fontSize="small" />
             </IconButton>
           )}
-          <IconButton color="error" onClick={() => handleDelete(params.row.levelId)}>
-            <DeleteIcon />
+          <IconButton
+            color="secondary"
+            onClick={() => handleDelete(params.row.levelId)}
+            size="small"
+          >
+            <DeleteIcon fontSize="small" />
           </IconButton>
         </>
       ),
@@ -154,34 +159,13 @@ function ModifyLevel(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dialog
-        open={props.open}
-        onClose={handleClose}
-        maxWidth="md"
-        fullWidth
-        sx={{
-          '& .MuiDialog-container': {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-          '& .MuiPaper-root': {
-            width: '40%',
-            maxWidth: 'none',
-          },
-        }}
-      >
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>
           Liste des Filières
           <IconButton
             aria-label="close"
             onClick={handleClose}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
+            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
           >
             <CloseIcon />
           </IconButton>
@@ -196,20 +180,18 @@ function ModifyLevel(props) {
             onChange={handleSearchChange}
             sx={{ marginBottom: 2 }}
           />
-          <div style={{ height: 'auto', width: '100%' }}>
+          <div style={{ height: 400, width: '100%' }}>
             <DataGrid
               rows={filteredLevels}
               columns={columns}
               autoHeight
-              rowsPerPageOptions={[]}
-              getRowId={(row) => row.levelId}
               disableSelectionOnClick
               hideFooter
             />
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="primary" variant="contained">
             Fermer
           </Button>
         </DialogActions>
@@ -217,15 +199,18 @@ function ModifyLevel(props) {
           open={notification.open}
           autoHideDuration={6000}
           onClose={() => setNotification({ ...notification, open: false })}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Centrer le Snackbar en bas
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity}>
+          <Alert
+            onClose={() => setNotification({ ...notification, open: false })}
+            severity={notification.severity}
+          >
             {notification.message}
           </Alert>
         </Snackbar>
       </Dialog>
     </ThemeProvider>
   );
-}
+};
 
 export default ModifyLevel;

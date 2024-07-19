@@ -26,5 +26,8 @@ public interface ProfessorService {
     public void updateEmail(Long professorId, String newEmail);
     public void updatePassword(Long professorId, String newPassword);
 
+    Optional<Professor> findProfessorById(long id);
+    Professor updateProfessor(long id, Professor professorDetails);
+
 
 }

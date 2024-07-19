@@ -14,6 +14,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import ModifyLevel from './ModifyLevel';
 import ModifyStudent from './ModifyStudent';
 import { styled } from '@mui/material/styles';
+import ModifyProfessor from './ModifyProfessor';
 
 import axios from 'axios';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -54,6 +55,7 @@ const SettingsPage = () => {
 
     const [openModifyLevel, setOpenModifyLevel] = useState(false);
     const [openModifyStudent, setOpenModifyStudent] = useState(false);
+    const [openModifyProfessor, setOpenModifyProfessor] = useState(false);
 
 
     const handleOpenModifyLevel = () => {
@@ -69,6 +71,13 @@ const SettingsPage = () => {
 
     const handleCloseModifyStudent = () => {
         setOpenModifyStudent(false);
+    };
+    const handleCloseModifyProfessor = () => {
+        setOpenModifyProfessor(false);
+    };
+
+    const handleOpenModifyProfessor = () => {
+        setOpenModifyProfessor(true);
     };
     const navigate = useNavigate();
 
@@ -584,6 +593,13 @@ const SettingsPage = () => {
     <Typography variant="h4">modifier étudiant</Typography>
   </ButtonBase>                    </Box>
                    <ModifyStudent open={openModifyStudent} onClose={handleCloseModifyStudent} />
+
+                   <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => handleOpenModifyProfessor()}>
+                  <ButtonBase>
+                   <Typography variant="h4">modifier professeur</Typography>
+                  </ButtonBase>                   
+                   </Box>
+                   <ModifyProfessor open={openModifyProfessor} onClose={handleCloseModifyProfessor} />
                     </Collapse>
                     <Box display="flex" alignItems="center" mt={4} mb={2}>
                         <Delete sx={{ mr: 1 }} />

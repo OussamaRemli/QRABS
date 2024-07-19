@@ -219,4 +219,21 @@ public class ProfessorServiceImpl implements ProfessorService {
         // Save the professor with the updated password
         professorRepository.save(professor);
     }
+
+    @Override
+    public Optional<Professor> findProfessorById(long id) {
+        return professorRepository.findById(id);
+    }
+
+    @Override
+    public Professor updateProfessor(long id, Professor professorDetails) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Professor not found with id " + id));
+
+        professor.setFirstName(professorDetails.getFirstName());
+        professor.setLastName(professorDetails.getLastName());
+        professor.setEmail(professorDetails.getEmail());
+
+        return professorRepository.save(professor);
+    }
 }

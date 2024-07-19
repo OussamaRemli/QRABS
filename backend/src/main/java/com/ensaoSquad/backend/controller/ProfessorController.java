@@ -319,5 +319,11 @@ public class ProfessorController {
         return true;
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Professor> updateProfessor(@PathVariable long id, @RequestBody Professor professorDetails) {
+        Professor updatedProfessor = professorService.updateProfessor(id, professorDetails);
+        return ResponseEntity.ok(updatedProfessor);
+    }
+
 
 }

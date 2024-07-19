@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping({"/api/departments","/api/departments/"})
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class DepartmentController {
     @Autowired
     private final DepartmentService service;

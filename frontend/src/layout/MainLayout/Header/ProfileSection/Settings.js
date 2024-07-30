@@ -104,7 +104,7 @@ const SettingsPage = () => {
             console.log('Modules uploaded:', response.data);
             setSelectedFile(null);
             setSnackbarSeverity('success');
-            setSnackbarMessage('Modules uploaded successfully');
+            setSnackbarMessage('fichier importé avec succés');
             setOpenSnackbar(true);
         })
         .catch((error) => {
@@ -139,7 +139,7 @@ const SettingsPage = () => {
             console.log('Modules uploaded:', response.data);
             setSelectedFile(null);
             setSnackbarSeverity('success');
-            setSnackbarMessage('Professors uploaded successfully');
+            setSnackbarMessage('fichier importé avec succés');
             setOpenSnackbar(true);
         })
         .catch((error) => {
@@ -174,7 +174,7 @@ const SettingsPage = () => {
             console.log('Modules uploaded:', response.data);
             setSelectedFile(null);
             setSnackbarSeverity('success');
-            setSnackbarMessage('Professors uploaded successfully');
+            setSnackbarMessage('fichier importé avec succés');
             setOpenSnackbar(true);
         })
         .catch((error) => {
@@ -512,7 +512,7 @@ const SettingsPage = () => {
             </Box>
             <Box display="flex" alignItems="center" mb={2} sx={{ marginLeft: 1 }}>
                         <AssignmentIndIcon sx={{ mr: 1 }} />
-                        <Typography variant="h4">Importer les affectations  via excel</Typography>
+                        <Typography variant="h4">Importer les souhaits des  via excel</Typography>
                     </Box>
                     <Box display="flex" alignItems="center" mb={2}>
 
@@ -538,13 +538,7 @@ const SettingsPage = () => {
 
 
 
-                    <Box display="flex" alignItems="center" mb={2} sx={{ marginLeft: 1 }}>
-                        <AddCircleOutlineIcon sx={{ mr: 1 }} />
-                        <Typography variant="h4">Ajouter une filière</Typography>
-                    </Box>
-                    <Button variant="contained" color="primary" onClick={() => setOpenDialogFeild(true)} sx={{ marginLeft: 6 }}>
-                        Ajouter une filière
-                    </Button>
+                    
                     <Dialog open={openDialogFeild} onClose={closeResetDialogFeild}>
                         <DialogTitle>Ajouter une filière</DialogTitle>
                         <DialogContent>
@@ -574,14 +568,14 @@ const SettingsPage = () => {
 
                  </Collapse>
 
-                 <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => setShowUpdate(!showUpdate)}>
+                 {/* <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => setShowUpdate(!showUpdate)}>
                   <SettingsBackupRestoreIcon sx={{ mr: 1 }} />
                   <ButtonBase>
     <Typography variant="h3">Gestion des ressources</Typography>
-  </ButtonBase>                    </Box>
-                    <Typography variant="subtitle1" mb={2}>
+  </ButtonBase>                    </Box> */}
+                    {/* <Typography variant="subtitle1" mb={2}>
                         modifier les données
-                    </Typography>
+                    </Typography> */}
                     <Collapse in={showUpdate}>
                     <Box display="flex" alignItems="center" mt={4} mb={2} onClick={() => handleOpenModifyLevel()}>
                   <ButtonBase>
@@ -650,7 +644,7 @@ const SettingsPage = () => {
 
             <Snackbar
                 open={openSnackbar}
-                autoHideDuration={6000}
+                autoHideDuration={3000}
                 onClose={handleSnackbarClose}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             >

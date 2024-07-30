@@ -190,10 +190,13 @@ const SettingsPage = () => {
 
     return (
         <Container>
-            <Typography  mt={3} mb={2} variant="h1" gutterBottom>Paramètres</Typography>
+                        <Typography  mt={3} mb={2} variant="h1" gutterBottom>Paramètres</Typography>
+
 
             <Box mb={2}>
+
             <Box display="flex" alignItems="center" mt={4} mb={2}>
+                
                         <CheckBoxIcon sx={{ mr: 1 }} />
                         <Typography variant="h3">Maruqer l'absence</Typography>
                     </Box>                   <Typography variant="subtitle1">En cas de report d'une séance, vous êtes invité(e) à indiquer votre absence pour cette séance.</Typography>

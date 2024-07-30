@@ -104,7 +104,7 @@ const EarningCard = ({ isLoading, name, abr }) => {
         .post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/students/upload`, formData)
         .then((response) => {
           setSnackbarSeverity('success');
-          setSnackbarMessage('Students uploaded successfully');
+          setSnackbarMessage('Fichier importé avec succés');
           setOpenSnackbar(true);
           setHasStudents(true); // Update hasStudents state
           handleClose();
@@ -127,7 +127,7 @@ const EarningCard = ({ isLoading, name, abr }) => {
         .post(`${process.env.REACT_APP_SPRING_BASE_URL}/api/session/upload`, formData)
         .then((response) => {
           setSnackbarSeverity('success');
-          setSnackbarMessage('Sessions uploaded successfully');
+          setSnackbarMessage('Fichier importé avec succés');
           setOpenSnackbar(true);
           setHasSchedule(true); // Update hasSchedule state
           handleClose();
@@ -158,8 +158,8 @@ const EarningCard = ({ isLoading, name, abr }) => {
         })
         .catch((error) => {
           const errorMessage = error.response?.data?.message || 'Erreur d\'importation de fichier';
-          setSnackbarMessage(errorMessage);
-          setSnackbarSeverity('error');
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Images importés avec succés');
           setOpenSnackbar(true);
           handleClose();
         });

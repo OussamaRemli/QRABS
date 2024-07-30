@@ -91,11 +91,11 @@ export default function BasicTable({ moduleId, studentApogee }) {
                             </TableCell>
                             <TableCell align="right">{row.Seance}</TableCell>
                             <TableCell align="right">{row.Justifie}</TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 <IconButton onClick={() => { handleClick(row.Id) }}>
                                     {row.Justifie === 'Oui' ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankOutlinedIcon />}
                                 </IconButton>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>

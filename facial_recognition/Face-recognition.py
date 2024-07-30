@@ -175,7 +175,7 @@ def encode_and_store_face_in_db(image_file):
     
     
 if __name__ == '__main__':
-    app.run(port=5010, debug=True)
+    app.run(port=5090, debug=True)
 
 
 

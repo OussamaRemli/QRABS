@@ -13,7 +13,6 @@ import '../../../assets/scss/style.css';
 function Users({ sessionId, levelId, level, group, apogee }) {
     const [users, setUsers] = useState([]);
 
-    // Load initial users and presence data from localStorage on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -23,10 +22,8 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                 }
                 const data = await response.json();
 
-                // Load presence data from localStorage
                 const storedPresence = JSON.parse(localStorage.getItem('presentQrabs')) || [];
 
-                // Create initial users with placeholder photoURL
                 const initialUsers = data.map(student => ({
                     _id: uuidv4(),
                     apogee: student.apogee,
@@ -35,10 +32,8 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                     photoURL: null,
                 }));
 
-                // Set initial users state
                 setUsers(initialUsers);
 
-                // Fetch photos for each student
                 await Promise.all(data.map(async student => {
                     try {
                         const imageResponse = await fetch(`${process.env.REACT_APP_SPRING_BASE_URL}/api/import-files/image/${student.apogee}`);
@@ -48,7 +43,6 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                         const imageBlob = await imageResponse.blob();
                         const imageUrl = URL.createObjectURL(imageBlob);
 
-                        // Update the user with the retrieved photoURL
                         setUsers(prevUsers => prevUsers.map(user => {
                             if (user.apogee === student.apogee) {
                                 return { ...user, photoURL: imageUrl };
@@ -65,9 +59,8 @@ function Users({ sessionId, levelId, level, group, apogee }) {
         };
 
         fetchData();
-    }, [level, group]); // Only depend on level and group for fetching initial data
+    }, [level, group]);
 
-    // Update presence based on apogee
     useEffect(() => {
         if (apogee.length > 0) {
             setUsers(prevUsers => {
@@ -76,7 +69,6 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                     present: apogee.includes(user.apogee) || user.present,
                 }));
 
-                // Update localStorage with new presence data
                 const currentPresence = JSON.parse(localStorage.getItem('presentQrabs')) || [];
                 const newPresence = [...new Set([...currentPresence, ...apogee])];
                 localStorage.setItem('presentQrabs', JSON.stringify(newPresence));
@@ -86,7 +78,6 @@ function Users({ sessionId, levelId, level, group, apogee }) {
         }
     }, [apogee]);
 
-    // Handle presence change
     const handlePresenceChange = (apogee, isPresent) => async () => {
         try {
             const url = isPresent
@@ -113,17 +104,14 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                     return user;
                 });
 
-                // Récupérer l'état actuel de `presentQrabs` ou initialiser un tableau vide
                 let presentQrabs = JSON.parse(localStorage.getItem('presentQrabs')) || [];
 
-                // Mettre à jour `presentQrabs` selon la présence
                 if (isPresent) {
                     presentQrabs = [...new Set([...presentQrabs, apogee])];
                 } else {
                     presentQrabs = presentQrabs.filter(id => id !== apogee);
                 }
 
-                // Sauvegarder la liste mise à jour dans `localStorage`
                 localStorage.setItem('presentQrabs', JSON.stringify(presentQrabs));
 
                 return updatedUsers;
@@ -200,8 +188,17 @@ function Users({ sessionId, levelId, level, group, apogee }) {
     return (
         <Box
             sx={{
-                height: 800,
+                height: '0.9',  // Ensure DataGrid does not have internal scrolling
                 width: '100%',
+                '& .MuiDataGrid-row': {
+                    bgcolor: (theme) =>
+                        theme.palette.mode === 'light' ? grey[200] : grey[900],
+                    borderBottom: 'none',  // Remove row borders
+                    '&:nth-of-type(odd)': {
+                        bgcolor: (theme) =>
+                            theme.palette.mode === 'light' ? grey[100] : grey[800],  // Color for odd rows
+                    },
+                },
             }}
         >
             <DataGrid
@@ -211,9 +208,10 @@ function Users({ sessionId, levelId, level, group, apogee }) {
                 rowsPerPageOptions={[5, 10, 20]}
                 pageSize={20}
                 rowHeight={70}
-                getRowSpacing={(params) => ({
-                    top: params.isFirstVisible ? 0 : 5,
-                    bottom: params.isLastVisible ? 0 : 5,
+                hideFooter
+                getRowSpacing={() => ({
+                    top: 0,
+                    bottom: 0,
                 })}
                 sx={{
                     [`& .${gridClasses.row}`]: {
@@ -227,4 +225,3 @@ function Users({ sessionId, levelId, level, group, apogee }) {
 }
 
 export default Users;
-
